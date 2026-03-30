@@ -12,6 +12,6 @@ repository = "https://github.com/jeroenvervaeke/treesitter-types"
 proc-macro = true
 
 [dependencies]
-treesitter-types = { path = "../treesitter-types" }
+treesitter-types = { version = "0.1.0", path = "../treesitter-types" }
 proc-macro2 = "1"
 syn = { version = "2", features = ["full", "extra-traits"] }
