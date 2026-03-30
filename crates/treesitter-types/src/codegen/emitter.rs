@@ -407,6 +407,8 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
         }
     };
 
+    let spanned_arms: Vec<_> = variants.iter().map(emit_enum_spanned_arm).collect();
+
     if has_named {
         quote! {
             #[derive(Debug, Clone)]
@@ -421,6 +423,14 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
                     src: &'tree [u8],
                 ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
                     #from_node_body
+                }
+            }
+
+            impl ::treesitter_types::Spanned for #type_name<'_> {
+                fn span(&self) -> ::treesitter_types::Span {
+                    match self {
+                        #(#spanned_arms)*
+                    }
                 }
             }
         }
@@ -441,6 +451,14 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
                     #from_node_body
                 }
             }
+
+            impl ::treesitter_types::Spanned for #type_name {
+                fn span(&self) -> ::treesitter_types::Span {
+                    match self {
+                        #(#spanned_arms)*
+                    }
+                }
+            }
         }
     }
 }
@@ -452,7 +470,8 @@ fn emit_enum_variant_decl(variant: &VariantDef) -> TokenStream {
         // Box the payload to handle recursive types (e.g., Expression → BinaryExpression → Expression)
         quote! { #name(::std::boxed::Box<#type_name<'tree>>), }
     } else {
-        quote! { #name, }
+        // Anonymous variants carry a Span so consumers can locate them in source
+        quote! { #name(::treesitter_types::Span), }
     }
 }
 
@@ -468,14 +487,24 @@ fn emit_enum_match_arm(variant: &VariantDef) -> TokenStream {
         }
     } else {
         quote! {
-            #kind_str => Ok(Self::#name),
+            #kind_str => Ok(Self::#name(::treesitter_types::Span::from(node))),
         }
+    }
+}
+
+fn emit_enum_spanned_arm(variant: &VariantDef) -> TokenStream {
+    let name = &variant.variant_name;
+    if variant.named {
+        quote! { Self::#name(inner) => inner.span(), }
+    } else {
+        quote! { Self::#name(span) => *span, }
     }
 }
 
 fn emit_any_node(decisions: &[TypeDecision]) -> TokenStream {
     let mut variant_decls = Vec::new();
     let mut match_arms = Vec::new();
+    let mut spanned_arms = Vec::new();
 
     for decision in decisions {
         let (type_name, kind_str) = match decision {
@@ -493,6 +522,10 @@ fn emit_any_node(decisions: &[TypeDecision]) -> TokenStream {
                 .map(Self::#type_name)
                 .unwrap_or(Self::Unknown(node)),
         });
+
+        spanned_arms.push(quote! {
+            Self::#type_name(inner) => inner.span(),
+        });
     }
 
     quote! {
@@ -507,6 +540,15 @@ fn emit_any_node(decisions: &[TypeDecision]) -> TokenStream {
                 match node.kind() {
                     #(#match_arms)*
                     _ => Self::Unknown(node),
+                }
+            }
+        }
+
+        impl ::treesitter_types::Spanned for AnyNode<'_> {
+            fn span(&self) -> ::treesitter_types::Span {
+                match self {
+                    #(#spanned_arms)*
+                    Self::Unknown(node) => ::treesitter_types::Span::from(*node),
                 }
             }
         }
