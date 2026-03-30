@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      tree-sitter:
+        patterns:
+          - "tree-sitter*"
+      rust-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "tree-sitter*"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
