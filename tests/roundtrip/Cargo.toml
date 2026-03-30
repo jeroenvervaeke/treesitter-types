@@ -1,0 +1,19 @@
+[package]
+name = "test-roundtrip"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+treesitter-types = { path = "../../crates/treesitter-types" }
+treesitter-types-go = { path = "../../crates/treesitter-types-go" }
+treesitter-types-java = { path = "../../crates/treesitter-types-java" }
+treesitter-types-javascript = { path = "../../crates/treesitter-types-javascript" }
+treesitter-types-rust = { path = "../../crates/treesitter-types-rust" }
+treesitter-types-typescript = { path = "../../crates/treesitter-types-typescript" }
+tree-sitter = "0.25"
+tree-sitter-go = "0.25"
+tree-sitter-java = "0.23"
+tree-sitter-javascript = "0.25"
+tree-sitter-rust = "0.24"
+tree-sitter-typescript = "0.23"
