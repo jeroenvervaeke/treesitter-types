@@ -19,6 +19,12 @@ pub fn format(tokens: &TokenStream) -> Result<String, Error> {
     Ok(prettyplease::unparse(&file))
 }
 
+/// Generates typed AST code from `node-types.json` contents and returns it as formatted Rust source.
+pub fn generate_to_string(node_types_json: &str) -> Result<String, Error> {
+    let tokens = generate(node_types_json)?;
+    format(&tokens)
+}
+
 /// Reads a `node-types.json` file, generates typed AST code, and writes it to `$OUT_DIR`.
 ///
 /// The generated code is formatted with `prettyplease` for readability.

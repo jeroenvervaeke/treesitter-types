@@ -57,30 +57,46 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo publish --dry-run -p treesitter-types
       - run: cargo publish --dry-run -p treesitter-types-macros
+      - run: cargo publish --dry-run -p treesitter-types-go
+      - run: cargo publish --dry-run -p treesitter-types-java
+      - run: cargo publish --dry-run -p treesitter-types-javascript
+      - run: cargo publish --dry-run -p treesitter-types-rust
+      - run: cargo publish --dry-run -p treesitter-types-typescript
+
+  codegen-freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: extractions/setup-just@v2
+      - run: just generate
+      - run: git diff --exit-code -- '*.rs' '*.json'
 
   integration:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        script:
-          - test-parse-go-language-repository
-          - test-parse-rust-language-repository
-          - test-parse-typescript-language-repository
-          - test-parse-javascript-language-repository
-          - test-parse-java-language-repository
+        lang:
+          - go
+          - rust
+          - typescript
+          - javascript
+          - java
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: integration
-      - run: ./script/${{ matrix.script }}
+      - uses: extractions/setup-just@v2
+      - run: just integration-test-${{ matrix.lang }}
 
   ci:
     runs-on: ubuntu-latest
     if: always()
-    needs: [pr-title, fmt, clippy, build-and-test, publish-dry-run, integration]
+    needs: [pr-title, fmt, clippy, build-and-test, publish-dry-run, codegen-freshness, integration]
     steps:
       - name: Check results
         run: |
@@ -90,6 +106,7 @@ jobs:
             "${{ needs.clippy.result }}"
             "${{ needs.build-and-test.result }}"
             "${{ needs.publish-dry-run.result }}"
+            "${{ needs.codegen-freshness.result }}"
             "${{ needs.integration.result }}"
           )
           for result in "${results[@]}"; do

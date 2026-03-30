@@ -186,48 +186,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "test-go-roundtrip"
+name = "test-roundtrip"
 version = "0.0.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-go",
- "treesitter-types",
-]
-
-[[package]]
-name = "test-java-roundtrip"
-version = "0.0.0"
-dependencies = [
- "tree-sitter",
  "tree-sitter-java",
- "treesitter-types",
-]
-
-[[package]]
-name = "test-javascript-roundtrip"
-version = "0.0.0"
-dependencies = [
- "tree-sitter",
  "tree-sitter-javascript",
- "treesitter-types",
-]
-
-[[package]]
-name = "test-rust-roundtrip"
-version = "0.0.0"
-dependencies = [
- "tree-sitter",
  "tree-sitter-rust",
- "treesitter-types",
-]
-
-[[package]]
-name = "test-typescript-roundtrip"
-version = "0.0.0"
-dependencies = [
- "tree-sitter",
  "tree-sitter-typescript",
  "treesitter-types",
+ "treesitter-types-go",
+ "treesitter-types-java",
+ "treesitter-types-javascript",
+ "treesitter-types-rust",
+ "treesitter-types-typescript",
 ]
 
 [[package]]
@@ -335,11 +308,58 @@ dependencies = [
 ]
 
 [[package]]
+name = "treesitter-types-cli"
+version = "0.0.0"
+dependencies = [
+ "treesitter-types",
+]
+
+[[package]]
+name = "treesitter-types-go"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
+ "treesitter-types",
+]
+
+[[package]]
+name = "treesitter-types-java"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
+ "treesitter-types",
+]
+
+[[package]]
+name = "treesitter-types-javascript"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
+ "treesitter-types",
+]
+
+[[package]]
 name = "treesitter-types-macros"
 version = "0.1.0"
 dependencies = [
  "proc-macro2",
  "syn",
+ "treesitter-types",
+]
+
+[[package]]
+name = "treesitter-types-rust"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
+ "treesitter-types",
+]
+
+[[package]]
+name = "treesitter-types-typescript"
+version = "0.1.0"
+dependencies = [
+ "tree-sitter",
  "treesitter-types",
 ]
 

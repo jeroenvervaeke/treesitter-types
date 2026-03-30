@@ -3,11 +3,13 @@ resolver = "2"
 members = [
     "crates/treesitter-types",
     "crates/treesitter-types-macros",
-    "tests/go",
-    "tests/rust",
-    "tests/typescript",
-    "tests/javascript",
-    "tests/java",
+    "crates/treesitter-types-cli",
+    "crates/treesitter-types-go",
+    "crates/treesitter-types-java",
+    "crates/treesitter-types-javascript",
+    "crates/treesitter-types-rust",
+    "crates/treesitter-types-typescript",
+    "tests/roundtrip",
 ]
 default-members = [
     "crates/treesitter-types",
