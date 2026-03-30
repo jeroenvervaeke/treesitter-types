@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-title:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --all --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --workspace
+      - run: cargo test --workspace
+
+  publish-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo publish --dry-run -p treesitter-types
+      - run: cargo publish --dry-run -p treesitter-types-macros
+
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        script:
+          - test-parse-go-language-repository
+          - test-parse-rust-language-repository
+          - test-parse-typescript-language-repository
+          - test-parse-javascript-language-repository
+          - test-parse-java-language-repository
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: integration
+      - run: ./script/${{ matrix.script }}
+
+  ci:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [pr-title, fmt, clippy, build-and-test, publish-dry-run, integration]
+    steps:
+      - name: Check results
+        run: |
+          results=(
+            "${{ needs.pr-title.result }}"
+            "${{ needs.fmt.result }}"
+            "${{ needs.clippy.result }}"
+            "${{ needs.build-and-test.result }}"
+            "${{ needs.publish-dry-run.result }}"
+            "${{ needs.integration.result }}"
+          )
+          for result in "${results[@]}"; do
+            if [[ "$result" != "success" && "$result" != "skipped" ]]; then
+              echo "One or more jobs failed: ${results[*]}"
+              exit 1
+            fi
+          done
+          echo "All CI checks passed"
