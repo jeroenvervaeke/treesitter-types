@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_URL="https://github.com/golang/go.git"
+PARSE_DIR="src"
+
+# Create temp directory, clean up on exit
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "$TMPDIR"' EXIT
+
+echo "==> Cloning Go repository (shallow, no blobs until checkout)..."
+git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/go" 2>&1 | tail -1
+
+cd "$TMPDIR/go"
+git sparse-checkout set "$PARSE_DIR" 2>/dev/null
+cd - > /dev/null
+
+FILE_COUNT=$(find "$TMPDIR/go/$PARSE_DIR" -name '*.go' -not -path '*/testdata/*' -not -path '*/vendor/*' | wc -l)
+echo "==> Found $FILE_COUNT .go files in $PARSE_DIR/"
+echo "==> Building parse_all_go..."
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+cargo build --release -p test-go-roundtrip --bin parse_all_go --manifest-path "$REPO_ROOT/Cargo.toml" 2>&1 | tail -1
+
+echo "==> Parsing all .go files..."
+echo
+
+"$REPO_ROOT/target/release/parse_all_go" "$TMPDIR/go/$PARSE_DIR"

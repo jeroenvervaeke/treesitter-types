@@ -1,0 +1,21 @@
+[package]
+name = "treesitter-types"
+version = "0.1.0"
+authors = ["Jeroen Vervaeke <treesitter-types.uvyaj@simplelogin.com>"]
+edition = "2021"
+rust-version = "1.77"
+description = "Generate typed Rust structs from any tree-sitter node-types.json"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jeroenvervaeke/treesitter-types"
+keywords = ["tree-sitter", "parser", "codegen", "ast"]
+categories = ["development-tools", "parser-implementations"]
+
+[dependencies]
+tree-sitter = "0.25"
+thiserror = "2"
+quote = "1"
+proc-macro2 = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+syn = { version = "2", features = ["full", "parsing"] }
+prettyplease = "0.2"

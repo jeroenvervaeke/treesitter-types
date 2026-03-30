@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/treesitter-types",
+    "crates/treesitter-types-macros",
+    "tests/go",
+    "tests/rust",
+    "tests/typescript",
+    "tests/javascript",
+    "tests/java",
+]
+default-members = [
+    "crates/treesitter-types",
+    "crates/treesitter-types-macros",
+]

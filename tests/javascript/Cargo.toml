@@ -1,0 +1,13 @@
+[package]
+name = "test-javascript-roundtrip"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+treesitter-types = { path = "../../crates/treesitter-types" }
+tree-sitter = "0.25"
+tree-sitter-javascript = "0.25"
+
+[build-dependencies]
+treesitter-types = { path = "../../crates/treesitter-types" }

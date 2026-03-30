@@ -1,0 +1,81 @@
+[
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "interpreted_string_literal",
+    "named": true
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "import_spec",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          { "type": ".", "named": false },
+          { "type": "identifier", "named": true }
+        ]
+      },
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          { "type": "interpreted_string_literal", "named": true }
+        ]
+      }
+    }
+  },
+  {
+    "type": "import_spec_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        { "type": "import_spec", "named": true }
+      ]
+    }
+  },
+  {
+    "type": "_expression",
+    "named": true,
+    "subtypes": [
+      { "type": "identifier", "named": true },
+      { "type": "interpreted_string_literal", "named": true }
+    ]
+  },
+  {
+    "type": "expression_statement",
+    "named": true,
+    "fields": {
+      "expr": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          { "type": "identifier", "named": true }
+        ]
+      }
+    }
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {
+      "statements": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          { "type": "expression_statement", "named": true }
+        ]
+      }
+    }
+  }
+]
