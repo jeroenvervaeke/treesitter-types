@@ -1,0 +1,39 @@
+name: Sync branch rulesets
+
+on:
+  push:
+    branches: [master]
+    paths: [".github/rulesets/**"]
+
+permissions:
+  administration: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply rulesets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for file in .github/rulesets/*.json; do
+            [ -f "$file" ] || continue
+            name=$(jq -r '.name' "$file")
+            echo "Processing ruleset: $name"
+
+            # Find existing ruleset by name
+            existing_id=$(gh api repos/${{ github.repository }}/rulesets \
+              --jq ".[] | select(.name == \"$name\") | .id" 2>/dev/null || true)
+
+            if [ -n "$existing_id" ]; then
+              echo "Updating ruleset $name (id: $existing_id)"
+              gh api repos/${{ github.repository }}/rulesets/$existing_id \
+                -X PUT --input "$file"
+            else
+              echo "Creating ruleset $name"
+              gh api repos/${{ github.repository }}/rulesets \
+                -X POST --input "$file"
+            fi
+          done
