@@ -38,7 +38,12 @@ fn languages() -> Vec<(&'static str, &'static str, &'static str)> {
             tree_sitter_go::NODE_TYPES,
             "crates/treesitter-types-go/src/generated.rs",
         ),
-(
+        (
+            "haskell",
+            tree_sitter_haskell::NODE_TYPES,
+            "crates/treesitter-types-haskell/src/generated.rs",
+        ),
+        (
             "html",
             tree_sitter_html::NODE_TYPES,
             "crates/treesitter-types-html/src/generated.rs",

@@ -102,6 +102,7 @@ Ready-to-use typed AST crates for 25 languages — no codegen step needed:
 | `treesitter-types-css` | tree-sitter-css |
 | `treesitter-types-elixir` | tree-sitter-elixir |
 | `treesitter-types-go` | tree-sitter-go |
+| `treesitter-types-haskell` | tree-sitter-haskell |
 | `treesitter-types-html` | tree-sitter-html |
 | `treesitter-types-java` | tree-sitter-java |
 | `treesitter-types-javascript` | tree-sitter-javascript |
@@ -146,6 +147,7 @@ The codegen is validated against real-world repositories with zero failures on c
 | [laravel/framework](https://github.com/laravel/framework) | PHP | - | - |
 | [SchemaStore/schemastore](https://github.com/SchemaStore/schemastore) | JSON | - | - |
 | [apache/spark](https://github.com/apache/spark) | Scala | - | - |
+| [haskell/cabal](https://github.com/haskell/cabal) | Haskell | - | - |
 
 Run the integration tests yourself:
 

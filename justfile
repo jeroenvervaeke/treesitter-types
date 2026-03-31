@@ -312,5 +312,25 @@ integration-test-scala:
     echo
     ./target/release/parse_all_scala "$TMPDIR/spark"
 
+# Run integration test: parse an entire real-world Haskell repository
+integration-test-haskell:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/haskell/cabal.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning haskell/cabal (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/cabal" 2>&1 | tail -1
+    cd "$TMPDIR/cabal"
+    git sparse-checkout set Cabal/src 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/cabal" -name '*.hs' | wc -l)
+    echo "==> Found $FILE_COUNT .hs files"
+    echo "==> Building parse_all_haskell..."
+    cargo build --release -p test-roundtrip --bin parse_all_haskell 2>&1 | tail -1
+    echo "==> Parsing all .hs files..."
+    echo
+    ./target/release/parse_all_haskell "$TMPDIR/cabal"
+
 # Run all integration tests
-integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java integration-test-python integration-test-c integration-test-cpp integration-test-ruby integration-test-c-sharp integration-test-css integration-test-php integration-test-json integration-test-html integration-test-scala
+integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java integration-test-python integration-test-c integration-test-cpp integration-test-bash integration-test-ruby integration-test-c-sharp integration-test-css integration-test-php integration-test-json integration-test-html integration-test-scala integration-test-haskell
