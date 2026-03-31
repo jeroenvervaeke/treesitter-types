@@ -316,3 +316,11 @@ integration-test-haskell:
     ./target/release/parse_all_haskell "$TMPDIR/cabal"
 
 # Run all integration tests
+
+# Dry-run a release to see what would happen
+release-dry-run level="patch":
+    cargo release {{level}} --workspace
+
+# Execute a release (bumps versions, generates changelog, publishes)
+release level="patch":
+    cargo release {{level}} --workspace --execute
