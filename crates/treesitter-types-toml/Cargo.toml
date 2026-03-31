@@ -1,0 +1,15 @@
+[package]
+name = "treesitter-types-toml"
+version = "0.1.0"
+authors = ["Jeroen Vervaeke <treesitter-types.uvyaj@simplelogin.com>"]
+edition = "2021"
+rust-version = "1.77"
+description = "Pre-generated strongly-typed AST types for TOML (tree-sitter-toml-ng)"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jeroenvervaeke/treesitter-types"
+keywords = ["tree-sitter", "toml", "ast", "parser", "codegen"]
+categories = ["development-tools", "parser-implementations"]
+
+[dependencies]
+treesitter-types = { version = "0.1.0", path = "../treesitter-types" }
+tree-sitter = "0.25"

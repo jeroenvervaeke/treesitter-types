@@ -42,15 +42,36 @@ pub fn emit_to_out_dir(node_types_path: impl AsRef<Path>) -> Result<(), Error> {
     let node_types_path = node_types_path.as_ref();
     let json = std::fs::read_to_string(node_types_path)
         .map_err(|e| Error::Io(node_types_path.to_path_buf(), e))?;
-    let tokens = generate(&json)?;
+
+    emit_str_to_out_dir(&json)?;
+
+    // Tell Cargo to re-run if the input changes
+    println!("cargo:rerun-if-changed={}", node_types_path.display());
+
+    Ok(())
+}
+
+/// Generates typed AST code from a `node-types.json` string and writes it to `$OUT_DIR`.
+///
+/// This is useful when the JSON is available as a constant (e.g., from a grammar crate's
+/// `NODE_TYPES` constant) rather than a file path.
+///
+/// Intended for use in `build.rs`:
+/// ```ignore
+/// treesitter_types::codegen::emit_str_to_out_dir(tree_sitter_go::NODE_TYPES).unwrap();
+/// ```
+///
+/// Then in `lib.rs`:
+/// ```ignore
+/// include!(concat!(env!("OUT_DIR"), "/treesitter_types_generated.rs"));
+/// ```
+pub fn emit_str_to_out_dir(node_types_json: &str) -> Result<(), Error> {
+    let tokens = generate(node_types_json)?;
     let code = format(&tokens)?;
 
     let out_dir = std::env::var("OUT_DIR").map_err(|_| Error::NoOutDir)?;
     let out_path = Path::new(&out_dir).join("treesitter_types_generated.rs");
     std::fs::write(&out_path, code).map_err(|e| Error::Io(out_path, e))?;
-
-    // Tell Cargo to re-run if the input changes
-    println!("cargo:rerun-if-changed={}", node_types_path.display());
 
     Ok(())
 }

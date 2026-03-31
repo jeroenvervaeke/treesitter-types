@@ -81,6 +81,9 @@ pub struct VariantDef {
     /// True if this variant references a supertype (has subtypes in the grammar).
     /// Supertypes are abstract — tree-sitter never emits them as node kinds at runtime.
     pub is_supertype: bool,
+    /// Additional kind strings that map to the same variant name (e.g., "a" and "A" both → `A`).
+    /// Populated during deduplication in the emitter.
+    pub extra_kinds: Vec<String>,
 }
 
 /// Maps all `NodeType` entries into `TypeDecision`s.
@@ -92,20 +95,76 @@ pub fn map_types(nodes: &[NodeType]) -> Vec<TypeDecision> {
         .map(|n| n.type_name.as_str())
         .collect();
 
-    nodes
+    // Collect concrete (non-supertype) node kinds for conflict detection
+    let concrete_kinds: std::collections::HashSet<&str> = nodes
+        .iter()
+        .filter(|n| n.named && n.subtypes.is_none())
+        .map(|n| n.type_name.as_str())
+        .collect();
+
+    let mut decisions: Vec<TypeDecision> = nodes
         .iter()
         .filter(|n| n.named)
-        .map(|n| map_node(n, &supertype_kinds))
-        .collect()
+        .map(|n| map_node(n, &supertype_kinds, &concrete_kinds))
+        .collect();
+
+    // Collect all defined type names
+    let defined_kinds: std::collections::HashSet<String> = nodes
+        .iter()
+        .filter(|n| n.named)
+        .map(|n| n.type_name.clone())
+        .collect();
+
+    // Collect all referenced named types from fields, children, and subtypes
+    let mut referenced_kinds = std::collections::HashSet::new();
+    for node in nodes.iter().filter(|n| n.named) {
+        for field_info in node.fields.values() {
+            for tr in &field_info.types {
+                if tr.named {
+                    referenced_kinds.insert(tr.type_name.clone());
+                }
+            }
+        }
+        if let Some(children) = &node.children {
+            for tr in &children.types {
+                if tr.named {
+                    referenced_kinds.insert(tr.type_name.clone());
+                }
+            }
+        }
+        if let Some(subtypes) = &node.subtypes {
+            for tr in subtypes {
+                if tr.named {
+                    referenced_kinds.insert(tr.type_name.clone());
+                }
+            }
+        }
+    }
+
+    // Generate leaf structs for referenced but undefined types
+    for kind in &referenced_kinds {
+        if !defined_kinds.contains(kind) {
+            decisions.push(TypeDecision::LeafStruct(LeafStructDef {
+                type_name: name_mangler::type_ident(kind),
+                kind: kind.clone(),
+            }));
+        }
+    }
+
+    decisions
 }
 
-fn map_node(node: &NodeType, supertype_kinds: &std::collections::HashSet<&str>) -> TypeDecision {
+fn map_node(
+    node: &NodeType,
+    supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
+) -> TypeDecision {
     let raw_kind = &node.type_name;
 
     // Supertype nodes (e.g., _expression, statement) → enum
     if let Some(subtypes) = &node.subtypes {
         return TypeDecision::SupertypeEnum(SupertypeEnumDef {
-            type_name: supertype_ident(raw_kind),
+            type_name: supertype_ident(raw_kind, concrete_kinds),
             kind: raw_kind.clone(),
             variants: subtypes
                 .iter()
@@ -122,12 +181,18 @@ fn map_node(node: &NodeType, supertype_kinds: &std::collections::HashSet<&str>) 
             .iter()
             .map(|(field_name, field_info)| {
                 let parent_name = type_name.to_string();
-                map_field(field_name, field_info, &parent_name, supertype_kinds)
+                map_field(
+                    field_name,
+                    field_info,
+                    &parent_name,
+                    supertype_kinds,
+                    concrete_kinds,
+                )
             })
             .collect();
         let children = node.children.as_ref().map(|c| {
             let parent_name = type_name.to_string();
-            map_children(c, &parent_name, supertype_kinds)
+            map_children(c, &parent_name, supertype_kinds, concrete_kinds)
         });
         return TypeDecision::Struct(StructDef {
             type_name,
@@ -149,7 +214,8 @@ fn make_variant_def(tr: &TypeRef, supertype_kinds: &std::collections::HashSet<&s
         variant_name: name_mangler::variant_name(&tr.type_name, tr.named),
         kind: tr.type_name.clone(),
         named: tr.named,
-        is_supertype: supertype_kinds.contains(tr.type_name.as_str()),
+        is_supertype: tr.named && supertype_kinds.contains(tr.type_name.as_str()),
+        extra_kinds: Vec::new(),
     }
 }
 
@@ -158,8 +224,15 @@ fn map_field(
     field_info: &FieldInfo,
     parent_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> FieldDef {
-    let type_ref = map_type_reference(&field_info.types, parent_name, field_name, supertype_kinds);
+    let type_ref = map_type_reference(
+        &field_info.types,
+        parent_name,
+        field_name,
+        supertype_kinds,
+        concrete_kinds,
+    );
     let field_type = match (field_info.required, field_info.multiple) {
         (_, true) => FieldType::Repeated(type_ref),
         (false, false) => FieldType::Optional(type_ref),
@@ -177,8 +250,15 @@ fn map_children(
     children: &FieldInfo,
     parent_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> ChildrenDef {
-    let type_ref = map_type_reference(&children.types, parent_name, "children", supertype_kinds);
+    let type_ref = map_type_reference(
+        &children.types,
+        parent_name,
+        "children",
+        supertype_kinds,
+        concrete_kinds,
+    );
     let field_type = match (children.required, children.multiple) {
         (_, true) => FieldType::Repeated(type_ref),
         (false, false) => FieldType::Optional(type_ref),
@@ -192,11 +272,17 @@ fn map_type_reference(
     parent_name: &str,
     field_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> TypeReference {
     // Filter to only named types for the type reference.
     // Anonymous nodes (punctuation) in field types are unusual but can appear in alternations.
     if types.len() == 1 && types[0].named {
-        TypeReference::Named(name_mangler::type_ident(&types[0].type_name))
+        let ident = if supertype_kinds.contains(types[0].type_name.as_str()) {
+            supertype_ident(&types[0].type_name, concrete_kinds)
+        } else {
+            name_mangler::type_ident(&types[0].type_name)
+        };
+        TypeReference::Named(ident)
     } else {
         // Multiple types or contains anonymous → alternation enum
         let enum_name = format!(
@@ -215,9 +301,17 @@ fn map_type_reference(
 }
 
 /// Supertype nodes start with `_` (e.g., `_expression`). Strip the prefix for the type name.
-fn supertype_ident(kind: &str) -> Ident {
+/// If stripping would conflict with a concrete node name, keep a suffix to disambiguate.
+fn supertype_ident(kind: &str, concrete_kinds: &std::collections::HashSet<&str>) -> Ident {
     let stripped = kind.strip_prefix('_').unwrap_or(kind);
-    name_mangler::type_ident(stripped)
+    // Check if the stripped name conflicts with a concrete (non-supertype) node
+    if concrete_kinds.contains(stripped) {
+        // Append "Type" to disambiguate (e.g., _parameter → ParameterType, parameter → Parameter)
+        let pascal = name_mangler::to_pascal_case(stripped);
+        quote::format_ident!("{}Type", pascal)
+    } else {
+        name_mangler::type_ident(stripped)
+    }
 }
 
 #[cfg(test)]
@@ -244,21 +338,24 @@ mod tests {
 
     #[test]
     fn test_node_with_fields_maps_to_struct() {
-        let json = r#"[{
-            "type": "import_spec",
-            "named": true,
-            "fields": {
-                "path": {
-                    "multiple": false,
-                    "required": true,
-                    "types": [{"type": "interpreted_string_literal", "named": true}]
+        let json = r#"[
+            {"type": "interpreted_string_literal", "named": true},
+            {
+                "type": "import_spec",
+                "named": true,
+                "fields": {
+                    "path": {
+                        "multiple": false,
+                        "required": true,
+                        "types": [{"type": "interpreted_string_literal", "named": true}]
+                    }
                 }
             }
-        }]"#;
+        ]"#;
         let nodes = parse_node_types(json).unwrap();
         let decisions = map_types(&nodes);
-        assert_eq!(decisions.len(), 1);
-        let TypeDecision::Struct(def) = &decisions[0] else {
+        assert_eq!(decisions.len(), 2);
+        let TypeDecision::Struct(def) = &decisions[1] else {
             panic!("expected Struct");
         };
         assert_eq!(def.type_name.to_string(), "ImportSpec");

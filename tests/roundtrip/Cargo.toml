@@ -6,14 +6,44 @@ publish = false
 
 [dependencies]
 treesitter-types = { path = "../../crates/treesitter-types" }
+treesitter-types-c = { path = "../../crates/treesitter-types-c" }
+treesitter-types-c-sharp = { path = "../../crates/treesitter-types-c-sharp" }
+treesitter-types-cpp = { path = "../../crates/treesitter-types-cpp" }
+treesitter-types-css = { path = "../../crates/treesitter-types-css" }
+treesitter-types-elixir = { path = "../../crates/treesitter-types-elixir" }
 treesitter-types-go = { path = "../../crates/treesitter-types-go" }
+treesitter-types-haskell = { path = "../../crates/treesitter-types-haskell" }
+treesitter-types-html = { path = "../../crates/treesitter-types-html" }
 treesitter-types-java = { path = "../../crates/treesitter-types-java" }
 treesitter-types-javascript = { path = "../../crates/treesitter-types-javascript" }
+treesitter-types-json = { path = "../../crates/treesitter-types-json" }
+treesitter-types-lua = { path = "../../crates/treesitter-types-lua" }
+treesitter-types-markdown = { path = "../../crates/treesitter-types-markdown" }
+treesitter-types-php = { path = "../../crates/treesitter-types-php" }
+treesitter-types-python = { path = "../../crates/treesitter-types-python" }
+treesitter-types-regex = { path = "../../crates/treesitter-types-regex" }
+treesitter-types-ruby = { path = "../../crates/treesitter-types-ruby" }
 treesitter-types-rust = { path = "../../crates/treesitter-types-rust" }
+treesitter-types-scala = { path = "../../crates/treesitter-types-scala" }
+treesitter-types-swift = { path = "../../crates/treesitter-types-swift" }
+treesitter-types-toml = { path = "../../crates/treesitter-types-toml" }
 treesitter-types-typescript = { path = "../../crates/treesitter-types-typescript" }
+treesitter-types-yaml = { path = "../../crates/treesitter-types-yaml" }
 tree-sitter = "0.25"
+tree-sitter-c = "0.24"
+tree-sitter-c-sharp = "0.23"
+tree-sitter-cpp = "0.23"
+tree-sitter-css = "0.25"
 tree-sitter-go = "0.25"
+tree-sitter-haskell = "0.23"
+tree-sitter-html = "0.23"
 tree-sitter-java = "0.23"
 tree-sitter-javascript = "0.25"
+tree-sitter-json = "0.24"
+tree-sitter-php = "0.24"
+tree-sitter-python = "0.25"
+tree-sitter-regex = "0.25"
+tree-sitter-ruby = "0.23"
 tree-sitter-rust = "0.24"
+tree-sitter-scala = "0.25"
 tree-sitter-typescript = "0.23"

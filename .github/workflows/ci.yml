@@ -57,11 +57,29 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo publish --dry-run -p treesitter-types
       - run: cargo publish --dry-run -p treesitter-types-macros
+      - run: cargo publish --dry-run -p treesitter-types-c
+      - run: cargo publish --dry-run -p treesitter-types-c-sharp
+      - run: cargo publish --dry-run -p treesitter-types-cpp
+      - run: cargo publish --dry-run -p treesitter-types-css
+      - run: cargo publish --dry-run -p treesitter-types-elixir
       - run: cargo publish --dry-run -p treesitter-types-go
+      - run: cargo publish --dry-run -p treesitter-types-haskell
+      - run: cargo publish --dry-run -p treesitter-types-html
       - run: cargo publish --dry-run -p treesitter-types-java
       - run: cargo publish --dry-run -p treesitter-types-javascript
+      - run: cargo publish --dry-run -p treesitter-types-json
+      - run: cargo publish --dry-run -p treesitter-types-lua
+      - run: cargo publish --dry-run -p treesitter-types-markdown
+      - run: cargo publish --dry-run -p treesitter-types-php
+      - run: cargo publish --dry-run -p treesitter-types-python
+      - run: cargo publish --dry-run -p treesitter-types-regex
+      - run: cargo publish --dry-run -p treesitter-types-ruby
       - run: cargo publish --dry-run -p treesitter-types-rust
+      - run: cargo publish --dry-run -p treesitter-types-scala
+      - run: cargo publish --dry-run -p treesitter-types-swift
+      - run: cargo publish --dry-run -p treesitter-types-toml
       - run: cargo publish --dry-run -p treesitter-types-typescript
+      - run: cargo publish --dry-run -p treesitter-types-yaml
 
   codegen-freshness:
     runs-on: ubuntu-latest
@@ -79,11 +97,22 @@ jobs:
       fail-fast: false
       matrix:
         lang:
+          - c
+          - c-sharp
+          - cpp
+          - css
           - go
-          - rust
-          - typescript
-          - javascript
+          - haskell
+          - html
           - java
+          - javascript
+          - json
+          - php
+          - python
+          - ruby
+          - rust
+          - scala
+          - typescript
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable

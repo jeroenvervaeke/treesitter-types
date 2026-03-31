@@ -1,11 +1,6 @@
-# Generate typed AST code for all language crates
+# Generate typed AST code for all language crates from grammar crate NODE_TYPES constants
 generate:
-    cargo build -p treesitter-types-cli
-    ./target/debug/treesitter-types-cli crates/treesitter-types-go/node-types.json > crates/treesitter-types-go/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-java/node-types.json > crates/treesitter-types-java/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-javascript/node-types.json > crates/treesitter-types-javascript/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-rust/node-types.json > crates/treesitter-types-rust/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-typescript/node-types.json > crates/treesitter-types-typescript/src/generated.rs
+    cargo run -p treesitter-types-codegen-runner
     cargo fmt --all
 
 # Run integration test: parse an entire real-world Go repository
@@ -109,5 +104,215 @@ integration-test-java:
     echo
     ./target/release/parse_all_java "$TMPDIR/spring"
 
+# Run integration test: parse an entire real-world Python repository
+integration-test-python:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/python/cpython.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning python/cpython (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/cpython" 2>&1 | tail -1
+    cd "$TMPDIR/cpython"
+    git sparse-checkout set Lib 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/cpython/Lib" -name '*.py' -not -path '*/test/*' | wc -l)
+    echo "==> Found $FILE_COUNT .py files in Lib/"
+    echo "==> Building parse_all_python..."
+    cargo build --release -p test-roundtrip --bin parse_all_python 2>&1 | tail -1
+    echo "==> Parsing all .py files..."
+    echo
+    ./target/release/parse_all_python "$TMPDIR/cpython/Lib"
+
+# Run integration test: parse an entire real-world C repository
+integration-test-c:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/git/git.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning git/git (shallow)..."
+    git clone --depth 1 --filter=blob:none "$REPO_URL" "$TMPDIR/git" 2>&1 | tail -1
+    FILE_COUNT=$(find "$TMPDIR/git" -name '*.c' -not -path '*/t/*' | wc -l)
+    echo "==> Found $FILE_COUNT .c files"
+    echo "==> Building parse_all_c..."
+    cargo build --release -p test-roundtrip --bin parse_all_c 2>&1 | tail -1
+    echo "==> Parsing all .c files..."
+    echo
+    ./target/release/parse_all_c "$TMPDIR/git"
+
+# Run integration test: parse an entire real-world C++ repository
+integration-test-cpp:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/nlohmann/json.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning nlohmann/json (shallow)..."
+    git clone --depth 1 --filter=blob:none "$REPO_URL" "$TMPDIR/json" 2>&1 | tail -1
+    FILE_COUNT=$(find "$TMPDIR/json" -name '*.cpp' -o -name '*.hpp' | wc -l)
+    echo "==> Found $FILE_COUNT .cpp/.hpp files"
+    echo "==> Building parse_all_cpp..."
+    cargo build --release -p test-roundtrip --bin parse_all_cpp 2>&1 | tail -1
+    echo "==> Parsing all .cpp files..."
+    echo
+    ./target/release/parse_all_cpp "$TMPDIR/json"
+
+# Run integration test: parse an entire real-world Ruby repository
+integration-test-ruby:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/rails/rails.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning rails/rails (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/rails" 2>&1 | tail -1
+    cd "$TMPDIR/rails"
+    git sparse-checkout set activerecord activesupport actionpack 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/rails" -name '*.rb' | wc -l)
+    echo "==> Found $FILE_COUNT .rb files"
+    echo "==> Building parse_all_ruby..."
+    cargo build --release -p test-roundtrip --bin parse_all_ruby 2>&1 | tail -1
+    echo "==> Parsing all .rb files..."
+    echo
+    ./target/release/parse_all_ruby "$TMPDIR/rails"
+
+# Run integration test: parse an entire real-world C# repository
+integration-test-c-sharp:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/dotnet/runtime.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning dotnet/runtime (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/runtime" 2>&1 | tail -1
+    cd "$TMPDIR/runtime"
+    git sparse-checkout set src/libraries/System.Text.Json/src 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/runtime" -name '*.cs' | wc -l)
+    echo "==> Found $FILE_COUNT .cs files"
+    echo "==> Building parse_all_c_sharp..."
+    cargo build --release -p test-roundtrip --bin parse_all_c_sharp 2>&1 | tail -1
+    echo "==> Parsing all .cs files..."
+    echo
+    ./target/release/parse_all_c_sharp "$TMPDIR/runtime"
+
+# Run integration test: parse real-world CSS files
+integration-test-css:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/twbs/bootstrap.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning twbs/bootstrap (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/bootstrap" 2>&1 | tail -1
+    cd "$TMPDIR/bootstrap"
+    git sparse-checkout set dist/css 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/bootstrap" -name '*.css' | wc -l)
+    echo "==> Found $FILE_COUNT .css files"
+    echo "==> Building parse_all_css..."
+    cargo build --release -p test-roundtrip --bin parse_all_css 2>&1 | tail -1
+    echo "==> Parsing all .css files..."
+    echo
+    ./target/release/parse_all_css "$TMPDIR/bootstrap"
+
+# Run integration test: parse real-world PHP files
+integration-test-php:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/laravel/framework.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning laravel/framework (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/laravel" 2>&1 | tail -1
+    cd "$TMPDIR/laravel"
+    git sparse-checkout set src 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/laravel/src" -name '*.php' | wc -l)
+    echo "==> Found $FILE_COUNT .php files in src/"
+    echo "==> Building parse_all_php..."
+    cargo build --release -p test-roundtrip --bin parse_all_php 2>&1 | tail -1
+    echo "==> Parsing all .php files..."
+    echo
+    ./target/release/parse_all_php "$TMPDIR/laravel/src"
+
+# Run integration test: parse real-world JSON files
+integration-test-json:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/SchemaStore/schemastore.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning SchemaStore/schemastore (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/schemastore" 2>&1 | tail -1
+    cd "$TMPDIR/schemastore"
+    git sparse-checkout set src/schemas/json 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/schemastore" -name '*.json' | wc -l)
+    echo "==> Found $FILE_COUNT .json files"
+    echo "==> Building parse_all_json..."
+    cargo build --release -p test-roundtrip --bin parse_all_json 2>&1 | tail -1
+    echo "==> Parsing all .json files..."
+    echo
+    ./target/release/parse_all_json "$TMPDIR/schemastore"
+
+# Run integration test: parse real-world HTML files
+integration-test-html:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/nicehash/NiceHashQuickMiner.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning a repo with HTML files..."
+    git clone --depth 1 --filter=blob:none "$REPO_URL" "$TMPDIR/repo" 2>&1 | tail -1
+    FILE_COUNT=$(find "$TMPDIR/repo" -name '*.html' | wc -l)
+    echo "==> Found $FILE_COUNT .html files"
+    echo "==> Building parse_all_html..."
+    cargo build --release -p test-roundtrip --bin parse_all_html 2>&1 | tail -1
+    echo "==> Parsing all .html files..."
+    echo
+    ./target/release/parse_all_html "$TMPDIR/repo"
+
+# Run integration test: parse an entire real-world Scala repository
+integration-test-scala:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/apache/spark.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning apache/spark (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/spark" 2>&1 | tail -1
+    cd "$TMPDIR/spark"
+    git sparse-checkout set core/src 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/spark" -name '*.scala' | wc -l)
+    echo "==> Found $FILE_COUNT .scala files"
+    echo "==> Building parse_all_scala..."
+    cargo build --release -p test-roundtrip --bin parse_all_scala 2>&1 | tail -1
+    echo "==> Parsing all .scala files..."
+    echo
+    ./target/release/parse_all_scala "$TMPDIR/spark"
+
+# Run integration test: parse an entire real-world Haskell repository
+integration-test-haskell:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    REPO_URL="https://github.com/haskell/cabal.git"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    echo "==> Cloning haskell/cabal (shallow, sparse checkout)..."
+    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/cabal" 2>&1 | tail -1
+    cd "$TMPDIR/cabal"
+    git sparse-checkout set Cabal/src 2>/dev/null
+    cd - > /dev/null
+    FILE_COUNT=$(find "$TMPDIR/cabal" -name '*.hs' | wc -l)
+    echo "==> Found $FILE_COUNT .hs files"
+    echo "==> Building parse_all_haskell..."
+    cargo build --release -p test-roundtrip --bin parse_all_haskell 2>&1 | tail -1
+    echo "==> Parsing all .hs files..."
+    echo
+    ./target/release/parse_all_haskell "$TMPDIR/cabal"
+
 # Run all integration tests
-integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java
