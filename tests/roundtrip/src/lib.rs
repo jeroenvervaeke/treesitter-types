@@ -4,7 +4,6 @@ pub use treesitter_types_c_sharp as c_sharp;
 pub use treesitter_types_cpp as cpp;
 pub use treesitter_types_css as css;
 pub use treesitter_types_go as go;
-pub use treesitter_types_haskell as haskell;
 pub use treesitter_types_html as html;
 pub use treesitter_types_java as java;
 pub use treesitter_types_javascript as javascript;
@@ -65,13 +64,6 @@ pub fn parse_go(src: &[u8]) -> tree_sitter::Tree {
     parser.parse(src, None).expect("parse failed")
 }
 
-pub fn parse_haskell(src: &[u8]) -> tree_sitter::Tree {
-    let mut parser = tree_sitter::Parser::new();
-    parser
-        .set_language(&tree_sitter_haskell::LANGUAGE.into())
-        .expect("failed to set Haskell language");
-    parser.parse(src, None).expect("parse failed")
-}
 
 pub fn parse_html(src: &[u8]) -> tree_sitter::Tree {
     let mut parser = tree_sitter::Parser::new();
