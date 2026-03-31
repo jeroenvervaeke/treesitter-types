@@ -1200,7 +1200,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandName<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2079,7 +2081,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HerestringRedirect<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2284,7 +2288,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NegatedCommand<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2370,37 +2376,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Number<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <NumberChildren as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -2570,7 +2546,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpression<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2789,37 +2767,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RedirectedStatement<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -2870,7 +2818,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleExpansion<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -3163,37 +3113,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TestCommand<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <TestCommandChildren as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -3244,7 +3164,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TranslatedString<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -3338,7 +3260,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpression<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,

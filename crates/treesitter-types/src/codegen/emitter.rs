@@ -394,6 +394,11 @@ fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident
             } else {
                 from_node
             };
+            // First try named non-field children (the common case). If none exist,
+            // fall back to trying all non-field, non-extra children including anonymous
+            // ones and pick the first that successfully parses. This handles grammars
+            // where supertypes (e.g., `expression`) include anonymous subtypes
+            // (e.g., `this`, `base` in C#) that `is_named()` would skip.
             quote! {
                 children: {
                     #collector
@@ -405,8 +410,14 @@ fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident
                         if fallback_cursor.goto_first_child() {
                             loop {
                                 if fallback_cursor.field_name().is_none() && !fallback_cursor.node().is_extra() {
-                                    fallback_child = Some(fallback_cursor.node());
-                                    break;
+                                    let candidate = fallback_cursor.node();
+                                    if (|| -> ::core::result::Result<_, ::treesitter_types::ParseError> {
+                                        let child = candidate;
+                                        Ok(#value_expr)
+                                    })().is_ok() {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
                                 }
                                 if !fallback_cursor.goto_next_sibling() {
                                     break;

@@ -1421,7 +1421,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AlignasQualifier<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -1748,37 +1750,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Attribute<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <ArgumentList as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -1882,7 +1854,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeSpecifier<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2129,7 +2103,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitfieldClause<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -2883,7 +2859,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseClause<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -3002,37 +2980,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumSpecifier<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <AttributeSpecifier as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -3181,37 +3129,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ExpressionStatement<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <ExpressionStatementChildren as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -3262,7 +3180,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ExtensionExpression<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -3474,7 +3394,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FieldDesignator<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -4531,7 +4453,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LabeledStatement<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -4700,7 +4624,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MsBasedModifier<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -4808,7 +4734,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MsDeclspecModifier<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -4889,7 +4817,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MsPointerModifier<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -5249,7 +5179,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpression<'tre
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -5532,7 +5464,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PreprocDefined<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -6114,37 +6048,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ReturnStatement<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <ReturnStatementChildren as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
@@ -6316,7 +6220,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SehTryStatement<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -6667,7 +6573,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDesignator<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if !fallback_cursor.node().is_extra() {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
                                 let candidate = fallback_cursor.node();
                                 if (|| -> ::core::result::Result<
                                     _,
@@ -7085,37 +6993,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeQualifier<'tree> {
                             )?,
                         )
                     }
-                    None => {
-                        let mut _result = None;
-                        let mut _fc = node.walk();
-                        if _fc.goto_first_child() {
-                            loop {
-                                if !_fc.node().is_extra() {
-                                    let child = _fc.node();
-                                    if let Ok(v) = (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        Ok(
-                                            Some(
-                                                <AlignasQualifier as ::treesitter_types::FromNode>::from_node(
-                                                    child,
-                                                    src,
-                                                )?,
-                                            ),
-                                        )
-                                    })() {
-                                        _result = Some(v);
-                                        break;
-                                    }
-                                }
-                                if !_fc.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                        _result.flatten()
-                    }
+                    None => None,
                 }
             },
         })
