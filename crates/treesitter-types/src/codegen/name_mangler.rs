@@ -4,10 +4,14 @@ use quote::format_ident;
 /// Keywords that can be escaped with `r#`.
 /// Note: `self`, `Self`, `super`, and `crate` cannot be raw identifiers.
 const RAW_ESCAPABLE_KEYWORDS: &[&str] = &[
+    // Strict keywords
     "as", "async", "await", "break", "const", "continue", "dyn", "else", "enum", "extern", "false",
     "fn", "for", "if", "impl", "in", "let", "loop", "macro", "match", "mod", "move", "mut", "pub",
     "ref", "return", "static", "struct", "trait", "true", "type", "union", "unsafe", "use",
     "where", "while", "yield",
+    // Reserved keywords (cannot be used as identifiers without r#)
+    "abstract", "become", "box", "do", "final", "macro", "override", "priv", "try", "typeof",
+    "unsized", "virtual",
 ];
 
 /// Keywords that cannot be raw identifiers — must be renamed.
@@ -87,6 +91,10 @@ pub fn anonymous_node_name(s: &str) -> String {
         "#" => "Hash".to_owned(),
         "$" => "Dollar".to_owned(),
         "_" => "Blank".to_owned(),
+        "\"" => "DoubleQuote".to_owned(),
+        "'" => "SingleQuote".to_owned(),
+        "`" => "Backtick".to_owned(),
+        "\\" => "Backslash".to_owned(),
         "->" => "Arrow".to_owned(),
         "<-" => "LArrow".to_owned(),
         "=>" => "FatArrow".to_owned(),
@@ -155,6 +163,10 @@ fn to_pascal_case_fallback(s: &str) -> String {
                 '#' => result.push_str("Hash"),
                 '$' => result.push_str("Dollar"),
                 '_' => result.push_str("Blank"),
+                '"' => result.push_str("DQuote"),
+                '\'' => result.push_str("SQuote"),
+                '`' => result.push_str("Backtick"),
+                '\\' => result.push_str("Backslash"),
                 c if c.is_alphanumeric() => {
                     result.push(c.to_uppercase().next().unwrap());
                 }

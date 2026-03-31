@@ -9,6 +9,19 @@ use quote::{format_ident, quote};
 pub fn emit(decisions: &[TypeDecision]) -> TokenStream {
     let mut tokens = TokenStream::new();
 
+    // Collect type names that have no lifetime parameter (anonymous-only supertype enums)
+    let no_lifetime_types: std::collections::HashSet<String> = decisions
+        .iter()
+        .filter_map(|d| {
+            if let TypeDecision::SupertypeEnum(def) = d {
+                if !def.variants.iter().any(|v| v.named) {
+                    return Some(def.type_name.to_string());
+                }
+            }
+            None
+        })
+        .collect();
+
     // Collect all alternation enums from struct fields to emit them alongside
     let mut alternation_enums: Vec<&AlternationEnumDef> = Vec::new();
     for decision in decisions {
@@ -19,7 +32,7 @@ pub fn emit(decisions: &[TypeDecision]) -> TokenStream {
 
     for decision in decisions {
         match decision {
-            TypeDecision::Struct(def) => tokens.extend(emit_struct(def)),
+            TypeDecision::Struct(def) => tokens.extend(emit_struct(def, &no_lifetime_types)),
             TypeDecision::LeafStruct(def) => tokens.extend(emit_leaf_struct(def)),
             TypeDecision::SupertypeEnum(def) => tokens.extend(emit_supertype_enum(def)),
         }
@@ -56,17 +69,28 @@ fn collect_alternation_from_field_type<'a>(
     }
 }
 
-fn emit_struct(def: &StructDef) -> TokenStream {
+fn emit_struct(
+    def: &StructDef,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     let type_name = &def.type_name;
     let kind_str = &def.kind;
 
-    let field_decls: Vec<_> = def.fields.iter().map(emit_field_decl).collect();
-    let field_parsers: Vec<_> = def.fields.iter().map(emit_field_parser).collect();
+    let field_decls: Vec<_> = def
+        .fields
+        .iter()
+        .map(|f| emit_field_decl(f, type_name, no_lifetime_types))
+        .collect();
+    let field_parsers: Vec<_> = def
+        .fields
+        .iter()
+        .map(|f| emit_field_parser(f, type_name, no_lifetime_types))
+        .collect();
 
     let (children_decl, children_parser) = if let Some(children) = &def.children {
         (
-            Some(emit_children_decl(children)),
-            Some(emit_children_parser(children)),
+            Some(emit_children_decl(children, type_name, no_lifetime_types)),
+            Some(emit_children_parser(children, type_name)),
         )
     } else {
         (None, None)
@@ -103,37 +127,74 @@ fn emit_struct(def: &StructDef) -> TokenStream {
     }
 }
 
-fn emit_field_decl(field: &FieldDef) -> TokenStream {
+fn emit_field_decl(
+    field: &FieldDef,
+    parent_type: &proc_macro2::Ident,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     let name = &field.field_name;
-    let ty = emit_rust_type(&field.field_type);
+    let ty = emit_rust_type(&field.field_type, parent_type, no_lifetime_types);
     quote! { pub #name: #ty, }
 }
 
-fn emit_children_decl(children: &ChildrenDef) -> TokenStream {
-    let ty = emit_rust_type(&children.field_type);
+fn emit_children_decl(
+    children: &ChildrenDef,
+    parent_type: &proc_macro2::Ident,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
+    let ty = emit_rust_type(&children.field_type, parent_type, no_lifetime_types);
     quote! { pub children: #ty, }
 }
 
-fn emit_rust_type(ft: &FieldType) -> TokenStream {
+/// Check if a type reference refers to the parent type (self-referential).
+fn is_self_referential(tr: &TypeReference, parent_type: &proc_macro2::Ident) -> bool {
+    match tr {
+        TypeReference::Named(ident) => ident == parent_type,
+        TypeReference::Alternation(_) => false,
+    }
+}
+
+fn emit_rust_type(
+    ft: &FieldType,
+    parent_type: &proc_macro2::Ident,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     match ft {
         FieldType::Direct(tr) => {
-            let inner = emit_type_reference(tr);
-            quote! { #inner }
+            let inner = emit_type_reference(tr, no_lifetime_types);
+            if is_self_referential(tr, parent_type) {
+                quote! { ::std::boxed::Box<#inner> }
+            } else {
+                quote! { #inner }
+            }
         }
         FieldType::Optional(tr) => {
-            let inner = emit_type_reference(tr);
-            quote! { ::core::option::Option<#inner> }
+            let inner = emit_type_reference(tr, no_lifetime_types);
+            if is_self_referential(tr, parent_type) {
+                quote! { ::core::option::Option<::std::boxed::Box<#inner>> }
+            } else {
+                quote! { ::core::option::Option<#inner> }
+            }
         }
         FieldType::Repeated(tr) => {
-            let inner = emit_type_reference(tr);
+            let inner = emit_type_reference(tr, no_lifetime_types);
             quote! { ::std::vec::Vec<#inner> }
         }
     }
 }
 
-fn emit_type_reference(tr: &TypeReference) -> TokenStream {
+fn emit_type_reference(
+    tr: &TypeReference,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     match tr {
-        TypeReference::Named(ident) => quote! { #ident<'tree> },
+        TypeReference::Named(ident) => {
+            if no_lifetime_types.contains(&ident.to_string()) {
+                quote! { #ident }
+            } else {
+                quote! { #ident<'tree> }
+            }
+        }
         TypeReference::Alternation(alt) => {
             let name = &alt.type_name;
             let has_named = alt.variants.iter().any(|v| v.named);
@@ -146,27 +207,44 @@ fn emit_type_reference(tr: &TypeReference) -> TokenStream {
     }
 }
 
-fn emit_field_parser(field: &FieldDef) -> TokenStream {
+fn emit_field_parser(
+    field: &FieldDef,
+    parent_type: &proc_macro2::Ident,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
+    let _ = no_lifetime_types; // used via emit_rust_type for field decls
     let name = &field.field_name;
     let raw_name = &field.raw_field_name;
 
     match &field.field_type {
         FieldType::Direct(type_ref) => {
             let from_node = emit_from_node_call(type_ref);
+            let self_ref = is_self_referential(type_ref, parent_type);
+            let value_expr = if self_ref {
+                quote! { ::std::boxed::Box::new(#from_node) }
+            } else {
+                from_node
+            };
             quote! {
                 #name: {
                     let child = node
                         .child_by_field_name(#raw_name)
                         .ok_or_else(|| ::treesitter_types::ParseError::missing_field(#raw_name, node))?;
-                    #from_node
+                    #value_expr
                 },
             }
         }
         FieldType::Optional(type_ref) => {
             let from_node = emit_from_node_call(type_ref);
+            let self_ref = is_self_referential(type_ref, parent_type);
+            let some_expr = if self_ref {
+                quote! { Some(::std::boxed::Box::new(#from_node)) }
+            } else {
+                quote! { Some(#from_node) }
+            };
             quote! {
                 #name: match node.child_by_field_name(#raw_name) {
-                    Some(child) => Some(#from_node),
+                    Some(child) => #some_expr,
                     None => None,
                 },
             }
@@ -213,14 +291,17 @@ fn emit_non_field_children_collector() -> TokenStream {
     }
 }
 
-fn emit_children_parser(children: &ChildrenDef) -> TokenStream {
+fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident) -> TokenStream {
     let collector = emit_non_field_children_collector();
     match &children.field_type {
         FieldType::Direct(type_ref) => {
             let from_node = emit_from_node_call_named_children(type_ref);
-            // Fall back to all non-field non-extra children (including anonymous)
-            // when no named children are found. This handles grammars that list
-            // anonymous nodes as valid children (e.g., Rust `_` wildcard pattern).
+            let self_ref = is_self_referential(type_ref, parent_type);
+            let value_expr = if self_ref {
+                quote! { ::std::boxed::Box::new(#from_node) }
+            } else {
+                from_node
+            };
             quote! {
                 children: {
                     #collector
@@ -242,17 +323,23 @@ fn emit_children_parser(children: &ChildrenDef) -> TokenStream {
                         }
                         fallback_child.ok_or_else(|| ::treesitter_types::ParseError::missing_field("children", node))?
                     };
-                    #from_node
+                    #value_expr
                 },
             }
         }
         FieldType::Optional(type_ref) => {
             let from_node = emit_from_node_call_named_children(type_ref);
+            let self_ref = is_self_referential(type_ref, parent_type);
+            let some_expr = if self_ref {
+                quote! { Some(::std::boxed::Box::new(#from_node)) }
+            } else {
+                quote! { Some(#from_node) }
+            };
             quote! {
                 children: {
                     #collector
                     match non_field_children.first() {
-                        Some(&child) => Some(#from_node),
+                        Some(&child) => #some_expr,
                         None => None,
                     }
                 },
@@ -336,6 +423,39 @@ fn emit_leaf_struct(def: &LeafStructDef) -> TokenStream {
     }
 }
 
+/// Deduplicate variants with the same name. When multiple anonymous nodes
+/// produce the same variant name (e.g., "A" and "a" both → `A`), keep only
+/// one variant and aggregate the extra kinds so we can match them all.
+fn deduplicate_variants(variants: &[VariantDef]) -> Vec<VariantDef> {
+    // Key includes both variant name and named flag, since anonymous variants
+    // (Span payload) and named variants (Box<T> payload) are incompatible.
+    let mut seen: std::collections::HashMap<(String, bool), usize> =
+        std::collections::HashMap::new();
+    let mut result: Vec<VariantDef> = Vec::new();
+    let mut used_names: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for v in variants {
+        let key = (v.variant_name.to_string(), v.named);
+        if let Some(&idx) = seen.get(&key) {
+            // Merge: same name and same named flag — can safely combine.
+            result[idx].extra_kinds.push(v.kind.clone());
+        } else {
+            let mut v = v.clone();
+            // If the name is already used by a variant with a different named flag,
+            // disambiguate by appending "Kw" for the anonymous one
+            let name_str = v.variant_name.to_string();
+            if used_names.contains(&name_str) && !v.named {
+                v.variant_name = format_ident!("{}Kw", name_str);
+            }
+            let actual_name = v.variant_name.to_string();
+            seen.insert(key, result.len());
+            used_names.insert(actual_name);
+            used_names.insert(name_str);
+            result.push(v);
+        }
+    }
+    result
+}
+
 fn emit_alternation_enum(def: &AlternationEnumDef) -> TokenStream {
     emit_enum_common(&def.type_name, &def.variants)
 }
@@ -345,6 +465,10 @@ fn emit_supertype_enum(def: &SupertypeEnumDef) -> TokenStream {
 }
 
 fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> TokenStream {
+    // Deduplicate variant names: when multiple anonymous nodes map to the same
+    // PascalCase name (e.g., "A" and "a" both become `A`), merge them into one
+    // variant and handle both kinds in the match arm.
+    let variants = deduplicate_variants(variants);
     let has_named = variants.iter().any(|v| v.named);
     let variant_decls: Vec<_> = variants.iter().map(emit_enum_variant_decl).collect();
 
@@ -435,7 +559,14 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
             }
         }
     } else {
-        // All variants are anonymous — no lifetime needed, suppress unused `src` warning
+        // All variants are anonymous — no lifetime needed.
+        // Use `src` if supertype fallbacks need it, otherwise `_src`.
+        let has_supertypes = !supertype_variants.is_empty();
+        let src_param = if has_supertypes {
+            quote! { src: &'tree [u8] }
+        } else {
+            quote! { _src: &'tree [u8] }
+        };
         quote! {
             #[derive(Debug, Clone)]
             pub enum #type_name {
@@ -446,7 +577,7 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
                 #[allow(clippy::collapsible_else_if)]
                 fn from_node(
                     node: ::tree_sitter::Node<'tree>,
-                    _src: &'tree [u8],
+                    #src_param,
                 ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
                     #from_node_body
                 }
@@ -478,16 +609,17 @@ fn emit_enum_variant_decl(variant: &VariantDef) -> TokenStream {
 fn emit_enum_match_arm(variant: &VariantDef) -> TokenStream {
     let kind_str = &variant.kind;
     let name = &variant.variant_name;
+    let extra = &variant.extra_kinds;
     if variant.named {
         let type_name = format_ident!("{}", name);
         quote! {
-            #kind_str => Ok(Self::#name(
+            #kind_str #(| #extra)* => Ok(Self::#name(
                 ::std::boxed::Box::new(<#type_name as ::treesitter_types::FromNode>::from_node(node, src)?)
             )),
         }
     } else {
         quote! {
-            #kind_str => Ok(Self::#name(::treesitter_types::Span::from(node))),
+            #kind_str #(| #extra)* => Ok(Self::#name(::treesitter_types::Span::from(node))),
         }
     }
 }
@@ -507,15 +639,25 @@ fn emit_any_node(decisions: &[TypeDecision]) -> TokenStream {
     let mut spanned_arms = Vec::new();
 
     for decision in decisions {
-        let (type_name, kind_str) = match decision {
-            TypeDecision::Struct(def) => (&def.type_name, &def.kind),
-            TypeDecision::LeafStruct(def) => (&def.type_name, &def.kind),
-            TypeDecision::SupertypeEnum(def) => (&def.type_name, &def.kind),
+        let (type_name, kind_str, needs_lifetime) = match decision {
+            TypeDecision::Struct(def) => (&def.type_name, &def.kind, true),
+            TypeDecision::LeafStruct(def) => (&def.type_name, &def.kind, true),
+            TypeDecision::SupertypeEnum(def) => {
+                // Supertype enums with only anonymous variants have no lifetime parameter
+                let has_named = def.variants.iter().any(|v| v.named);
+                (&def.type_name, &def.kind, has_named)
+            }
         };
 
-        variant_decls.push(quote! {
-            #type_name(#type_name<'tree>),
-        });
+        if needs_lifetime {
+            variant_decls.push(quote! {
+                #type_name(#type_name<'tree>),
+            });
+        } else {
+            variant_decls.push(quote! {
+                #type_name(#type_name),
+            });
+        }
 
         match_arms.push(quote! {
             #kind_str => <#type_name as ::treesitter_types::FromNode>::from_node(node, src)
