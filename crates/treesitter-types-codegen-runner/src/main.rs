@@ -1,3 +1,12 @@
+//! Batch code generator that produces all pre-generated language crates from their
+//! [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) grammar crates.
+//!
+//! This binary is used during development to regenerate the `generated.rs` files in each
+//! `treesitter-types-*` language crate. It is automatically re-run when a new version of a
+//! grammar crate is released.
+//!
+//! Built on the [`treesitter-types`](https://docs.rs/treesitter-types) code-generation library.
+
 use std::path::Path;
 
 /// Each entry: (language name, NODE_TYPES json, output path relative to workspace root)
