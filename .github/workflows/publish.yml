@@ -38,11 +38,31 @@ jobs:
         run: |
           cargo publish --dry-run -p treesitter-types
           cargo publish --dry-run -p treesitter-types-macros
+          cargo publish --dry-run -p treesitter-types-bash
+          cargo publish --dry-run -p treesitter-types-c
+          cargo publish --dry-run -p treesitter-types-c-sharp
+          cargo publish --dry-run -p treesitter-types-cpp
+          cargo publish --dry-run -p treesitter-types-css
+          cargo publish --dry-run -p treesitter-types-elixir
           cargo publish --dry-run -p treesitter-types-go
+          cargo publish --dry-run -p treesitter-types-haskell
+          cargo publish --dry-run -p treesitter-types-html
           cargo publish --dry-run -p treesitter-types-java
           cargo publish --dry-run -p treesitter-types-javascript
+          cargo publish --dry-run -p treesitter-types-json
+          cargo publish --dry-run -p treesitter-types-lua
+          cargo publish --dry-run -p treesitter-types-markdown
+          cargo publish --dry-run -p treesitter-types-ocaml
+          cargo publish --dry-run -p treesitter-types-php
+          cargo publish --dry-run -p treesitter-types-python
+          cargo publish --dry-run -p treesitter-types-regex
+          cargo publish --dry-run -p treesitter-types-ruby
           cargo publish --dry-run -p treesitter-types-rust
+          cargo publish --dry-run -p treesitter-types-scala
+          cargo publish --dry-run -p treesitter-types-swift
+          cargo publish --dry-run -p treesitter-types-toml
           cargo publish --dry-run -p treesitter-types-typescript
+          cargo publish --dry-run -p treesitter-types-yaml
 
       - name: Bump versions
         run: cargo set-version --workspace "${{ inputs.version }}"
@@ -76,15 +96,41 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: cargo publish -p treesitter-types-macros
 
-      - name: Publish language crates
+      - name: Publish language crates (batch 1)
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
+          cargo publish -p treesitter-types-bash &
+          cargo publish -p treesitter-types-c &
+          cargo publish -p treesitter-types-c-sharp &
+          cargo publish -p treesitter-types-cpp &
+          cargo publish -p treesitter-types-css &
+          cargo publish -p treesitter-types-elixir &
           cargo publish -p treesitter-types-go &
+          cargo publish -p treesitter-types-haskell &
+          cargo publish -p treesitter-types-html &
           cargo publish -p treesitter-types-java &
+          wait
+
+      - name: Publish language crates (batch 2)
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
           cargo publish -p treesitter-types-javascript &
+          cargo publish -p treesitter-types-json &
+          cargo publish -p treesitter-types-lua &
+          cargo publish -p treesitter-types-markdown &
+          cargo publish -p treesitter-types-ocaml &
+          cargo publish -p treesitter-types-php &
+          cargo publish -p treesitter-types-python &
+          cargo publish -p treesitter-types-regex &
+          cargo publish -p treesitter-types-ruby &
           cargo publish -p treesitter-types-rust &
+          cargo publish -p treesitter-types-scala &
+          cargo publish -p treesitter-types-swift &
+          cargo publish -p treesitter-types-toml &
           cargo publish -p treesitter-types-typescript &
+          cargo publish -p treesitter-types-yaml &
           wait
 
       - name: Create GitHub release
