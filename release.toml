@@ -1,0 +1,20 @@
+shared-version = true
+consolidate-commits = true
+
+allow-branch = ["master"]
+
+tag-name = "v{{version}}"
+
+# Matches cliff.toml skip pattern: ^chore\(release\)
+pre-release-commit-message = "chore(release): release v{{version}}"
+
+# Generate a single root-level CHANGELOG.md via git-cliff before the release commit.
+# The hook runs per-crate from each crate's directory, so we use --workdir to always
+# target the workspace root.
+pre-release-hook = ["bash", "-c", "ROOT=$(git rev-parse --show-toplevel) && git-cliff --workdir \"$ROOT\" --tag \"v$1\" --output \"$ROOT/CHANGELOG.md\"", "_", "{{version}}"]
+
+# Delay between crate publishes to avoid crates.io rate limiting (25+ crates)
+rate-limit = { existing-work-ms = 5000 }
+
+push = true
+push-remote = "origin"

@@ -1,16 +1,22 @@
-name: Publish
+name: Release
 
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version to publish (e.g. 0.2.0)"
+      level:
+        description: "Release level (patch, minor, major, or exact version like 0.2.0)"
         required: true
         type: string
+      dry-run:
+        description: "Dry run (do not actually publish)"
+        required: false
+        type: boolean
+        default: true
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: write
     steps:
@@ -25,111 +31,35 @@ jobs:
       - name: Install tools
         uses: taiki-e/install-action@v2
         with:
-          tool: git-cliff,cargo-edit
+          tool: git-cliff,cargo-release
 
-      - name: Validate version format
-        run: |
-          if ! echo "${{ inputs.version }}" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-            echo "Error: version must be in semver format (e.g. 0.2.0)"
-            exit 1
-          fi
-
-      - name: Dry-run publish all crates
-        run: |
-          cargo publish --dry-run -p treesitter-types
-          cargo publish --dry-run -p treesitter-types-macros
-          cargo publish --dry-run -p treesitter-types-c
-          cargo publish --dry-run -p treesitter-types-c-sharp
-          cargo publish --dry-run -p treesitter-types-cpp
-          cargo publish --dry-run -p treesitter-types-css
-          cargo publish --dry-run -p treesitter-types-elixir
-          cargo publish --dry-run -p treesitter-types-go
-          cargo publish --dry-run -p treesitter-types-haskell
-          cargo publish --dry-run -p treesitter-types-html
-          cargo publish --dry-run -p treesitter-types-java
-          cargo publish --dry-run -p treesitter-types-javascript
-          cargo publish --dry-run -p treesitter-types-json
-          cargo publish --dry-run -p treesitter-types-lua
-          cargo publish --dry-run -p treesitter-types-markdown
-          cargo publish --dry-run -p treesitter-types-php
-          cargo publish --dry-run -p treesitter-types-python
-          cargo publish --dry-run -p treesitter-types-regex
-          cargo publish --dry-run -p treesitter-types-ruby
-          cargo publish --dry-run -p treesitter-types-rust
-          cargo publish --dry-run -p treesitter-types-scala
-          cargo publish --dry-run -p treesitter-types-swift
-          cargo publish --dry-run -p treesitter-types-toml
-          cargo publish --dry-run -p treesitter-types-typescript
-          cargo publish --dry-run -p treesitter-types-yaml
-
-      - name: Bump versions
-        run: cargo set-version --workspace "${{ inputs.version }}"
-
-      - name: Generate release notes
-        run: git-cliff --tag "v${{ inputs.version }}" --output RELEASE_NOTES.md
-
-      - name: Commit and tag
+      - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "chore(release): v${{ inputs.version }}"
-          git tag "v${{ inputs.version }}"
 
-      - name: Push
-        run: |
-          git push origin HEAD:master
-          git push origin "v${{ inputs.version }}"
-
-      - name: Publish treesitter-types (base crate)
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: cargo publish -p treesitter-types
-
-      - name: Wait for crates.io index update
-        run: sleep 30
-
-      - name: Publish treesitter-types-macros
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: cargo publish -p treesitter-types-macros
-
-      - name: Publish language crates (batch 1)
+      - name: Release
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
-          cargo publish -p treesitter-types-c &
-          cargo publish -p treesitter-types-c-sharp &
-          cargo publish -p treesitter-types-cpp &
-          cargo publish -p treesitter-types-css &
-          cargo publish -p treesitter-types-elixir &
-          cargo publish -p treesitter-types-go &
-          cargo publish -p treesitter-types-haskell &
-          cargo publish -p treesitter-types-html &
-          cargo publish -p treesitter-types-java &
-          wait
+          FLAGS="${{ inputs.level }}"
+          if [ "${{ inputs.dry-run }}" != "true" ]; then
+            FLAGS="$FLAGS --execute --no-confirm"
+          fi
+          cargo release $FLAGS --workspace
 
-      - name: Publish language crates (batch 2)
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      - name: Determine version
+        if: inputs.dry-run != true
+        id: version
         run: |
-          cargo publish -p treesitter-types-javascript &
-          cargo publish -p treesitter-types-json &
-          cargo publish -p treesitter-types-lua &
-          cargo publish -p treesitter-types-markdown &
-          cargo publish -p treesitter-types-php &
-          cargo publish -p treesitter-types-python &
-          cargo publish -p treesitter-types-regex &
-          cargo publish -p treesitter-types-ruby &
-          cargo publish -p treesitter-types-rust &
-          cargo publish -p treesitter-types-scala &
-          cargo publish -p treesitter-types-swift &
-          cargo publish -p treesitter-types-toml &
-          cargo publish -p treesitter-types-typescript &
-          cargo publish -p treesitter-types-yaml &
-          wait
+          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "treesitter-types") | .version')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
+        if: inputs.dry-run != true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "v${{ inputs.version }}" --title "v${{ inputs.version }}" --notes-file RELEASE_NOTES.md
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git-cliff --tag "v${VERSION}" --latest --output RELEASE_NOTES.md
+          gh release create "v${VERSION}" --title "v${VERSION}" --notes-file RELEASE_NOTES.md
