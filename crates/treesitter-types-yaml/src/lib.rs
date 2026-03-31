@@ -25,7 +25,10 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let stream = Stream::from_node(tree.root_node(), src).unwrap();
-//! assert!(!stream.children.is_empty());
+//!
+//! // The stream contains one YAML document.
+//! assert_eq!(stream.children.len(), 1);
+//! assert!(!stream.children[0].children.is_empty());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

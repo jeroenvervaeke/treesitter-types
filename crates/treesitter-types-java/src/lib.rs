@@ -28,9 +28,20 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
-//!
-//! // The program has one top-level child: the `Hello` class declaration.
 //! assert_eq!(program.children.len(), 1);
+//!
+//! // Extract the class declaration and inspect its fields.
+//! let ProgramChildren::Statement(stmt) = &program.children[0] else {
+//!     panic!("expected a statement");
+//! };
+//! let Statement::Declaration(decl) = stmt.as_ref() else {
+//!     panic!("expected a declaration");
+//! };
+//! let Declaration::ClassDeclaration(class) = decl.as_ref() else {
+//!     panic!("expected a class declaration");
+//! };
+//! assert_eq!(class.name.text(), "Hello");
+//! assert!(class.superclass.is_none());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

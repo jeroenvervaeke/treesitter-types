@@ -28,11 +28,16 @@
 //! parser.set_language(&tree_sitter_cpp::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
 //!
-//! let translation_unit = TranslationUnit::from_node(tree.root_node(), src).unwrap();
+//! let tu = TranslationUnit::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The translation unit has two top-level children:
 //! // a #include directive and the `main` function definition.
-//! assert_eq!(translation_unit.children.len(), 2);
+//! assert_eq!(tu.children.len(), 2);
+//!
+//! let TranslationUnitChildren::FunctionDefinition(func) = &tu.children[1] else {
+//!     panic!("expected a function definition");
+//! };
+//! assert!(func.body.is_some());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

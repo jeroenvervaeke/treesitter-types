@@ -27,10 +27,20 @@
 //! parser.set_language(&tree_sitter_scala::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
 //!
-//! let compilation_unit = CompilationUnit::from_node(tree.root_node(), src).unwrap();
+//! let cu = CompilationUnit::from_node(tree.root_node(), src).unwrap();
+//! assert_eq!(cu.children.len(), 1);
 //!
-//! // The compilation unit has one top-level child: the `Hello` object definition.
-//! assert_eq!(compilation_unit.children.len(), 1);
+//! // Extract the object definition and inspect its name.
+//! let CompilationUnitChildren::Definition(def) = &cu.children[0] else {
+//!     panic!("expected a definition");
+//! };
+//! let Definition::ObjectDefinition(obj) = def.as_ref() else {
+//!     panic!("expected an object definition");
+//! };
+//! let ObjectDefinitionName::Identifier(name) = &obj.name else {
+//!     panic!("expected an identifier");
+//! };
+//! assert_eq!(name.text(), "Hello");
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

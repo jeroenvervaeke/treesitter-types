@@ -25,7 +25,10 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let source = Source::from_node(tree.root_node(), src).unwrap();
-//! assert!(!source.children.is_empty());
+//!
+//! // The source has one top-level child: the `defmodule` call.
+//! assert_eq!(source.children.len(), 1);
+//! assert_eq!(source.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

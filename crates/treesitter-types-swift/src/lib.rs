@@ -25,7 +25,10 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let source_file = SourceFile::from_node(tree.root_node(), src).unwrap();
-//! assert!(!source_file.children.is_empty());
+//!
+//! // The source file has two top-level children:
+//! // a function declaration and a call expression.
+//! assert_eq!(source_file.children.len(), 2);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

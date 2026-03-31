@@ -32,6 +32,10 @@
 //! // The program has two top-level children:
 //! // a method definition and a method call.
 //! assert_eq!(program.children.len(), 2);
+//!
+//! // All children implement the Spanned trait for source locations.
+//! assert_eq!(program.span.start.row, 0);
+//! assert_eq!(program.span.start.column, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

@@ -25,7 +25,10 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let chunk = Chunk::from_node(tree.root_node(), src).unwrap();
-//! assert!(!chunk.children.is_empty());
+//!
+//! // The chunk has two top-level children:
+//! // a function statement and a function call statement.
+//! assert_eq!(chunk.children.len(), 2);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

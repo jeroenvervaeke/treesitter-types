@@ -29,7 +29,14 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The document contains the doctype and the <html> element.
 //! assert!(!document.children.is_empty());
+//!
+//! let DocumentChildren::Doctype(doctype) = &document.children[0] else {
+//!     panic!("expected a doctype");
+//! };
+//! assert_eq!(doctype.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

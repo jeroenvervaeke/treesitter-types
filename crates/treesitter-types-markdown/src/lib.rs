@@ -23,7 +23,14 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
-//! assert!(!document.children.is_empty());
+//!
+//! // The document has one top-level child: a section containing the heading
+//! // and paragraph.
+//! assert_eq!(document.children.len(), 1);
+//! let DocumentChildren::Section(section) = &document.children[0] else {
+//!     panic!("expected a section");
+//! };
+//! assert_eq!(section.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

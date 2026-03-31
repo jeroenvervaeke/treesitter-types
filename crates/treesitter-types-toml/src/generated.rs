@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ArrayChildren<'tree>>,
@@ -19,8 +19,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Array<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -34,9 +33,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Array<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<ArrayChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <ArrayChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -48,7 +51,7 @@ impl ::treesitter_types::Spanned for Array<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Document<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DocumentChildren<'tree>>,
@@ -69,8 +72,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -84,9 +86,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <DocumentChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <DocumentChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -98,7 +104,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DottedKey<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DottedKeyChildren<'tree>>,
@@ -119,8 +125,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DottedKey<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -134,9 +139,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DottedKey<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <DottedKeyChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <DottedKeyChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -148,7 +157,7 @@ impl ::treesitter_types::Spanned for DottedKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Float<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -175,7 +184,7 @@ impl ::treesitter_types::Spanned for Float<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InlineTable<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Pair<'tree>>,
@@ -196,8 +205,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InlineTable<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -211,9 +219,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InlineTable<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Pair as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Pair as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -225,7 +237,7 @@ impl ::treesitter_types::Spanned for InlineTable<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Integer<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -252,7 +264,7 @@ impl ::treesitter_types::Spanned for Integer<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pair<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PairChildren<'tree>>,
@@ -273,8 +285,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pair<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -288,9 +299,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pair<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<PairChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <PairChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -302,7 +317,7 @@ impl ::treesitter_types::Spanned for Pair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedKey<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -323,8 +338,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKey<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -338,9 +352,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKey<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<EscapeSequence as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -352,7 +370,7 @@ impl ::treesitter_types::Spanned for QuotedKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct String<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -373,8 +391,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -388,9 +405,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<EscapeSequence as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -402,7 +423,7 @@ impl ::treesitter_types::Spanned for String<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Table<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TableChildren<'tree>>,
@@ -423,8 +444,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Table<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -438,9 +458,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Table<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<TableChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <TableChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -452,7 +476,7 @@ impl ::treesitter_types::Spanned for Table<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TableArrayElement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TableArrayElementChildren<'tree>>,
@@ -473,8 +497,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TableArrayElement<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -488,11 +511,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TableArrayElement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <TableArrayElementChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <TableArrayElementChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -504,7 +529,7 @@ impl ::treesitter_types::Spanned for TableArrayElement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BareKey<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -531,7 +556,7 @@ impl ::treesitter_types::Spanned for BareKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Boolean<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -558,7 +583,7 @@ impl ::treesitter_types::Spanned for Boolean<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -585,7 +610,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeSequence<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -612,7 +637,7 @@ impl ::treesitter_types::Spanned for EscapeSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalDate<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -639,7 +664,7 @@ impl ::treesitter_types::Spanned for LocalDate<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalDateTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -666,7 +691,7 @@ impl ::treesitter_types::Spanned for LocalDateTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -693,7 +718,7 @@ impl ::treesitter_types::Spanned for LocalTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OffsetDateTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -720,7 +745,7 @@ impl ::treesitter_types::Spanned for OffsetDateTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArrayChildren<'tree> {
     Array(::std::boxed::Box<Array<'tree>>),
     Boolean(::std::boxed::Box<Boolean<'tree>>),
@@ -740,36 +765,126 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "array" => Ok(Self::Array(::std::boxed::Box::new(
-                <Array as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "inline_table" => Ok(Self::InlineTable(::std::boxed::Box::new(
-                <InlineTable as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_date" => Ok(Self::LocalDate(::std::boxed::Box::new(
-                <LocalDate as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_date_time" => Ok(Self::LocalDateTime(::std::boxed::Box::new(
-                <LocalDateTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_time" => Ok(Self::LocalTime(::std::boxed::Box::new(
-                <LocalTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "offset_date_time" => Ok(Self::OffsetDateTime(::std::boxed::Box::new(
-                <OffsetDateTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "array" => {
+                Ok(
+                    Self::Array(
+                        ::std::boxed::Box::new(
+                            <Array as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "inline_table" => {
+                Ok(
+                    Self::InlineTable(
+                        ::std::boxed::Box::new(
+                            <InlineTable as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_date" => {
+                Ok(
+                    Self::LocalDate(
+                        ::std::boxed::Box::new(
+                            <LocalDate as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_date_time" => {
+                Ok(
+                    Self::LocalDateTime(
+                        ::std::boxed::Box::new(
+                            <LocalDateTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_time" => {
+                Ok(
+                    Self::LocalTime(
+                        ::std::boxed::Box::new(
+                            <LocalTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "offset_date_time" => {
+                Ok(
+                    Self::OffsetDateTime(
+                        ::std::boxed::Box::new(
+                            <OffsetDateTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -790,7 +905,7 @@ impl ::treesitter_types::Spanned for ArrayChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DocumentChildren<'tree> {
     Pair(::std::boxed::Box<Pair<'tree>>),
     Table(::std::boxed::Box<Table<'tree>>),
@@ -803,15 +918,39 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DocumentChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "pair" => Ok(Self::Pair(::std::boxed::Box::new(
-                <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "table" => Ok(Self::Table(::std::boxed::Box::new(
-                <Table as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "table_array_element" => Ok(Self::TableArrayElement(::std::boxed::Box::new(
-                <TableArrayElement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "pair" => {
+                Ok(
+                    Self::Pair(
+                        ::std::boxed::Box::new(
+                            <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "table" => {
+                Ok(
+                    Self::Table(
+                        ::std::boxed::Box::new(
+                            <Table as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "table_array_element" => {
+                Ok(
+                    Self::TableArrayElement(
+                        ::std::boxed::Box::new(
+                            <TableArrayElement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -825,7 +964,7 @@ impl ::treesitter_types::Spanned for DocumentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DottedKeyChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -838,15 +977,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DottedKeyChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "bare_key" => Ok(Self::BareKey(::std::boxed::Box::new(
-                <BareKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dotted_key" => Ok(Self::DottedKey(::std::boxed::Box::new(
-                <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_key" => Ok(Self::QuotedKey(::std::boxed::Box::new(
-                <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "bare_key" => {
+                Ok(
+                    Self::BareKey(
+                        ::std::boxed::Box::new(
+                            <BareKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dotted_key" => {
+                Ok(
+                    Self::DottedKey(
+                        ::std::boxed::Box::new(
+                            <DottedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_key" => {
+                Ok(
+                    Self::QuotedKey(
+                        ::std::boxed::Box::new(
+                            <QuotedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -860,7 +1026,7 @@ impl ::treesitter_types::Spanned for DottedKeyChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PairChildren<'tree> {
     Array(::std::boxed::Box<Array<'tree>>),
     BareKey(::std::boxed::Box<BareKey<'tree>>),
@@ -883,45 +1049,162 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PairChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "array" => Ok(Self::Array(::std::boxed::Box::new(
-                <Array as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bare_key" => Ok(Self::BareKey(::std::boxed::Box::new(
-                <BareKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dotted_key" => Ok(Self::DottedKey(::std::boxed::Box::new(
-                <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "inline_table" => Ok(Self::InlineTable(::std::boxed::Box::new(
-                <InlineTable as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_date" => Ok(Self::LocalDate(::std::boxed::Box::new(
-                <LocalDate as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_date_time" => Ok(Self::LocalDateTime(::std::boxed::Box::new(
-                <LocalDateTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "local_time" => Ok(Self::LocalTime(::std::boxed::Box::new(
-                <LocalTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "offset_date_time" => Ok(Self::OffsetDateTime(::std::boxed::Box::new(
-                <OffsetDateTime as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_key" => Ok(Self::QuotedKey(::std::boxed::Box::new(
-                <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "array" => {
+                Ok(
+                    Self::Array(
+                        ::std::boxed::Box::new(
+                            <Array as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bare_key" => {
+                Ok(
+                    Self::BareKey(
+                        ::std::boxed::Box::new(
+                            <BareKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dotted_key" => {
+                Ok(
+                    Self::DottedKey(
+                        ::std::boxed::Box::new(
+                            <DottedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "inline_table" => {
+                Ok(
+                    Self::InlineTable(
+                        ::std::boxed::Box::new(
+                            <InlineTable as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_date" => {
+                Ok(
+                    Self::LocalDate(
+                        ::std::boxed::Box::new(
+                            <LocalDate as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_date_time" => {
+                Ok(
+                    Self::LocalDateTime(
+                        ::std::boxed::Box::new(
+                            <LocalDateTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "local_time" => {
+                Ok(
+                    Self::LocalTime(
+                        ::std::boxed::Box::new(
+                            <LocalTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "offset_date_time" => {
+                Ok(
+                    Self::OffsetDateTime(
+                        ::std::boxed::Box::new(
+                            <OffsetDateTime as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_key" => {
+                Ok(
+                    Self::QuotedKey(
+                        ::std::boxed::Box::new(
+                            <QuotedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -945,7 +1228,7 @@ impl ::treesitter_types::Spanned for PairChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TableChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -959,18 +1242,51 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TableChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "bare_key" => Ok(Self::BareKey(::std::boxed::Box::new(
-                <BareKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dotted_key" => Ok(Self::DottedKey(::std::boxed::Box::new(
-                <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pair" => Ok(Self::Pair(::std::boxed::Box::new(
-                <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_key" => Ok(Self::QuotedKey(::std::boxed::Box::new(
-                <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "bare_key" => {
+                Ok(
+                    Self::BareKey(
+                        ::std::boxed::Box::new(
+                            <BareKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dotted_key" => {
+                Ok(
+                    Self::DottedKey(
+                        ::std::boxed::Box::new(
+                            <DottedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pair" => {
+                Ok(
+                    Self::Pair(
+                        ::std::boxed::Box::new(
+                            <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_key" => {
+                Ok(
+                    Self::QuotedKey(
+                        ::std::boxed::Box::new(
+                            <QuotedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -985,7 +1301,7 @@ impl ::treesitter_types::Spanned for TableChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TableArrayElementChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -999,18 +1315,51 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TableArrayElementChildren<'t
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "bare_key" => Ok(Self::BareKey(::std::boxed::Box::new(
-                <BareKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dotted_key" => Ok(Self::DottedKey(::std::boxed::Box::new(
-                <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pair" => Ok(Self::Pair(::std::boxed::Box::new(
-                <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_key" => Ok(Self::QuotedKey(::std::boxed::Box::new(
-                <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "bare_key" => {
+                Ok(
+                    Self::BareKey(
+                        ::std::boxed::Box::new(
+                            <BareKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dotted_key" => {
+                Ok(
+                    Self::DottedKey(
+                        ::std::boxed::Box::new(
+                            <DottedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pair" => {
+                Ok(
+                    Self::Pair(
+                        ::std::boxed::Box::new(
+                            <Pair as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_key" => {
+                Ok(
+                    Self::QuotedKey(
+                        ::std::boxed::Box::new(
+                            <QuotedKey as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1025,7 +1374,7 @@ impl ::treesitter_types::Spanned for TableArrayElementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     Array(Array<'tree>),
     Document(Document<'tree>),
@@ -1051,66 +1400,96 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "array" => <Array as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Array)
-                .unwrap_or(Self::Unknown(node)),
-            "document" => <Document as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Document)
-                .unwrap_or(Self::Unknown(node)),
-            "dotted_key" => <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::DottedKey)
-                .unwrap_or(Self::Unknown(node)),
-            "float" => <Float as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Float)
-                .unwrap_or(Self::Unknown(node)),
-            "inline_table" => <InlineTable as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::InlineTable)
-                .unwrap_or(Self::Unknown(node)),
-            "integer" => <Integer as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Integer)
-                .unwrap_or(Self::Unknown(node)),
-            "pair" => <Pair as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Pair)
-                .unwrap_or(Self::Unknown(node)),
-            "quoted_key" => <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::QuotedKey)
-                .unwrap_or(Self::Unknown(node)),
-            "string" => <String as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::String)
-                .unwrap_or(Self::Unknown(node)),
-            "table" => <Table as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Table)
-                .unwrap_or(Self::Unknown(node)),
+            "array" => {
+                <Array as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Array)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "document" => {
+                <Document as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Document)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "dotted_key" => {
+                <DottedKey as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::DottedKey)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "float" => {
+                <Float as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Float)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "inline_table" => {
+                <InlineTable as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::InlineTable)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "integer" => {
+                <Integer as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Integer)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "pair" => {
+                <Pair as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Pair)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "quoted_key" => {
+                <QuotedKey as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::QuotedKey)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "string" => {
+                <String as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::String)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "table" => {
+                <Table as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Table)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "table_array_element" => {
                 <TableArrayElement as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::TableArrayElement)
                     .unwrap_or(Self::Unknown(node))
             }
-            "bare_key" => <BareKey as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::BareKey)
-                .unwrap_or(Self::Unknown(node)),
-            "boolean" => <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Boolean)
-                .unwrap_or(Self::Unknown(node)),
-            "comment" => <Comment as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Comment)
-                .unwrap_or(Self::Unknown(node)),
+            "bare_key" => {
+                <BareKey as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::BareKey)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "boolean" => {
+                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Boolean)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "comment" => {
+                <Comment as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Comment)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "escape_sequence" => {
                 <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::EscapeSequence)
                     .unwrap_or(Self::Unknown(node))
             }
-            "local_date" => <LocalDate as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::LocalDate)
-                .unwrap_or(Self::Unknown(node)),
+            "local_date" => {
+                <LocalDate as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::LocalDate)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "local_date_time" => {
                 <LocalDateTime as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::LocalDateTime)
                     .unwrap_or(Self::Unknown(node))
             }
-            "local_time" => <LocalTime as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::LocalTime)
-                .unwrap_or(Self::Unknown(node)),
+            "local_time" => {
+                <LocalTime as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::LocalTime)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "offset_date_time" => {
                 <OffsetDateTime as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::OffsetDateTime)

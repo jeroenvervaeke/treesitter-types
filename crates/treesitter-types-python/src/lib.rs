@@ -31,6 +31,16 @@
 //! // The module has two top-level children:
 //! // a function definition and a function call expression.
 //! assert_eq!(module.children.len(), 2);
+//!
+//! // Extract the function definition and inspect its fields.
+//! let ModuleChildren::CompoundStatement(stmt) = &module.children[0] else {
+//!     panic!("expected a compound statement");
+//! };
+//! let CompoundStatement::FunctionDefinition(func) = stmt.as_ref() else {
+//!     panic!("expected a function definition");
+//! };
+//! assert_eq!(func.name.text(), "main");
+//! assert!(func.return_type.is_none());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

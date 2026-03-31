@@ -27,9 +27,14 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
-//!
-//! // The document has one top-level child: the root JSON object.
 //! assert_eq!(document.children.len(), 1);
+//!
+//! // The root value is an object with two key-value pairs.
+//! let Value::Object(object) = &document.children[0] else {
+//!     panic!("expected an object");
+//! };
+//! assert_eq!(object.children.len(), 2);
+//! assert_eq!(object.children[0].key.span.start.row, 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

@@ -29,6 +29,19 @@
 //!
 //! // The source file has one top-level child: the `main` function definition.
 //! assert_eq!(source_file.children.len(), 1);
+//!
+//! // Extract the function item and inspect its fields.
+//! let SourceFileChildren::DeclarationStatement(decl) = &source_file.children[0] else {
+//!     panic!("expected a declaration statement");
+//! };
+//! let DeclarationStatement::FunctionItem(func) = decl.as_ref() else {
+//!     panic!("expected a function item");
+//! };
+//! let FunctionItemName::Identifier(name) = &func.name else {
+//!     panic!("expected an identifier");
+//! };
+//! assert_eq!(name.text(), "main");
+//! assert!(func.return_type.is_none());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

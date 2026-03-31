@@ -19,7 +19,10 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let pattern = Pattern::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The pattern spans the entire input.
 //! assert_eq!(pattern.span.start.column, 0);
+//! assert_eq!(pattern.span.end.column, 14);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

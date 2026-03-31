@@ -23,7 +23,13 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
-//! assert!(!document.children.is_empty());
+//!
+//! // The document has one top-level child: a [package] table.
+//! assert_eq!(document.children.len(), 1);
+//! let DocumentChildren::Table(table) = &document.children[0] else {
+//!     panic!("expected a table");
+//! };
+//! assert!(!table.children.is_empty());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

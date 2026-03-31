@@ -29,11 +29,17 @@
 //! parser.set_language(&tree_sitter_c_sharp::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
 //!
-//! let compilation_unit = CompilationUnit::from_node(tree.root_node(), src).unwrap();
+//! let cu = CompilationUnit::from_node(tree.root_node(), src).unwrap();
+//! assert_eq!(cu.children.len(), 2);
 //!
-//! // The compilation unit has two top-level children:
-//! // a using directive and the `Hello` class declaration.
-//! assert_eq!(compilation_unit.children.len(), 2);
+//! // Extract the class declaration and inspect its name.
+//! let CompilationUnitChildren::TypeDeclaration(type_decl) = &cu.children[1] else {
+//!     panic!("expected a type declaration");
+//! };
+//! let TypeDeclaration::ClassDeclaration(class) = type_decl.as_ref() else {
+//!     panic!("expected a class declaration");
+//! };
+//! assert_eq!(class.name.text(), "Hello");
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

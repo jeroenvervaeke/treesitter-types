@@ -27,6 +27,9 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let haskell = Haskell::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The module has a header, imports (optional), and declarations.
+//! assert!(haskell.children.is_some()); // the `module Main where` header
 //! assert!(haskell.declarations.is_some());
 //! ```
 

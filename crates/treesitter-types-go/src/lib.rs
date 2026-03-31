@@ -34,6 +34,14 @@
 //! // The source file has three top-level children:
 //! // a package clause, an import declaration, and a function declaration.
 //! assert_eq!(source_file.children.len(), 3);
+//!
+//! // Extract the function declaration and inspect its fields.
+//! let SourceFileChildren::FunctionDeclaration(func) = &source_file.children[2] else {
+//!     panic!("expected a function declaration");
+//! };
+//! assert_eq!(func.name.text(), "main");
+//! assert!(func.body.is_some());
+//! assert!(func.result.is_none());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

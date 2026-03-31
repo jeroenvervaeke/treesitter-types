@@ -30,10 +30,20 @@
 //! let tree = parser.parse(src, None).unwrap();
 //!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
-//!
-//! // The program has two top-level children:
-//! // a function declaration and an expression statement.
 //! assert_eq!(program.children.len(), 2);
+//!
+//! // Extract the function declaration and inspect its fields.
+//! let ProgramChildren::Statement(stmt) = &program.children[0] else {
+//!     panic!("expected a statement");
+//! };
+//! let Statement::Declaration(decl) = stmt.as_ref() else {
+//!     panic!("expected a declaration");
+//! };
+//! let Declaration::FunctionDeclaration(func) = decl.as_ref() else {
+//!     panic!("expected a function declaration");
+//! };
+//! assert_eq!(func.name.text(), "greet");
+//! assert!(func.return_type.is_some());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

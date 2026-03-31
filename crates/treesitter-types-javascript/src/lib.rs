@@ -32,6 +32,19 @@
 //! // The program has two top-level children:
 //! // a function declaration and an expression statement.
 //! assert_eq!(program.children.len(), 2);
+//!
+//! // Drill into the first child to reach the function declaration.
+//! let ProgramChildren::Statement(stmt) = &program.children[0] else {
+//!     panic!("expected a statement");
+//! };
+//! let Statement::Declaration(decl) = stmt.as_ref() else {
+//!     panic!("expected a declaration");
+//! };
+//! let Declaration::FunctionDeclaration(func) = decl.as_ref() else {
+//!     panic!("expected a function declaration");
+//! };
+//! assert_eq!(func.name.text(), "greet");
+//! assert_eq!(func.parameters.children.len(), 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

@@ -31,6 +31,16 @@
 //!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
 //! assert!(!program.children.is_empty());
+//!
+//! // The second child is the function definition (first is the php tag).
+//! let ProgramChildren::Statement(stmt) = &program.children[1] else {
+//!     panic!("expected a statement");
+//! };
+//! let Statement::FunctionDefinition(func) = stmt.as_ref() else {
+//!     panic!("expected a function definition");
+//! };
+//! assert_eq!(func.name.text(), "greet");
+//! assert!(func.return_type.is_none());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
