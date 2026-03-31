@@ -158,22 +158,6 @@ integration-test-cpp:
     echo
     ./target/release/parse_all_cpp "$TMPDIR/json"
 
-# Run integration test: parse an entire real-world Bash repository
-    #!/usr/bin/env bash
-    set -euo pipefail
-    REPO_URL="https://github.com/ohmyzsh/ohmyzsh.git"
-    TMPDIR=$(mktemp -d)
-    trap 'rm -rf "$TMPDIR"' EXIT
-    echo "==> Cloning ohmyzsh/ohmyzsh (shallow)..."
-    git clone --depth 1 --filter=blob:none "$REPO_URL" "$TMPDIR/ohmyzsh" 2>&1 | tail -1
-    FILE_COUNT=$(find "$TMPDIR/ohmyzsh" -name '*.sh' | wc -l)
-    echo "==> Found $FILE_COUNT .sh files"
-    echo "==> Building parse_all_bash..."
-    cargo build --release -p test-roundtrip --bin parse_all_bash 2>&1 | tail -1
-    echo "==> Parsing all .sh files..."
-    echo
-    ./target/release/parse_all_bash "$TMPDIR/ohmyzsh"
-
 # Run integration test: parse an entire real-world Ruby repository
 integration-test-ruby:
     #!/usr/bin/env bash
