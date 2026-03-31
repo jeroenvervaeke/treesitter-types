@@ -181,12 +181,18 @@ fn map_node(
             .iter()
             .map(|(field_name, field_info)| {
                 let parent_name = type_name.to_string();
-                map_field(field_name, field_info, &parent_name, supertype_kinds)
+                map_field(
+                    field_name,
+                    field_info,
+                    &parent_name,
+                    supertype_kinds,
+                    concrete_kinds,
+                )
             })
             .collect();
         let children = node.children.as_ref().map(|c| {
             let parent_name = type_name.to_string();
-            map_children(c, &parent_name, supertype_kinds)
+            map_children(c, &parent_name, supertype_kinds, concrete_kinds)
         });
         return TypeDecision::Struct(StructDef {
             type_name,
@@ -218,8 +224,15 @@ fn map_field(
     field_info: &FieldInfo,
     parent_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> FieldDef {
-    let type_ref = map_type_reference(&field_info.types, parent_name, field_name, supertype_kinds);
+    let type_ref = map_type_reference(
+        &field_info.types,
+        parent_name,
+        field_name,
+        supertype_kinds,
+        concrete_kinds,
+    );
     let field_type = match (field_info.required, field_info.multiple) {
         (_, true) => FieldType::Repeated(type_ref),
         (false, false) => FieldType::Optional(type_ref),
@@ -237,8 +250,15 @@ fn map_children(
     children: &FieldInfo,
     parent_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> ChildrenDef {
-    let type_ref = map_type_reference(&children.types, parent_name, "children", supertype_kinds);
+    let type_ref = map_type_reference(
+        &children.types,
+        parent_name,
+        "children",
+        supertype_kinds,
+        concrete_kinds,
+    );
     let field_type = match (children.required, children.multiple) {
         (_, true) => FieldType::Repeated(type_ref),
         (false, false) => FieldType::Optional(type_ref),
@@ -252,11 +272,17 @@ fn map_type_reference(
     parent_name: &str,
     field_name: &str,
     supertype_kinds: &std::collections::HashSet<&str>,
+    concrete_kinds: &std::collections::HashSet<&str>,
 ) -> TypeReference {
     // Filter to only named types for the type reference.
     // Anonymous nodes (punctuation) in field types are unusual but can appear in alternations.
     if types.len() == 1 && types[0].named {
-        TypeReference::Named(name_mangler::type_ident(&types[0].type_name))
+        let ident = if supertype_kinds.contains(types[0].type_name.as_str()) {
+            supertype_ident(&types[0].type_name, concrete_kinds)
+        } else {
+            name_mangler::type_ident(&types[0].type_name)
+        };
+        TypeReference::Named(ident)
     } else {
         // Multiple types or contains anonymous → alternation enum
         let enum_name = format!(

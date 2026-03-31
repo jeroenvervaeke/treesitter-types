@@ -1987,7 +1987,7 @@ impl ::treesitter_types::Spanned for ArrayExpression<'_> {
 pub struct ArrayGetExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub array: SimpleExpression<'tree>,
-    pub index: SequenceExpression<'tree>,
+    pub index: SequenceExpressionType<'tree>,
     pub operator: ::core::option::Option<IndexingOperatorPath<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayGetExpression<'tree> {
@@ -2009,7 +2009,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayGetExpression<'tree> {
                 let child = node
                     .child_by_field_name("index")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("index", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             operator: match node.child_by_field_name("operator") {
                 Some(child) => Some(
@@ -2266,7 +2266,7 @@ impl ::treesitter_types::Spanned for AttributePayload<'_> {
 pub struct BigarrayGetExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub array: SimpleExpression<'tree>,
-    pub index: SequenceExpression<'tree>,
+    pub index: SequenceExpressionType<'tree>,
     pub operator: ::core::option::Option<IndexingOperatorPath<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for BigarrayGetExpression<'tree> {
@@ -2288,7 +2288,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BigarrayGetExpression<'tree>
                 let child = node
                     .child_by_field_name("index")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("index", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             operator: match node.child_by_field_name("operator") {
                 Some(child) => Some(
@@ -2668,7 +2668,7 @@ impl ::treesitter_types::Spanned for ClassDefinition<'_> {
 pub struct ClassFunction<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: ClassExpression<'tree>,
-    pub children: ::std::vec::Vec<Parameter<'tree>>,
+    pub children: ::std::vec::Vec<ParameterType<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ClassFunction<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -2707,7 +2707,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassFunction<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Parameter as ::treesitter_types::FromNode>::from_node(
+                    items.push(<ParameterType as ::treesitter_types::FromNode>::from_node(
                         child, src,
                     )?);
                 }
@@ -2759,7 +2759,7 @@ impl ::treesitter_types::Spanned for ClassFunctionType<'_> {
 #[derive(Debug, Clone)]
 pub struct ClassInitializer<'tree> {
     pub span: ::treesitter_types::Span,
-    pub initializer: SequenceExpression<'tree>,
+    pub initializer: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<ItemAttribute<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ClassInitializer<'tree> {
@@ -2775,7 +2775,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassInitializer<'tree> {
                 let child = node.child_by_field_name("initializer").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("initializer", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -3030,7 +3030,7 @@ impl ::treesitter_types::Spanned for ClassTypePath<'_> {
 pub struct CoercionExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub coercion: Type<'tree>,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
     pub r#type: ::core::option::Option<Type<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for CoercionExpression<'tree> {
@@ -3052,7 +3052,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CoercionExpression<'tree> {
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             r#type: match node.child_by_field_name("type") {
                 Some(child) => Some(<Type as ::treesitter_types::FromNode>::from_node(
@@ -3640,7 +3640,7 @@ impl ::treesitter_types::Spanned for Directive<'_> {
 #[derive(Debug, Clone)]
 pub struct DoClause<'tree> {
     pub span: ::treesitter_types::Span,
-    pub children: ::core::option::Option<SequenceExpression<'tree>>,
+    pub children: ::core::option::Option<SequenceExpressionType<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for DoClause<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -3673,7 +3673,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoClause<'tree> {
                 };
                 match non_field_children.first() {
                     Some(&child) => Some(
-                        <SequenceExpression as ::treesitter_types::FromNode>::from_node(
+                        <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )?,
                     ),
@@ -3692,7 +3692,7 @@ impl ::treesitter_types::Spanned for DoClause<'_> {
 pub struct EffectPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub continuation: SimplePattern<'tree>,
-    pub effect: ::std::boxed::Box<EffectPattern<'tree>>,
+    pub effect: EffectPatternType<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for EffectPattern<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -3713,9 +3713,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EffectPattern<'tree> {
                 let child = node
                     .child_by_field_name("effect")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("effect", node))?;
-                ::std::boxed::Box::new(<EffectPattern as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?)
+                <EffectPatternType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
         })
     }
@@ -4045,7 +4043,7 @@ impl ::treesitter_types::Spanned for Extension<'_> {
 #[derive(Debug, Clone)]
 pub struct External<'tree> {
     pub span: ::treesitter_types::Span,
-    pub r#type: PolymorphicType<'tree>,
+    pub r#type: PolymorphicTypeType<'tree>,
     pub children: ::std::vec::Vec<ExternalChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for External<'tree> {
@@ -4061,7 +4059,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for External<'tree> {
                 let child = node
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
-                <PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -4102,7 +4100,7 @@ impl ::treesitter_types::Spanned for External<'_> {
 #[derive(Debug, Clone)]
 pub struct FieldDeclaration<'tree> {
     pub span: ::treesitter_types::Span,
-    pub r#type: PolymorphicType<'tree>,
+    pub r#type: PolymorphicTypeType<'tree>,
     pub children: FieldName<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FieldDeclaration<'tree> {
@@ -4118,7 +4116,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FieldDeclaration<'tree> {
                 let child = node
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
-                <PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -4472,9 +4470,9 @@ impl ::treesitter_types::Spanned for FloatingAttribute<'_> {
 #[derive(Debug, Clone)]
 pub struct ForExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub from: SequenceExpression<'tree>,
+    pub from: SequenceExpressionType<'tree>,
     pub name: ForExpressionName<'tree>,
-    pub to: SequenceExpression<'tree>,
+    pub to: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<ForExpressionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ForExpression<'tree> {
@@ -4490,7 +4488,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForExpression<'tree> {
                 let child = node
                     .child_by_field_name("from")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("from", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             name: {
                 let child = node
@@ -4502,7 +4500,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForExpression<'tree> {
                 let child = node
                     .child_by_field_name("to")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("to", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -4545,7 +4543,7 @@ impl ::treesitter_types::Spanned for ForExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct FunExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: SequenceExpression<'tree>,
+    pub body: SequenceExpressionType<'tree>,
     pub r#type: ::core::option::Option<SimpleType<'tree>>,
     pub children: ::std::vec::Vec<FunExpressionChildren<'tree>>,
 }
@@ -4562,7 +4560,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunExpression<'tree> {
                 let child = node
                     .child_by_field_name("body")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             r#type: match node.child_by_field_name("type") {
                 Some(child) => Some(<SimpleType as ::treesitter_types::FromNode>::from_node(
@@ -4819,7 +4817,7 @@ impl ::treesitter_types::Spanned for FunctorType<'_> {
 #[derive(Debug, Clone)]
 pub struct Guard<'tree> {
     pub span: ::treesitter_types::Span,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Guard<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -4834,7 +4832,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Guard<'tree> {
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
         })
     }
@@ -4939,7 +4937,7 @@ impl ::treesitter_types::Spanned for HashType<'_> {
 #[derive(Debug, Clone)]
 pub struct IfExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub condition: SequenceExpression<'tree>,
+    pub condition: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<IfExpressionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for IfExpression<'tree> {
@@ -4955,7 +4953,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfExpression<'tree> {
                 let child = node.child_by_field_name("condition").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("condition", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -5333,7 +5331,7 @@ impl ::treesitter_types::Spanned for InheritanceSpecification<'_> {
 #[derive(Debug, Clone)]
 pub struct InstanceVariableDefinition<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: ::core::option::Option<SequenceExpression<'tree>>,
+    pub body: ::core::option::Option<SequenceExpressionType<'tree>>,
     pub coercion: ::core::option::Option<Type<'tree>>,
     pub r#type: ::core::option::Option<Type<'tree>>,
     pub children: ::std::vec::Vec<InstanceVariableDefinitionChildren<'tree>>,
@@ -5349,7 +5347,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InstanceVariableDefinition<'
             span: ::treesitter_types::Span::from(node),
             body: match node.child_by_field_name("body") {
                 Some(child) => Some(
-                    <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?,
+                    <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(
+                        child, src,
+                    )?,
                 ),
                 None => None,
             },
@@ -6328,10 +6328,10 @@ impl ::treesitter_types::Spanned for LazyPattern<'_> {
 #[derive(Debug, Clone)]
 pub struct LetBinding<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: ::core::option::Option<SequenceExpression<'tree>>,
+    pub body: ::core::option::Option<SequenceExpressionType<'tree>>,
     pub coercion: ::core::option::Option<Type<'tree>>,
     pub pattern: BindingPattern<'tree>,
-    pub r#type: ::core::option::Option<PolymorphicType<'tree>>,
+    pub r#type: ::core::option::Option<PolymorphicTypeType<'tree>>,
     pub children: ::std::vec::Vec<LetBindingChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LetBinding<'tree> {
@@ -6345,7 +6345,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetBinding<'tree> {
             span: ::treesitter_types::Span::from(node),
             body: match node.child_by_field_name("body") {
                 Some(child) => Some(
-                    <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?,
+                    <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(
+                        child, src,
+                    )?,
                 ),
                 None => None,
             },
@@ -6362,9 +6364,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetBinding<'tree> {
                 <BindingPattern as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             r#type: match node.child_by_field_name("type") {
-                Some(child) => {
-                    Some(<PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?)
-                }
+                Some(child) => Some(
+                    <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?,
+                ),
                 None => None,
             },
             children: {
@@ -6481,7 +6483,7 @@ impl ::treesitter_types::Spanned for LetClassExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct LetExceptionExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: SequenceExpression<'tree>,
+    pub body: SequenceExpressionType<'tree>,
     pub children: ExceptionDefinition<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LetExceptionExpression<'tree> {
@@ -6497,7 +6499,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetExceptionExpression<'tree
                 let child = node
                     .child_by_field_name("body")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -6554,7 +6556,7 @@ impl ::treesitter_types::Spanned for LetExceptionExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct LetExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: SequenceExpression<'tree>,
+    pub body: SequenceExpressionType<'tree>,
     pub children: ValueDefinition<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LetExpression<'tree> {
@@ -6570,7 +6572,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetExpression<'tree> {
                 let child = node
                     .child_by_field_name("body")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -6627,7 +6629,7 @@ impl ::treesitter_types::Spanned for LetExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct LetModuleExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: SequenceExpression<'tree>,
+    pub body: SequenceExpressionType<'tree>,
     pub children: ModuleDefinition<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LetModuleExpression<'tree> {
@@ -6643,7 +6645,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetModuleExpression<'tree> {
                 let child = node
                     .child_by_field_name("body")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -6846,7 +6848,7 @@ impl ::treesitter_types::Spanned for LetOpenClassType<'_> {
 #[derive(Debug, Clone)]
 pub struct LetOpenExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: SequenceExpression<'tree>,
+    pub body: SequenceExpressionType<'tree>,
     pub children: OpenModule<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LetOpenExpression<'tree> {
@@ -6862,7 +6864,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LetOpenExpression<'tree> {
                 let child = node
                     .child_by_field_name("body")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -7357,7 +7359,7 @@ impl ::treesitter_types::Spanned for MatchCase<'_> {
 #[derive(Debug, Clone)]
 pub struct MatchExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<MatchExpressionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for MatchExpression<'tree> {
@@ -7373,7 +7375,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MatchExpression<'tree> {
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -7416,8 +7418,8 @@ impl ::treesitter_types::Spanned for MatchExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct MethodDefinition<'tree> {
     pub span: ::treesitter_types::Span,
-    pub body: ::core::option::Option<SequenceExpression<'tree>>,
-    pub r#type: ::core::option::Option<PolymorphicType<'tree>>,
+    pub body: ::core::option::Option<SequenceExpressionType<'tree>>,
+    pub r#type: ::core::option::Option<PolymorphicTypeType<'tree>>,
     pub children: ::std::vec::Vec<MethodDefinitionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for MethodDefinition<'tree> {
@@ -7431,14 +7433,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MethodDefinition<'tree> {
             span: ::treesitter_types::Span::from(node),
             body: match node.child_by_field_name("body") {
                 Some(child) => Some(
-                    <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?,
+                    <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(
+                        child, src,
+                    )?,
                 ),
                 None => None,
             },
             r#type: match node.child_by_field_name("type") {
-                Some(child) => {
-                    Some(<PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?)
-                }
+                Some(child) => Some(
+                    <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?,
+                ),
                 None => None,
             },
             children: {
@@ -7517,7 +7521,7 @@ impl ::treesitter_types::Spanned for MethodInvocation<'_> {
 #[derive(Debug, Clone)]
 pub struct MethodSpecification<'tree> {
     pub span: ::treesitter_types::Span,
-    pub r#type: PolymorphicType<'tree>,
+    pub r#type: PolymorphicTypeType<'tree>,
     pub children: ::std::vec::Vec<MethodSpecificationChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for MethodSpecification<'tree> {
@@ -7533,7 +7537,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MethodSpecification<'tree> {
                 let child = node
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
-                <PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -7576,7 +7580,7 @@ impl ::treesitter_types::Spanned for MethodSpecification<'_> {
 #[derive(Debug, Clone)]
 pub struct MethodType<'tree> {
     pub span: ::treesitter_types::Span,
-    pub r#type: PolymorphicType<'tree>,
+    pub r#type: PolymorphicTypeType<'tree>,
     pub children: MethodName<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for MethodType<'tree> {
@@ -7592,7 +7596,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MethodType<'tree> {
                 let child = node
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
-                <PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -8684,7 +8688,7 @@ impl ::treesitter_types::Spanned for PackedModule<'_> {
 #[derive(Debug, Clone)]
 pub struct Parameter<'tree> {
     pub span: ::treesitter_types::Span,
-    pub default: ::core::option::Option<SequenceExpression<'tree>>,
+    pub default: ::core::option::Option<SequenceExpressionType<'tree>>,
     pub pattern: ParameterPattern<'tree>,
     pub r#type: ::core::option::Option<Type<'tree>>,
     pub children: ::core::option::Option<LabelName<'tree>>,
@@ -8700,7 +8704,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Parameter<'tree> {
             span: ::treesitter_types::Span::from(node),
             default: match node.child_by_field_name("default") {
                 Some(child) => Some(
-                    <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?,
+                    <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(
+                        child, src,
+                    )?,
                 ),
                 None => None,
             },
@@ -8820,7 +8826,7 @@ impl ::treesitter_types::Spanned for ParenthesizedClassExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct ParenthesizedExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
     pub children: ::core::option::Option<AttributeId<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpression<'tree> {
@@ -8836,7 +8842,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpression<'tre
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -10265,7 +10271,7 @@ impl ::treesitter_types::Spanned for StringContent<'_> {
 #[derive(Debug, Clone)]
 pub struct StringGetExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub index: SequenceExpression<'tree>,
+    pub index: SequenceExpressionType<'tree>,
     pub operator: ::core::option::Option<IndexingOperatorPath<'tree>>,
     pub string: SimpleExpression<'tree>,
 }
@@ -10282,7 +10288,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringGetExpression<'tree> {
                 let child = node
                     .child_by_field_name("index")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("index", node))?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             operator: match node.child_by_field_name("operator") {
                 Some(child) => Some(
@@ -10589,7 +10595,7 @@ impl ::treesitter_types::Spanned for ToplevelDirective<'_> {
 #[derive(Debug, Clone)]
 pub struct TryExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<TryExpressionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpression<'tree> {
@@ -10605,7 +10611,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpression<'tree> {
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -11140,7 +11146,7 @@ impl ::treesitter_types::Spanned for TypedClassExpression<'_> {
 #[derive(Debug, Clone)]
 pub struct TypedExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub expression: SequenceExpression<'tree>,
+    pub expression: SequenceExpressionType<'tree>,
     pub r#type: Type<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TypedExpression<'tree> {
@@ -11156,7 +11162,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypedExpression<'tree> {
                 let child = node.child_by_field_name("expression").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("expression", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             r#type: {
                 let child = node
@@ -11374,7 +11380,7 @@ impl ::treesitter_types::Spanned for ValuePath<'_> {
 #[derive(Debug, Clone)]
 pub struct ValueSpecification<'tree> {
     pub span: ::treesitter_types::Span,
-    pub r#type: PolymorphicType<'tree>,
+    pub r#type: PolymorphicTypeType<'tree>,
     pub children: ::std::vec::Vec<ValueSpecificationChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ValueSpecification<'tree> {
@@ -11390,7 +11396,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueSpecification<'tree> {
                 let child = node
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
-                <PolymorphicType as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PolymorphicTypeType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -11485,7 +11491,7 @@ impl ::treesitter_types::Spanned for VariantDeclaration<'_> {
 #[derive(Debug, Clone)]
 pub struct WhileExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub condition: SequenceExpression<'tree>,
+    pub condition: SequenceExpressionType<'tree>,
     pub children: ::std::vec::Vec<WhileExpressionChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for WhileExpression<'tree> {
@@ -11501,7 +11507,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileExpression<'tree> {
                 let child = node.child_by_field_name("condition").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("condition", node)
                 })?;
-                <SequenceExpression as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SequenceExpressionType as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
