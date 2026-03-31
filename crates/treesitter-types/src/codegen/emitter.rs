@@ -411,6 +411,7 @@ fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident
                             loop {
                                 if fallback_cursor.field_name().is_none() && !fallback_cursor.node().is_extra() {
                                     let candidate = fallback_cursor.node();
+                                    #[allow(clippy::needless_question_mark)]
                                     if (|| -> ::core::result::Result<_, ::treesitter_types::ParseError> {
                                         let child = candidate;
                                         Ok(#value_expr)
