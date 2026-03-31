@@ -15,33 +15,40 @@
 //! ```
 //! use treesitter_types_rust::*;
 //!
+//! // A minimal Rust hello-world program.
 //! let src = b"\
 //! fn main() {
 //!     println!(\"Hello, World!\");
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_rust::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let source_file = SourceFile::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The source file has one top-level child: the `main` function definition.
+//! // The source file has one top-level child: a function definition.
 //! assert_eq!(source_file.children.len(), 1);
 //!
-//! // Extract the function item and inspect its fields.
+//! // Unwrap the function item through the declaration statement wrapper.
 //! let SourceFileChildren::DeclarationStatement(decl) = &source_file.children[0] else {
 //!     panic!("expected a declaration statement");
 //! };
 //! let DeclarationStatement::FunctionItem(func) = decl.as_ref() else {
 //!     panic!("expected a function item");
 //! };
+//!
+//! // Check function metadata.
 //! let FunctionItemName::Identifier(name) = &func.name else {
 //!     panic!("expected an identifier");
 //! };
 //! assert_eq!(name.text(), "main");
-//! assert!(func.return_type.is_none());
+//! assert!(func.parameters.children.is_empty()); // no parameters
+//! assert!(func.return_type.is_none());           // no return type
+//!
+//! // The body contains one statement: the `println!` macro invocation.
+//! assert_eq!(func.body.children.len(), 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

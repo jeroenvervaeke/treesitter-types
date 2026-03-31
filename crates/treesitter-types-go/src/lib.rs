@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_go::*;
 //!
+//! // A minimal Go hello-world program.
 //! let src = b"\
 //! package main
 //!
@@ -25,23 +26,38 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_go::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let source_file = SourceFile::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The source file has three top-level children:
-//! // a package clause, an import declaration, and a function declaration.
+//! // The source file has three top-level children.
 //! assert_eq!(source_file.children.len(), 3);
 //!
-//! // Extract the function declaration and inspect its fields.
+//! // 1) The package clause — `package main`.
+//! let SourceFileChildren::PackageClause(pkg) = &source_file.children[0] else {
+//!     panic!("expected a package clause");
+//! };
+//! assert_eq!(pkg.children.text(), "main");
+//!
+//! // 2) The import declaration — `import "fmt"`.
+//! let SourceFileChildren::ImportDeclaration(import) = &source_file.children[1] else {
+//!     panic!("expected an import declaration");
+//! };
+//! let ImportDeclarationChildren::ImportSpec(spec) = &import.children else {
+//!     panic!("expected a single import spec");
+//! };
+//! assert!(spec.name.is_none()); // no alias
+//!
+//! // 3) The function declaration — `func main() { ... }`.
 //! let SourceFileChildren::FunctionDeclaration(func) = &source_file.children[2] else {
 //!     panic!("expected a function declaration");
 //! };
 //! assert_eq!(func.name.text(), "main");
-//! assert!(func.body.is_some());
-//! assert!(func.result.is_none());
+//! assert!(func.parameters.children.is_empty()); // no parameters
+//! assert!(func.result.is_none());                // no return type
+//! assert!(func.body.is_some());                  // has a body
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

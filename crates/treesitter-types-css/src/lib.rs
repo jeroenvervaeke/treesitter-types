@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_css::*;
 //!
+//! // A small CSS stylesheet.
 //! let src = b"\
 //! body {
 //!     color: red;
@@ -22,18 +23,21 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_css::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let stylesheet = Stylesheet::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The stylesheet has one top-level child: a rule set for `body`.
 //! assert_eq!(stylesheet.children.len(), 1);
 //!
-//! // Extract the rule set — it contains the selectors and declarations.
 //! let StylesheetChildren::RuleSet(rule_set) = &stylesheet.children[0] else {
 //!     panic!("expected a rule set");
 //! };
+//! // The rule set contains the selector and declarations.
 //! assert!(!rule_set.children.is_empty());
+//! assert_eq!(rule_set.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

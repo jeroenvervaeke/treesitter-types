@@ -12,6 +12,7 @@
 //! ```
 //! use treesitter_types_yaml::*;
 //!
+//! // A small YAML document.
 //! let src = b"\
 //! name: hello
 //! version: 1.0.0
@@ -20,15 +21,19 @@
 //!   - bar
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_yaml::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let stream = Stream::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The stream contains one YAML document.
+//! // A YAML stream contains one or more documents.
 //! assert_eq!(stream.children.len(), 1);
-//! assert!(!stream.children[0].children.is_empty());
+//!
+//! // The document contains the top-level mapping.
+//! let doc = &stream.children[0];
+//! assert!(!doc.children.is_empty());
+//! assert_eq!(doc.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

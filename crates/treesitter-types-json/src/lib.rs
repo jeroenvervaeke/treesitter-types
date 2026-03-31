@@ -15,26 +15,39 @@
 //! ```
 //! use treesitter_types_json::*;
 //!
+//! // A small JSON document.
 //! let src = b"\
 //! {
-//!     \"hello\": \"world\",
-//!     \"count\": 42
+//!     \"name\": \"hello\",
+//!     \"version\": 42
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_json::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
-//! assert_eq!(document.children.len(), 1);
 //!
-//! // The root value is an object with two key-value pairs.
+//! // The document contains one top-level value: a JSON object.
+//! assert_eq!(document.children.len(), 1);
 //! let Value::Object(object) = &document.children[0] else {
 //!     panic!("expected an object");
 //! };
+//!
+//! // The object has two key-value pairs.
 //! assert_eq!(object.children.len(), 2);
-//! assert_eq!(object.children[0].key.span.start.row, 1);
+//!
+//! // First pair: "name" => "hello".
+//! let first_pair = &object.children[0];
+//! assert_eq!(first_pair.key.span.start.row, 1);
+//!
+//! // Second pair: "version" => 42.
+//! let second_pair = &object.children[1];
+//! let Value::Number(num) = &second_pair.value else {
+//!     panic!("expected a number");
+//! };
+//! assert_eq!(num.text(), "42");
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_html::*;
 //!
+//! // A minimal HTML document.
 //! let src = b"\
 //! <!DOCTYPE html>
 //! <html>
@@ -24,19 +25,27 @@
 //! </html>
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_html::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The document contains the doctype and the <html> element.
 //! assert!(!document.children.is_empty());
 //!
+//! // The first child is the doctype declaration.
 //! let DocumentChildren::Doctype(doctype) = &document.children[0] else {
 //!     panic!("expected a doctype");
 //! };
 //! assert_eq!(doctype.span.start.row, 0);
+//!
+//! // The second child is the <html> element.
+//! let DocumentChildren::Element(html_elem) = &document.children[1] else {
+//!     panic!("expected an element");
+//! };
+//! // The <html> element contains child elements (<body>, text, etc.).
+//! assert!(!html_elem.children.is_empty());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

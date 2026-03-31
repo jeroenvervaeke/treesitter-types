@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_ruby::*;
 //!
+//! // A minimal Ruby hello-world program.
 //! let src = b"\
 //! def greet(name)
 //!   puts \"Hello, #{name}!\"
@@ -23,19 +24,20 @@
 //! greet(\"World\")
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_ruby::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The program has two top-level children:
 //! // a method definition and a method call.
 //! assert_eq!(program.children.len(), 2);
 //!
-//! // All children implement the Spanned trait for source locations.
+//! // Both statements start at column 0.
 //! assert_eq!(program.span.start.row, 0);
 //! assert_eq!(program.span.start.column, 0);
+//! assert!(program.span.end.row >= 4);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

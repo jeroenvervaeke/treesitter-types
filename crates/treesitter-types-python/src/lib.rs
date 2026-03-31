@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_python::*;
 //!
+//! // A minimal Python hello-world program.
 //! let src = b"\
 //! def main():
 //!     print(\"Hello, World!\")
@@ -22,17 +23,16 @@
 //! main()
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_python::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let module = Module::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The module has two top-level children:
-//! // a function definition and a function call expression.
+//! // The module has two top-level children.
 //! assert_eq!(module.children.len(), 2);
 //!
-//! // Extract the function definition and inspect its fields.
+//! // 1) The function definition — `def main(): ...`.
 //! let ModuleChildren::CompoundStatement(stmt) = &module.children[0] else {
 //!     panic!("expected a compound statement");
 //! };
@@ -40,7 +40,17 @@
 //!     panic!("expected a function definition");
 //! };
 //! assert_eq!(func.name.text(), "main");
-//! assert!(func.return_type.is_none());
+//! assert!(func.parameters.children.is_empty()); // no parameters
+//! assert!(func.return_type.is_none());           // no return type annotation
+//!
+//! // 2) The call expression — `main()`.
+//! let ModuleChildren::SimpleStatement(call_stmt) = &module.children[1] else {
+//!     panic!("expected a simple statement");
+//! };
+//! let SimpleStatement::ExpressionStatement(expr) = call_stmt.as_ref() else {
+//!     panic!("expected an expression statement");
+//! };
+//! assert_eq!(expr.children.len(), 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

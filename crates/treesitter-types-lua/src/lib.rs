@@ -12,6 +12,7 @@
 //! ```
 //! use treesitter_types_lua::*;
 //!
+//! // A minimal Lua hello-world program.
 //! let src = b"\
 //! function greet(name)
 //!     print(\"Hello, \" .. name .. \"!\")
@@ -20,15 +21,17 @@
 //! greet(\"World\")
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_lua::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let chunk = Chunk::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The chunk has two top-level children:
 //! // a function statement and a function call statement.
 //! assert_eq!(chunk.children.len(), 2);
+//! assert_eq!(chunk.span.start.row, 0);
+//! assert!(chunk.span.end.row >= 4);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

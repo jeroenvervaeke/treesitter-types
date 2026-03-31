@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_c::*;
 //!
+//! // A minimal C hello-world program.
 //! let src = b"\
 //! #include <stdio.h>
 //!
@@ -24,17 +25,22 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_c::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let tu = TranslationUnit::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The translation unit has two top-level children:
-//! // a #include directive and the `main` function definition.
+//! // The translation unit has two top-level children.
 //! assert_eq!(tu.children.len(), 2);
 //!
-//! // Extract the function definition and inspect its return type.
+//! // 1) The #include directive.
+//! let TranslationUnitChildren::PreprocInclude(include) = &tu.children[0] else {
+//!     panic!("expected a preproc include");
+//! };
+//! assert_eq!(include.span.start.row, 0);
+//!
+//! // 2) The `main` function definition with return type `int`.
 //! let TranslationUnitChildren::FunctionDefinition(func) = &tu.children[1] else {
 //!     panic!("expected a function definition");
 //! };
@@ -42,6 +48,12 @@
 //!     panic!("expected a primitive type");
 //! };
 //! assert_eq!(return_type.text(), "int");
+//!
+//! // The declarator holds the function name and parameter list.
+//! let Declarator::FunctionDeclarator(decl) = &func.declarator else {
+//!     panic!("expected a function declarator");
+//! };
+//! assert!(decl.parameters.children.is_empty()); // no parameters
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

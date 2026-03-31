@@ -12,6 +12,7 @@
 //! ```
 //! use treesitter_types_swift::*;
 //!
+//! // A minimal Swift hello-world program.
 //! let src = b"\
 //! func greet(name: String) {
 //!     print(\"Hello, \\(name)!\")
@@ -20,15 +21,17 @@
 //! greet(name: \"World\")
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_swift::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let source_file = SourceFile::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The source file has two top-level children:
 //! // a function declaration and a call expression.
 //! assert_eq!(source_file.children.len(), 2);
+//! assert_eq!(source_file.span.start.row, 0);
+//! assert!(source_file.span.end.row >= 4);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

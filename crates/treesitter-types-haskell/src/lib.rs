@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_haskell::*;
 //!
+//! // A minimal Haskell hello-world program.
 //! let src = b"\
 //! module Main where
 //!
@@ -22,15 +23,20 @@
 //! main = putStrLn \"Hello, World!\"
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_haskell::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let haskell = Haskell::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The module has a header, imports (optional), and declarations.
-//! assert!(haskell.children.is_some()); // the `module Main where` header
+//! // The module has a header (`module Main where`), no imports, and declarations.
+//! assert!(haskell.children.is_some()); // the module header
+//! assert!(haskell.imports.is_none());  // no import statements
 //! assert!(haskell.declarations.is_some());
+//!
+//! // The declarations section contains the type signature and the binding.
+//! let decls = haskell.declarations.as_ref().unwrap();
+//! assert!(!decls.children.is_empty());
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

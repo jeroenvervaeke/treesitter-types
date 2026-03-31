@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_cpp::*;
 //!
+//! // A minimal C++ hello-world program.
 //! let src = b"\
 //! #include <iostream>
 //!
@@ -24,20 +25,26 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_cpp::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let tu = TranslationUnit::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The translation unit has two top-level children:
-//! // a #include directive and the `main` function definition.
+//! // The translation unit has two top-level children.
 //! assert_eq!(tu.children.len(), 2);
 //!
+//! // 1) The #include directive.
+//! let TranslationUnitChildren::PreprocInclude(include) = &tu.children[0] else {
+//!     panic!("expected a preproc include");
+//! };
+//! assert_eq!(include.span.start.row, 0);
+//!
+//! // 2) The `main` function definition.
 //! let TranslationUnitChildren::FunctionDefinition(func) = &tu.children[1] else {
 //!     panic!("expected a function definition");
 //! };
-//! assert!(func.body.is_some());
+//! assert!(func.body.is_some()); // has a function body
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

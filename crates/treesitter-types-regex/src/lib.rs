@@ -12,12 +12,13 @@
 //! ```
 //! use treesitter_types_regex::*;
 //!
+//! // A regular expression with a character class and a capture group.
 //! let src = b"[a-z]+([0-9]*)";
 //!
+//! // Parse the regex with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_regex::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let pattern = Pattern::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The pattern spans the entire input.

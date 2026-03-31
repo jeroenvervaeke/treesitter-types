@@ -12,24 +12,28 @@
 //! ```
 //! use treesitter_types_toml::*;
 //!
+//! // A small TOML document.
 //! let src = b"\
 //! [package]
 //! name = \"hello\"
 //! version = \"1.0.0\"
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_toml_ng::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The document has one top-level child: a [package] table.
 //! assert_eq!(document.children.len(), 1);
+//!
 //! let DocumentChildren::Table(table) = &document.children[0] else {
 //!     panic!("expected a table");
 //! };
+//! // The table contains the key-value pairs: `name` and `version`.
 //! assert!(!table.children.is_empty());
+//! assert_eq!(table.span.start.row, 0);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

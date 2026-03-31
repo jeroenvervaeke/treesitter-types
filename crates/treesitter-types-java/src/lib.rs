@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_java::*;
 //!
+//! // A minimal Java hello-world program.
 //! let src = b"\
 //! class Hello {
 //!     public static void main(String[] args) {
@@ -23,14 +24,16 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_java::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The program has one top-level child: the `Hello` class.
 //! assert_eq!(program.children.len(), 1);
 //!
-//! // Extract the class declaration and inspect its fields.
+//! // Unwrap the class declaration.
 //! let ProgramChildren::Statement(stmt) = &program.children[0] else {
 //!     panic!("expected a statement");
 //! };
@@ -41,7 +44,11 @@
 //!     panic!("expected a class declaration");
 //! };
 //! assert_eq!(class.name.text(), "Hello");
-//! assert!(class.superclass.is_none());
+//! assert!(class.superclass.is_none());   // no `extends`
+//! assert!(class.interfaces.is_none());   // no `implements`
+//!
+//! // The class body contains one method.
+//! assert_eq!(class.body.children.len(), 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

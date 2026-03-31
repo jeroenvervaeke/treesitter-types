@@ -12,24 +12,27 @@
 //! ```
 //! use treesitter_types_markdown::*;
 //!
+//! // A small Markdown document.
 //! let src = b"\
 //! # Hello, World!
 //!
 //! This is a paragraph.
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_md::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let document = Document::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The document has one top-level child: a section containing the heading
-//! // and paragraph.
+//! // The document has one top-level section.
 //! assert_eq!(document.children.len(), 1);
+//!
 //! let DocumentChildren::Section(section) = &document.children[0] else {
 //!     panic!("expected a section");
 //! };
+//! // The section contains the heading and the paragraph.
+//! assert!(!section.children.is_empty());
 //! assert_eq!(section.span.start.row, 0);
 //! ```
 

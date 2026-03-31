@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_javascript::*;
 //!
+//! // A minimal JavaScript hello-world program.
 //! let src = b"\
 //! function greet(name) {
 //!     console.log(\"Hello, \" + name + \"!\");
@@ -23,17 +24,16 @@
 //! greet(\"World\");
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_javascript::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
 //!
-//! // The program has two top-level children:
-//! // a function declaration and an expression statement.
+//! // The program has two top-level children.
 //! assert_eq!(program.children.len(), 2);
 //!
-//! // Drill into the first child to reach the function declaration.
+//! // 1) The function declaration — `function greet(name) { ... }`.
 //! let ProgramChildren::Statement(stmt) = &program.children[0] else {
 //!     panic!("expected a statement");
 //! };
@@ -44,7 +44,16 @@
 //!     panic!("expected a function declaration");
 //! };
 //! assert_eq!(func.name.text(), "greet");
-//! assert_eq!(func.parameters.children.len(), 1);
+//! assert_eq!(func.parameters.children.len(), 1); // one parameter: `name`
+//!
+//! // 2) The call expression — `greet("World");`.
+//! let ProgramChildren::Statement(call_stmt) = &program.children[1] else {
+//!     panic!("expected a statement");
+//! };
+//! let Statement::ExpressionStatement(expr) = call_stmt.as_ref() else {
+//!     panic!("expected an expression statement");
+//! };
+//! assert_eq!(expr.span.start.row, 4);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

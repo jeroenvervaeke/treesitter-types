@@ -12,6 +12,7 @@
 //! ```
 //! use treesitter_types_elixir::*;
 //!
+//! // A minimal Elixir hello-world program.
 //! let src = b"\
 //! defmodule Hello do
 //!   def world do
@@ -20,15 +21,16 @@
 //! end
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_elixir::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let source = Source::from_node(tree.root_node(), src).unwrap();
 //!
 //! // The source has one top-level child: the `defmodule` call.
 //! assert_eq!(source.children.len(), 1);
 //! assert_eq!(source.span.start.row, 0);
+//! assert!(source.span.end.row >= 4);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

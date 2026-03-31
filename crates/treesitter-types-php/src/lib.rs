@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_php::*;
 //!
+//! // A minimal PHP hello-world program.
 //! let src = b"\
 //! <?php
 //!
@@ -25,14 +26,16 @@
 //! greet(\"World\");
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_php::LANGUAGE_PHP.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let program = Program::from_node(tree.root_node(), src).unwrap();
-//! assert!(!program.children.is_empty());
 //!
-//! // The second child is the function definition (first is the php tag).
+//! // First child is the `<?php` tag, then our statements.
+//! assert!(program.children.len() >= 3);
+//!
+//! // The function definition — `function greet($name) { ... }`.
 //! let ProgramChildren::Statement(stmt) = &program.children[1] else {
 //!     panic!("expected a statement");
 //! };
@@ -40,7 +43,8 @@
 //!     panic!("expected a function definition");
 //! };
 //! assert_eq!(func.name.text(), "greet");
-//! assert!(func.return_type.is_none());
+//! assert_eq!(func.parameters.children.len(), 1); // one parameter: `$name`
+//! assert!(func.return_type.is_none());            // no return type declaration
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};

@@ -15,6 +15,7 @@
 //! ```
 //! use treesitter_types_scala::*;
 //!
+//! // A minimal Scala hello-world program.
 //! let src = b"\
 //! object Hello {
 //!   def main(args: Array[String]): Unit = {
@@ -23,14 +24,15 @@
 //! }
 //! ";
 //!
+//! // Parse the source with tree-sitter and convert into typed AST.
 //! let mut parser = tree_sitter::Parser::new();
 //! parser.set_language(&tree_sitter_scala::LANGUAGE.into()).unwrap();
 //! let tree = parser.parse(src, None).unwrap();
-//!
 //! let cu = CompilationUnit::from_node(tree.root_node(), src).unwrap();
+//!
+//! // The compilation unit has one top-level child: the `Hello` object.
 //! assert_eq!(cu.children.len(), 1);
 //!
-//! // Extract the object definition and inspect its name.
 //! let CompilationUnitChildren::Definition(def) = &cu.children[0] else {
 //!     panic!("expected a definition");
 //! };
@@ -41,6 +43,10 @@
 //!     panic!("expected an identifier");
 //! };
 //! assert_eq!(name.text(), "Hello");
+//! assert!(obj.extend.is_none()); // no `extends` clause
+//!
+//! // The object body contains one method definition.
+//! assert_eq!(obj.body.len(), 1);
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
