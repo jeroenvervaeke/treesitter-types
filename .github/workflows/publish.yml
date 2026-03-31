@@ -38,7 +38,6 @@ jobs:
         run: |
           cargo publish --dry-run -p treesitter-types
           cargo publish --dry-run -p treesitter-types-macros
-          cargo publish --dry-run -p treesitter-types-bash
           cargo publish --dry-run -p treesitter-types-c
           cargo publish --dry-run -p treesitter-types-c-sharp
           cargo publish --dry-run -p treesitter-types-cpp
@@ -52,7 +51,6 @@ jobs:
           cargo publish --dry-run -p treesitter-types-json
           cargo publish --dry-run -p treesitter-types-lua
           cargo publish --dry-run -p treesitter-types-markdown
-          cargo publish --dry-run -p treesitter-types-ocaml
           cargo publish --dry-run -p treesitter-types-php
           cargo publish --dry-run -p treesitter-types-python
           cargo publish --dry-run -p treesitter-types-regex
@@ -100,7 +98,6 @@ jobs:
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
-          cargo publish -p treesitter-types-bash &
           cargo publish -p treesitter-types-c &
           cargo publish -p treesitter-types-c-sharp &
           cargo publish -p treesitter-types-cpp &
@@ -120,7 +117,6 @@ jobs:
           cargo publish -p treesitter-types-json &
           cargo publish -p treesitter-types-lua &
           cargo publish -p treesitter-types-markdown &
-          cargo publish -p treesitter-types-ocaml &
           cargo publish -p treesitter-types-php &
           cargo publish -p treesitter-types-python &
           cargo publish -p treesitter-types-regex &
