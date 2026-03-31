@@ -558,6 +558,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessQualifier<'tree> {
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <AccessQualifierChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -1795,6 +1826,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ColonArgument<'tree> {
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <ColonArgumentChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -2770,6 +2832,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FinallyClause<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <FinallyClauseChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -4069,6 +4162,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolatedStringExpression
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <InterpolatedString as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -4149,6 +4273,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Interpolation<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <InterpolationChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -4282,6 +4437,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaExpression<'tree> {
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <LambdaExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -4393,6 +4579,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LiteralType<'tree> {
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <LiteralTypeChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -4501,6 +4718,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroBody<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <MacroBodyChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -5467,6 +5715,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpression<'tre
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <Expression as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -5599,6 +5878,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrefixExpression<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <PrefixExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -6014,6 +6324,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SingletonType<'tree> {
                             }
                         }
                     }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <SingletonTypeChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     fallback_child.ok_or_else(|| {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
@@ -6404,6 +6745,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ThrowExpression<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <Expression as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -6924,6 +7296,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeCaseClause<'tree> {
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            <TypeCaseClauseChildren as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            )?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
                             }
                         }
                     }

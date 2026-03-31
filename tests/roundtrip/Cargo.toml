@@ -6,7 +6,6 @@ publish = false
 
 [dependencies]
 treesitter-types = { path = "../../crates/treesitter-types" }
-treesitter-types-bash = { path = "../../crates/treesitter-types-bash" }
 treesitter-types-c = { path = "../../crates/treesitter-types-c" }
 treesitter-types-c-sharp = { path = "../../crates/treesitter-types-c-sharp" }
 treesitter-types-cpp = { path = "../../crates/treesitter-types-cpp" }
@@ -31,7 +30,6 @@ treesitter-types-toml = { path = "../../crates/treesitter-types-toml" }
 treesitter-types-typescript = { path = "../../crates/treesitter-types-typescript" }
 treesitter-types-yaml = { path = "../../crates/treesitter-types-yaml" }
 tree-sitter = "0.25"
-tree-sitter-bash = "0.25"
 tree-sitter-c = "0.24"
 tree-sitter-c-sharp = "0.23"
 tree-sitter-cpp = "0.23"

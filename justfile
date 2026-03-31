@@ -159,7 +159,6 @@ integration-test-cpp:
     ./target/release/parse_all_cpp "$TMPDIR/json"
 
 # Run integration test: parse an entire real-world Bash repository
-integration-test-bash:
     #!/usr/bin/env bash
     set -euo pipefail
     REPO_URL="https://github.com/ohmyzsh/ohmyzsh.git"
@@ -333,4 +332,3 @@ integration-test-haskell:
     ./target/release/parse_all_haskell "$TMPDIR/cabal"
 
 # Run all integration tests
-integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java integration-test-python integration-test-c integration-test-cpp integration-test-bash integration-test-ruby integration-test-c-sharp integration-test-css integration-test-php integration-test-json integration-test-html integration-test-scala integration-test-haskell

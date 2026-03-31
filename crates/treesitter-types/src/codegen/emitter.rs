@@ -425,6 +425,31 @@ fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident
                                 }
                             }
                         }
+                        // Second fallback: try children WITH field names.
+                        // Some grammars (e.g., Haskell) have children that node-types.json
+                        // lists as unnamed, but tree-sitter assigns inherited field names at
+                        // runtime, causing the first fallback to skip them.
+                        if fallback_child.is_none() {
+                            let mut cursor2 = node.walk();
+                            if cursor2.goto_first_child() {
+                                loop {
+                                    if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                        let candidate = cursor2.node();
+                                        #[allow(clippy::needless_question_mark)]
+                                        if (|| -> ::core::result::Result<_, ::treesitter_types::ParseError> {
+                                            let child = candidate;
+                                            Ok(#value_expr)
+                                        })().is_ok() {
+                                            fallback_child = Some(candidate);
+                                            break;
+                                        }
+                                    }
+                                    if !cursor2.goto_next_sibling() {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                         fallback_child.ok_or_else(|| ::treesitter_types::ParseError::missing_field("children", node))?
                     };
                     #value_expr

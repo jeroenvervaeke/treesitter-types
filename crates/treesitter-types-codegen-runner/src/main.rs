@@ -4,11 +4,6 @@ use std::path::Path;
 fn languages() -> Vec<(&'static str, &'static str, &'static str)> {
     vec![
         (
-            "bash",
-            tree_sitter_bash::NODE_TYPES,
-            "crates/treesitter-types-bash/src/generated.rs",
-        ),
-        (
             "c",
             tree_sitter_c::NODE_TYPES,
             "crates/treesitter-types-c/src/generated.rs",

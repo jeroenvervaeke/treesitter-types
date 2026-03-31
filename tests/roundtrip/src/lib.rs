@@ -1,4 +1,3 @@
-pub use treesitter_types_bash as bash;
 pub use treesitter_types_c as c;
 pub use treesitter_types_c_sharp as c_sharp;
 pub use treesitter_types_cpp as cpp;
@@ -16,14 +15,6 @@ pub use treesitter_types_ruby as ruby;
 pub use treesitter_types_rust as rust;
 pub use treesitter_types_scala as scala;
 pub use treesitter_types_typescript as typescript;
-
-pub fn parse_bash(src: &[u8]) -> tree_sitter::Tree {
-    let mut parser = tree_sitter::Parser::new();
-    parser
-        .set_language(&tree_sitter_bash::LANGUAGE.into())
-        .expect("failed to set Bash language");
-    parser.parse(src, None).expect("parse failed")
-}
 
 pub fn parse_c(src: &[u8]) -> tree_sitter::Tree {
     let mut parser = tree_sitter::Parser::new();

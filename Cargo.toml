@@ -5,7 +5,6 @@ members = [
     "crates/treesitter-types-macros",
     "crates/treesitter-types-cli",
     "crates/treesitter-types-codegen-runner",
-    "crates/treesitter-types-bash",
     "crates/treesitter-types-c",
     "crates/treesitter-types-c-sharp",
     "crates/treesitter-types-cpp",
