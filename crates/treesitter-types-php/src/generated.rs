@@ -905,33 +905,6 @@ impl ::treesitter_types::Spanned for Argument<'_> {
     }
 }
 #[derive(Debug, Clone)]
-pub struct ArgumentPlaceholder<'tree> {
-    pub span: ::treesitter_types::Span,
-    text: &'tree str,
-}
-impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentPlaceholder<'tree> {
-    fn from_node(
-        node: ::tree_sitter::Node<'tree>,
-        src: &'tree [u8],
-    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-        debug_assert_eq!(node.kind(), "argument_placeholder");
-        Ok(Self {
-            span: ::treesitter_types::Span::from(node),
-            text: node.utf8_text(src)?,
-        })
-    }
-}
-impl<'tree> ::treesitter_types::LeafNode<'tree> for ArgumentPlaceholder<'tree> {
-    fn text(&self) -> &'tree str {
-        self.text
-    }
-}
-impl ::treesitter_types::Spanned for ArgumentPlaceholder<'_> {
-    fn span(&self) -> ::treesitter_types::Span {
-        self.span
-    }
-}
-#[derive(Debug, Clone)]
 pub struct Arguments<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ArgumentsChildren<'tree>>,
@@ -5920,7 +5893,7 @@ pub struct PropertyPromotionParameter<'tree> {
     pub name: PropertyPromotionParameterName<'tree>,
     pub readonly: ::core::option::Option<ReadonlyModifier<'tree>>,
     pub r#type: ::core::option::Option<Type<'tree>>,
-    pub visibility: ::std::vec::Vec<VisibilityModifier<'tree>>,
+    pub visibility: VisibilityModifier<'tree>,
     pub children: ::core::option::Option<PropertyHookList<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyPromotionParameter<'tree> {
@@ -5965,16 +5938,10 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyPromotionParameter<'
                 None => None,
             },
             visibility: {
-                let mut cursor = node.walk();
-                let mut items = ::std::vec::Vec::new();
-                for child in node.children_by_field_name("visibility", &mut cursor) {
-                    items.push(
-                        <VisibilityModifier as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
-                }
-                items
+                let child = node.child_by_field_name("visibility").ok_or_else(|| {
+                    ::treesitter_types::ParseError::missing_field("visibility", node)
+                })?;
+                <VisibilityModifier as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -8492,7 +8459,6 @@ impl ::treesitter_types::Spanned for AnonymousFunctionUseClauseChildren<'_> {
 }
 #[derive(Debug, Clone)]
 pub enum ArgumentChildren<'tree> {
-    ArgumentPlaceholder(::std::boxed::Box<ArgumentPlaceholder<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
     Name(::std::boxed::Box<Name<'tree>>),
     VariadicUnpacking(::std::boxed::Box<VariadicUnpacking<'tree>>),
@@ -8504,9 +8470,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "argument_placeholder" => Ok(Self::ArgumentPlaceholder(::std::boxed::Box::new(
-                <ArgumentPlaceholder as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
             "name" => Ok(Self::Name(::std::boxed::Box::new(
                 <Name as ::treesitter_types::FromNode>::from_node(node, src)?,
             ))),
@@ -8528,7 +8491,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentChildren<'tree> {
 impl ::treesitter_types::Spanned for ArgumentChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::ArgumentPlaceholder(inner) => inner.span(),
             Self::Expression(inner) => inner.span(),
             Self::Name(inner) => inner.span(),
             Self::VariadicUnpacking(inner) => inner.span(),
@@ -13556,7 +13518,6 @@ pub enum AnyNode<'tree> {
     AnonymousFunction(AnonymousFunction<'tree>),
     AnonymousFunctionUseClause(AnonymousFunctionUseClause<'tree>),
     Argument(Argument<'tree>),
-    ArgumentPlaceholder(ArgumentPlaceholder<'tree>),
     Arguments(Arguments<'tree>),
     ArrayCreationExpression(ArrayCreationExpression<'tree>),
     ArrayElementInitializer(ArrayElementInitializer<'tree>),
@@ -13753,11 +13714,6 @@ impl<'tree> AnyNode<'tree> {
             "argument" => <Argument as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::Argument)
                 .unwrap_or(Self::Unknown(node)),
-            "argument_placeholder" => {
-                <ArgumentPlaceholder as ::treesitter_types::FromNode>::from_node(node, src)
-                    .map(Self::ArgumentPlaceholder)
-                    .unwrap_or(Self::Unknown(node))
-            }
             "arguments" => <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::Arguments)
                 .unwrap_or(Self::Unknown(node)),
@@ -14444,7 +14400,6 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::AnonymousFunction(inner) => inner.span(),
             Self::AnonymousFunctionUseClause(inner) => inner.span(),
             Self::Argument(inner) => inner.span(),
-            Self::ArgumentPlaceholder(inner) => inner.span(),
             Self::Arguments(inner) => inner.span(),
             Self::ArrayCreationExpression(inner) => inner.span(),
             Self::ArrayElementInitializer(inner) => inner.span(),

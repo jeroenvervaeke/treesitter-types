@@ -57,7 +57,7 @@ pub fn emit_to_out_dir(node_types_path: impl AsRef<Path>) -> Result<(), Error> {
 /// `NODE_TYPES` constant) rather than a file path.
 ///
 /// Intended for use in `build.rs`:
-/// ```no_run
+/// ```ignore
 /// treesitter_types::codegen::emit_str_to_out_dir(tree_sitter_go::NODE_TYPES).unwrap();
 /// ```
 ///

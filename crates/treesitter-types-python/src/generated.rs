@@ -104,6 +104,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleStatement<'tree> {
             "exec_statement" => Ok(Self::ExecStatement(::std::boxed::Box::new(
                 <ExecStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
             ))),
+            "expression_statement" => Ok(Self::ExpressionStatement(::std::boxed::Box::new(
+                <ExpressionStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
+            ))),
             "future_import_statement" => Ok(Self::FutureImportStatement(::std::boxed::Box::new(
                 <FutureImportStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
             ))),
@@ -134,17 +137,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleStatement<'tree> {
             "type_alias_statement" => Ok(Self::TypeAliasStatement(::std::boxed::Box::new(
                 <TypeAliasStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
             ))),
-            _other => {
-                if let Ok(v) =
-                    <ExpressionStatement as ::treesitter_types::FromNode>::from_node(node, src)
-                {
-                    Ok(Self::ExpressionStatement(::std::boxed::Box::new(v)))
-                } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
-                }
-            }
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
 }
@@ -234,56 +227,6 @@ impl ::treesitter_types::Spanned for Expression<'_> {
             Self::NamedExpression(inner) => inner.span(),
             Self::NotOperator(inner) => inner.span(),
             Self::PrimaryExpression(inner) => inner.span(),
-        }
-    }
-}
-#[derive(Debug, Clone)]
-pub enum ExpressionStatement<'tree> {
-    Assignment(::std::boxed::Box<Assignment<'tree>>),
-    AugmentedAssignment(::std::boxed::Box<AugmentedAssignment<'tree>>),
-    Expression(::std::boxed::Box<Expression<'tree>>),
-    TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
-    Yield(::std::boxed::Box<Yield<'tree>>),
-}
-impl<'tree> ::treesitter_types::FromNode<'tree> for ExpressionStatement<'tree> {
-    #[allow(clippy::collapsible_else_if)]
-    fn from_node(
-        node: ::tree_sitter::Node<'tree>,
-        src: &'tree [u8],
-    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-        match node.kind() {
-            "assignment" => Ok(Self::Assignment(::std::boxed::Box::new(
-                <Assignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "augmented_assignment" => Ok(Self::AugmentedAssignment(::std::boxed::Box::new(
-                <AugmentedAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple_expression" => Ok(Self::TupleExpression(::std::boxed::Box::new(
-                <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "yield" => Ok(Self::Yield(::std::boxed::Box::new(
-                <Yield as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
-                    Ok(Self::Expression(::std::boxed::Box::new(v)))
-                } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
-                }
-            }
-        }
-    }
-}
-impl ::treesitter_types::Spanned for ExpressionStatement<'_> {
-    fn span(&self) -> ::treesitter_types::Span {
-        match self {
-            Self::Assignment(inner) => inner.span(),
-            Self::AugmentedAssignment(inner) => inner.span(),
-            Self::Expression(inner) => inner.span(),
-            Self::TupleExpression(inner) => inner.span(),
-            Self::Yield(inner) => inner.span(),
         }
     }
 }
@@ -2562,6 +2505,58 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ExpressionList<'tree> {
     }
 }
 impl ::treesitter_types::Spanned for ExpressionList<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone)]
+pub struct ExpressionStatement<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub children: ::std::vec::Vec<ExpressionStatementChildren<'tree>>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ExpressionStatement<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "expression_statement");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            children: {
+                #[allow(clippy::suspicious_else_formatting)]
+                let non_field_children = {
+                    let mut cursor = node.walk();
+                    let mut result = ::std::vec::Vec::new();
+                    if cursor.goto_first_child() {
+                        loop {
+                            if cursor.field_name().is_none()
+                                && cursor.node().is_named()
+                                && !cursor.node().is_extra()
+                            {
+                                result.push(cursor.node());
+                            }
+                            if !cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    result
+                };
+                let mut items = ::std::vec::Vec::new();
+                for child in non_field_children {
+                    items.push(
+                        <ExpressionStatementChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )?,
+                    );
+                }
+                items
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for ExpressionStatement<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -5170,56 +5165,6 @@ impl ::treesitter_types::Spanned for Tuple<'_> {
     }
 }
 #[derive(Debug, Clone)]
-pub struct TupleExpression<'tree> {
-    pub span: ::treesitter_types::Span,
-    pub children: ::std::vec::Vec<Expression<'tree>>,
-}
-impl<'tree> ::treesitter_types::FromNode<'tree> for TupleExpression<'tree> {
-    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
-    fn from_node(
-        node: ::tree_sitter::Node<'tree>,
-        src: &'tree [u8],
-    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-        debug_assert_eq!(node.kind(), "tuple_expression");
-        Ok(Self {
-            span: ::treesitter_types::Span::from(node),
-            children: {
-                #[allow(clippy::suspicious_else_formatting)]
-                let non_field_children = {
-                    let mut cursor = node.walk();
-                    let mut result = ::std::vec::Vec::new();
-                    if cursor.goto_first_child() {
-                        loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
-                                && !cursor.node().is_extra()
-                            {
-                                result.push(cursor.node());
-                            }
-                            if !cursor.goto_next_sibling() {
-                                break;
-                            }
-                        }
-                    }
-                    result
-                };
-                let mut items = ::std::vec::Vec::new();
-                for child in non_field_children {
-                    items.push(<Expression as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
-                }
-                items
-            },
-        })
-    }
-}
-impl ::treesitter_types::Spanned for TupleExpression<'_> {
-    fn span(&self) -> ::treesitter_types::Span {
-        self.span
-    }
-}
-#[derive(Debug, Clone)]
 pub struct TuplePattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TuplePatternChildren<'tree>>,
@@ -7369,6 +7314,51 @@ impl ::treesitter_types::Spanned for ExecStatementCode<'_> {
     }
 }
 #[derive(Debug, Clone)]
+pub enum ExpressionStatementChildren<'tree> {
+    Assignment(::std::boxed::Box<Assignment<'tree>>),
+    AugmentedAssignment(::std::boxed::Box<AugmentedAssignment<'tree>>),
+    Expression(::std::boxed::Box<Expression<'tree>>),
+    Yield(::std::boxed::Box<Yield<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ExpressionStatementChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "assignment" => Ok(Self::Assignment(::std::boxed::Box::new(
+                <Assignment as ::treesitter_types::FromNode>::from_node(node, src)?,
+            ))),
+            "augmented_assignment" => Ok(Self::AugmentedAssignment(::std::boxed::Box::new(
+                <AugmentedAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
+            ))),
+            "yield" => Ok(Self::Yield(::std::boxed::Box::new(
+                <Yield as ::treesitter_types::FromNode>::from_node(node, src)?,
+            ))),
+            _other => {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                    Ok(Self::Expression(::std::boxed::Box::new(v)))
+                } else {
+                    Err(::treesitter_types::ParseError::unexpected_kind(
+                        _other, node,
+                    ))
+                }
+            }
+        }
+    }
+}
+impl ::treesitter_types::Spanned for ExpressionStatementChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::Assignment(inner) => inner.span(),
+            Self::AugmentedAssignment(inner) => inner.span(),
+            Self::Expression(inner) => inner.span(),
+            Self::Yield(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone)]
 pub enum ForInClauseLeft<'tree> {
     Pattern(::std::boxed::Box<Pattern<'tree>>),
     PatternList(::std::boxed::Box<PatternList<'tree>>),
@@ -8891,7 +8881,6 @@ pub enum AnyNode<'tree> {
     CompoundStatement(CompoundStatement<'tree>),
     SimpleStatement(SimpleStatement<'tree>),
     Expression(Expression<'tree>),
-    ExpressionStatement(ExpressionStatement<'tree>),
     Parameter(Parameter<'tree>),
     Pattern(Pattern<'tree>),
     PrimaryExpression(PrimaryExpression<'tree>),
@@ -8934,6 +8923,7 @@ pub enum AnyNode<'tree> {
     ExceptClause(ExceptClause<'tree>),
     ExecStatement(ExecStatement<'tree>),
     ExpressionList(ExpressionList<'tree>),
+    ExpressionStatement(ExpressionStatement<'tree>),
     FinallyClause(FinallyClause<'tree>),
     ForInClause(ForInClause<'tree>),
     ForStatement(ForStatement<'tree>),
@@ -8987,7 +8977,6 @@ pub enum AnyNode<'tree> {
     Subscript(Subscript<'tree>),
     TryStatement(TryStatement<'tree>),
     Tuple(Tuple<'tree>),
-    TupleExpression(TupleExpression<'tree>),
     TuplePattern(TuplePattern<'tree>),
     Type(Type<'tree>),
     TypeAliasStatement(TypeAliasStatement<'tree>),
@@ -9036,11 +9025,6 @@ impl<'tree> AnyNode<'tree> {
             "expression" => <Expression as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::Expression)
                 .unwrap_or(Self::Unknown(node)),
-            "expression_statement" => {
-                <ExpressionStatement as ::treesitter_types::FromNode>::from_node(node, src)
-                    .map(Self::ExpressionStatement)
-                    .unwrap_or(Self::Unknown(node))
-            }
             "parameter" => <Parameter as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::Parameter)
                 .unwrap_or(Self::Unknown(node)),
@@ -9209,6 +9193,11 @@ impl<'tree> AnyNode<'tree> {
             "expression_list" => {
                 <ExpressionList as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::ExpressionList)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "expression_statement" => {
+                <ExpressionStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ExpressionStatement)
                     .unwrap_or(Self::Unknown(node))
             }
             "finally_clause" => {
@@ -9428,11 +9417,6 @@ impl<'tree> AnyNode<'tree> {
             "tuple" => <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::Tuple)
                 .unwrap_or(Self::Unknown(node)),
-            "tuple_expression" => {
-                <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                    .map(Self::TupleExpression)
-                    .unwrap_or(Self::Unknown(node))
-            }
             "tuple_pattern" => <TuplePattern as ::treesitter_types::FromNode>::from_node(node, src)
                 .map(Self::TuplePattern)
                 .unwrap_or(Self::Unknown(node)),
@@ -9559,7 +9543,6 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::CompoundStatement(inner) => inner.span(),
             Self::SimpleStatement(inner) => inner.span(),
             Self::Expression(inner) => inner.span(),
-            Self::ExpressionStatement(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
             Self::Pattern(inner) => inner.span(),
             Self::PrimaryExpression(inner) => inner.span(),
@@ -9602,6 +9585,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::ExceptClause(inner) => inner.span(),
             Self::ExecStatement(inner) => inner.span(),
             Self::ExpressionList(inner) => inner.span(),
+            Self::ExpressionStatement(inner) => inner.span(),
             Self::FinallyClause(inner) => inner.span(),
             Self::ForInClause(inner) => inner.span(),
             Self::ForStatement(inner) => inner.span(),
@@ -9655,7 +9639,6 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::Subscript(inner) => inner.span(),
             Self::TryStatement(inner) => inner.span(),
             Self::Tuple(inner) => inner.span(),
-            Self::TupleExpression(inner) => inner.span(),
             Self::TuplePattern(inner) => inner.span(),
             Self::Type(inner) => inner.span(),
             Self::TypeAliasStatement(inner) => inner.span(),

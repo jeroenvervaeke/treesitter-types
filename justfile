@@ -1,31 +1,6 @@
-# Generate typed AST code for all language crates
+# Generate typed AST code for all language crates from grammar crate NODE_TYPES constants
 generate:
-    cargo build -p treesitter-types-cli
-    ./target/debug/treesitter-types-cli crates/treesitter-types-bash/node-types.json > crates/treesitter-types-bash/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-c/node-types.json > crates/treesitter-types-c/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-c-sharp/node-types.json > crates/treesitter-types-c-sharp/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-cpp/node-types.json > crates/treesitter-types-cpp/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-css/node-types.json > crates/treesitter-types-css/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-elixir/node-types.json > crates/treesitter-types-elixir/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-go/node-types.json > crates/treesitter-types-go/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-haskell/node-types.json > crates/treesitter-types-haskell/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-html/node-types.json > crates/treesitter-types-html/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-java/node-types.json > crates/treesitter-types-java/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-javascript/node-types.json > crates/treesitter-types-javascript/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-json/node-types.json > crates/treesitter-types-json/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-lua/node-types.json > crates/treesitter-types-lua/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-markdown/node-types.json > crates/treesitter-types-markdown/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-ocaml/node-types.json > crates/treesitter-types-ocaml/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-php/node-types.json > crates/treesitter-types-php/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-python/node-types.json > crates/treesitter-types-python/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-regex/node-types.json > crates/treesitter-types-regex/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-ruby/node-types.json > crates/treesitter-types-ruby/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-rust/node-types.json > crates/treesitter-types-rust/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-scala/node-types.json > crates/treesitter-types-scala/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-swift/node-types.json > crates/treesitter-types-swift/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-toml/node-types.json > crates/treesitter-types-toml/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-typescript/node-types.json > crates/treesitter-types-typescript/src/generated.rs
-    ./target/debug/treesitter-types-cli crates/treesitter-types-yaml/node-types.json > crates/treesitter-types-yaml/src/generated.rs
+    cargo run -p treesitter-types-codegen-runner
     cargo fmt --all
 
 # Run integration test: parse an entire real-world Go repository

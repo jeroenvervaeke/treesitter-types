@@ -9,8 +9,9 @@ use quote::{format_ident, quote};
 pub fn emit(decisions: &[TypeDecision]) -> TokenStream {
     let mut tokens = TokenStream::new();
 
-    // Collect type names that have no lifetime parameter (anonymous-only supertype enums)
-    let no_lifetime_types: std::collections::HashSet<String> = decisions
+    // Collect type names that have no lifetime parameter.
+    // First pass: anonymous-only supertype enums (known statically).
+    let mut no_lifetime_types: std::collections::HashSet<String> = decisions
         .iter()
         .filter_map(|d| {
             if let TypeDecision::SupertypeEnum(def) = d {
@@ -21,6 +22,26 @@ pub fn emit(decisions: &[TypeDecision]) -> TokenStream {
             None
         })
         .collect();
+
+    // Second pass: structs whose fields all resolve to no-lifetime types.
+    // Iterate until stable (handles transitive dependencies).
+    loop {
+        let mut changed = false;
+        for decision in decisions {
+            if let TypeDecision::Struct(def) = decision {
+                let name = def.type_name.to_string();
+                if !no_lifetime_types.contains(&name)
+                    && !struct_needs_lifetime(def, &no_lifetime_types)
+                {
+                    no_lifetime_types.insert(name);
+                    changed = true;
+                }
+            }
+        }
+        if !changed {
+            break;
+        }
+    }
 
     // Collect all alternation enums from struct fields to emit them alongside
     let mut alternation_enums: Vec<&AlternationEnumDef> = Vec::new();
@@ -34,16 +55,18 @@ pub fn emit(decisions: &[TypeDecision]) -> TokenStream {
         match decision {
             TypeDecision::Struct(def) => tokens.extend(emit_struct(def, &no_lifetime_types)),
             TypeDecision::LeafStruct(def) => tokens.extend(emit_leaf_struct(def)),
-            TypeDecision::SupertypeEnum(def) => tokens.extend(emit_supertype_enum(def)),
+            TypeDecision::SupertypeEnum(def) => {
+                tokens.extend(emit_supertype_enum(def, &no_lifetime_types))
+            }
         }
     }
 
     for alt in &alternation_enums {
-        tokens.extend(emit_alternation_enum(alt));
+        tokens.extend(emit_alternation_enum(alt, &no_lifetime_types));
     }
 
     // Emit the AnyNode top-level enum
-    tokens.extend(emit_any_node(decisions));
+    tokens.extend(emit_any_node(decisions, &no_lifetime_types));
 
     tokens
 }
@@ -69,12 +92,41 @@ fn collect_alternation_from_field_type<'a>(
     }
 }
 
+/// Check whether a field type needs a lifetime parameter.
+fn field_type_needs_lifetime(
+    ft: &FieldType,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> bool {
+    let tr = match ft {
+        FieldType::Direct(tr) | FieldType::Optional(tr) | FieldType::Repeated(tr) => tr,
+    };
+    match tr {
+        TypeReference::Named(ident) => !no_lifetime_types.contains(&ident.to_string()),
+        TypeReference::Alternation(alt) => alt.variants.iter().any(|v| v.named),
+    }
+}
+
+/// Check whether a struct definition needs a lifetime parameter.
+fn struct_needs_lifetime(
+    def: &StructDef,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> bool {
+    def.fields
+        .iter()
+        .any(|f| field_type_needs_lifetime(&f.field_type, no_lifetime_types))
+        || def
+            .children
+            .as_ref()
+            .is_some_and(|c| field_type_needs_lifetime(&c.field_type, no_lifetime_types))
+}
+
 fn emit_struct(
     def: &StructDef,
     no_lifetime_types: &std::collections::HashSet<String>,
 ) -> TokenStream {
     let type_name = &def.type_name;
     let kind_str = &def.kind;
+    let needs_lifetime = struct_needs_lifetime(def, no_lifetime_types);
 
     let field_decls: Vec<_> = def
         .fields
@@ -96,32 +148,72 @@ fn emit_struct(
         (None, None)
     };
 
-    quote! {
-        #[derive(Debug, Clone)]
-        pub struct #type_name<'tree> {
-            pub span: ::treesitter_types::Span,
-            #(#field_decls)*
-            #children_decl
-        }
+    if needs_lifetime {
+        quote! {
+            #[derive(Debug, Clone)]
+            pub struct #type_name<'tree> {
+                pub span: ::treesitter_types::Span,
+                #(#field_decls)*
+                #children_decl
+            }
 
-        impl<'tree> ::treesitter_types::FromNode<'tree> for #type_name<'tree> {
-            #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
-            fn from_node(
-                node: ::tree_sitter::Node<'tree>,
-                src: &'tree [u8],
-            ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-                debug_assert_eq!(node.kind(), #kind_str);
-                Ok(Self {
-                    span: ::treesitter_types::Span::from(node),
-                    #(#field_parsers)*
-                    #children_parser
-                })
+            impl<'tree> ::treesitter_types::FromNode<'tree> for #type_name<'tree> {
+                #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+                fn from_node(
+                    node: ::tree_sitter::Node<'tree>,
+                    src: &'tree [u8],
+                ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+                    debug_assert_eq!(node.kind(), #kind_str);
+                    Ok(Self {
+                        span: ::treesitter_types::Span::from(node),
+                        #(#field_parsers)*
+                        #children_parser
+                    })
+                }
+            }
+
+            impl ::treesitter_types::Spanned for #type_name<'_> {
+                fn span(&self) -> ::treesitter_types::Span {
+                    self.span
+                }
             }
         }
+    } else {
+        // No-lifetime struct: fields are all anonymous-only types.
+        // Still use `src` param since field parsers pass it to FromNode::from_node.
+        let has_fields = !def.fields.is_empty() || def.children.is_some();
+        let src_param = if has_fields {
+            quote! { src: &'tree [u8] }
+        } else {
+            quote! { _src: &'tree [u8] }
+        };
+        quote! {
+            #[derive(Debug, Clone)]
+            pub struct #type_name {
+                pub span: ::treesitter_types::Span,
+                #(#field_decls)*
+                #children_decl
+            }
 
-        impl ::treesitter_types::Spanned for #type_name<'_> {
-            fn span(&self) -> ::treesitter_types::Span {
-                self.span
+            impl<'tree> ::treesitter_types::FromNode<'tree> for #type_name {
+                #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+                fn from_node(
+                    node: ::tree_sitter::Node<'tree>,
+                    #src_param,
+                ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+                    debug_assert_eq!(node.kind(), #kind_str);
+                    Ok(Self {
+                        span: ::treesitter_types::Span::from(node),
+                        #(#field_parsers)*
+                        #children_parser
+                    })
+                }
+            }
+
+            impl ::treesitter_types::Spanned for #type_name {
+                fn span(&self) -> ::treesitter_types::Span {
+                    self.span
+                }
             }
         }
     }
@@ -456,21 +548,34 @@ fn deduplicate_variants(variants: &[VariantDef]) -> Vec<VariantDef> {
     result
 }
 
-fn emit_alternation_enum(def: &AlternationEnumDef) -> TokenStream {
-    emit_enum_common(&def.type_name, &def.variants)
+fn emit_alternation_enum(
+    def: &AlternationEnumDef,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
+    emit_enum_common(&def.type_name, &def.variants, no_lifetime_types)
 }
 
-fn emit_supertype_enum(def: &SupertypeEnumDef) -> TokenStream {
-    emit_enum_common(&def.type_name, &def.variants)
+fn emit_supertype_enum(
+    def: &SupertypeEnumDef,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
+    emit_enum_common(&def.type_name, &def.variants, no_lifetime_types)
 }
 
-fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> TokenStream {
+fn emit_enum_common(
+    type_name: &proc_macro2::Ident,
+    variants: &[VariantDef],
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     // Deduplicate variant names: when multiple anonymous nodes map to the same
     // PascalCase name (e.g., "A" and "a" both become `A`), merge them into one
     // variant and handle both kinds in the match arm.
     let variants = deduplicate_variants(variants);
     let has_named = variants.iter().any(|v| v.named);
-    let variant_decls: Vec<_> = variants.iter().map(emit_enum_variant_decl).collect();
+    let variant_decls: Vec<_> = variants
+        .iter()
+        .map(|v| emit_enum_variant_decl(v, no_lifetime_types))
+        .collect();
 
     // Separate concrete variants (direct kind match) from supertype variants
     // (kinds starting with `_` — tree-sitter never emits these as node kinds,
@@ -594,12 +699,18 @@ fn emit_enum_common(type_name: &proc_macro2::Ident, variants: &[VariantDef]) -> 
     }
 }
 
-fn emit_enum_variant_decl(variant: &VariantDef) -> TokenStream {
+fn emit_enum_variant_decl(
+    variant: &VariantDef,
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     let name = &variant.variant_name;
     if variant.named {
         let type_name = format_ident!("{}", name);
-        // Box the payload to handle recursive types (e.g., Expression → BinaryExpression → Expression)
-        quote! { #name(::std::boxed::Box<#type_name<'tree>>), }
+        if no_lifetime_types.contains(&type_name.to_string()) {
+            quote! { #name(::std::boxed::Box<#type_name>), }
+        } else {
+            quote! { #name(::std::boxed::Box<#type_name<'tree>>), }
+        }
     } else {
         // Anonymous variants carry a Span so consumers can locate them in source
         quote! { #name(::treesitter_types::Span), }
@@ -633,21 +744,21 @@ fn emit_enum_spanned_arm(variant: &VariantDef) -> TokenStream {
     }
 }
 
-fn emit_any_node(decisions: &[TypeDecision]) -> TokenStream {
+fn emit_any_node(
+    decisions: &[TypeDecision],
+    no_lifetime_types: &std::collections::HashSet<String>,
+) -> TokenStream {
     let mut variant_decls = Vec::new();
     let mut match_arms = Vec::new();
     let mut spanned_arms = Vec::new();
 
     for decision in decisions {
-        let (type_name, kind_str, needs_lifetime) = match decision {
-            TypeDecision::Struct(def) => (&def.type_name, &def.kind, true),
-            TypeDecision::LeafStruct(def) => (&def.type_name, &def.kind, true),
-            TypeDecision::SupertypeEnum(def) => {
-                // Supertype enums with only anonymous variants have no lifetime parameter
-                let has_named = def.variants.iter().any(|v| v.named);
-                (&def.type_name, &def.kind, has_named)
-            }
+        let (type_name, kind_str) = match decision {
+            TypeDecision::Struct(def) => (&def.type_name, &def.kind),
+            TypeDecision::LeafStruct(def) => (&def.type_name, &def.kind),
+            TypeDecision::SupertypeEnum(def) => (&def.type_name, &def.kind),
         };
+        let needs_lifetime = !no_lifetime_types.contains(&type_name.to_string());
 
         if needs_lifetime {
             variant_decls.push(quote! {
