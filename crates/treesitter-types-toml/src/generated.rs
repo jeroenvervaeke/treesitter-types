@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ArrayChildren<'tree>>,
@@ -48,7 +48,7 @@ impl ::treesitter_types::Spanned for Array<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Document<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DocumentChildren<'tree>>,
@@ -98,7 +98,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DottedKey<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DottedKeyChildren<'tree>>,
@@ -148,7 +148,7 @@ impl ::treesitter_types::Spanned for DottedKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Float<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -175,7 +175,7 @@ impl ::treesitter_types::Spanned for Float<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InlineTable<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Pair<'tree>>,
@@ -225,7 +225,7 @@ impl ::treesitter_types::Spanned for InlineTable<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Integer<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -252,7 +252,7 @@ impl ::treesitter_types::Spanned for Integer<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pair<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PairChildren<'tree>>,
@@ -302,7 +302,7 @@ impl ::treesitter_types::Spanned for Pair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedKey<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -352,7 +352,7 @@ impl ::treesitter_types::Spanned for QuotedKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct String<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -402,7 +402,7 @@ impl ::treesitter_types::Spanned for String<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Table<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TableChildren<'tree>>,
@@ -452,7 +452,7 @@ impl ::treesitter_types::Spanned for Table<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TableArrayElement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TableArrayElementChildren<'tree>>,
@@ -504,7 +504,7 @@ impl ::treesitter_types::Spanned for TableArrayElement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BareKey<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -531,7 +531,7 @@ impl ::treesitter_types::Spanned for BareKey<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Boolean<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -558,7 +558,7 @@ impl ::treesitter_types::Spanned for Boolean<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -585,7 +585,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeSequence<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -612,7 +612,7 @@ impl ::treesitter_types::Spanned for EscapeSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalDate<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -639,7 +639,7 @@ impl ::treesitter_types::Spanned for LocalDate<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalDateTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -666,7 +666,7 @@ impl ::treesitter_types::Spanned for LocalDateTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LocalTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -693,7 +693,7 @@ impl ::treesitter_types::Spanned for LocalTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OffsetDateTime<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -720,7 +720,7 @@ impl ::treesitter_types::Spanned for OffsetDateTime<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArrayChildren<'tree> {
     Array(::std::boxed::Box<Array<'tree>>),
     Boolean(::std::boxed::Box<Boolean<'tree>>),
@@ -790,7 +790,7 @@ impl ::treesitter_types::Spanned for ArrayChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DocumentChildren<'tree> {
     Pair(::std::boxed::Box<Pair<'tree>>),
     Table(::std::boxed::Box<Table<'tree>>),
@@ -825,7 +825,7 @@ impl ::treesitter_types::Spanned for DocumentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DottedKeyChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -860,7 +860,7 @@ impl ::treesitter_types::Spanned for DottedKeyChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PairChildren<'tree> {
     Array(::std::boxed::Box<Array<'tree>>),
     BareKey(::std::boxed::Box<BareKey<'tree>>),
@@ -945,7 +945,7 @@ impl ::treesitter_types::Spanned for PairChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TableChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -985,7 +985,7 @@ impl ::treesitter_types::Spanned for TableChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TableArrayElementChildren<'tree> {
     BareKey(::std::boxed::Box<BareKey<'tree>>),
     DottedKey(::std::boxed::Box<DottedKey<'tree>>),
@@ -1025,7 +1025,7 @@ impl ::treesitter_types::Spanned for TableArrayElementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     Array(Array<'tree>),
     Document(Document<'tree>),

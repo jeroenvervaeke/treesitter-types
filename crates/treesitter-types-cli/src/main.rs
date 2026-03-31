@@ -1,3 +1,16 @@
+//! Command-line tool for generating strongly-typed Rust AST types from a
+//! [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) `node-types.json` file.
+//!
+//! This is a thin wrapper around the [`treesitter-types`](https://docs.rs/treesitter-types)
+//! code-generation library. It reads a `node-types.json` file and prints the generated Rust code
+//! to stdout.
+//!
+//! # Usage
+//!
+//! ```sh
+//! treesitter-types-cli path/to/node-types.json > generated.rs
+//! ```
+
 use std::path::PathBuf;
 
 fn main() {

@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Alias<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: AliasName<'tree>,
@@ -112,7 +112,7 @@ impl ::treesitter_types::Spanned for Alias<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Anchor<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: AnchorName<'tree>,
@@ -226,7 +226,7 @@ impl ::treesitter_types::Spanned for Anchor<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockMapping<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockMappingPair<'tree>>,
@@ -276,7 +276,7 @@ impl ::treesitter_types::Spanned for BlockMapping<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockMappingPair<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: ::core::option::Option<BlockMappingPairKey<'tree>>,
@@ -311,7 +311,7 @@ impl ::treesitter_types::Spanned for BlockMappingPair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockNode<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockNodeChildren<'tree>>,
@@ -361,7 +361,7 @@ impl ::treesitter_types::Spanned for BlockNode<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -388,7 +388,7 @@ impl ::treesitter_types::Spanned for BlockScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockSequence<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockSequenceItem<'tree>>,
@@ -438,7 +438,7 @@ impl ::treesitter_types::Spanned for BlockSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockSequenceItem<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<BlockSequenceItemChildren<'tree>>,
@@ -489,7 +489,7 @@ impl ::treesitter_types::Spanned for BlockSequenceItem<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Document<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DocumentChildren<'tree>>,
@@ -539,7 +539,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DoubleQuoteScalar<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -589,7 +589,7 @@ impl ::treesitter_types::Spanned for DoubleQuoteScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FlowMapping<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<FlowMappingChildren<'tree>>,
@@ -641,7 +641,7 @@ impl ::treesitter_types::Spanned for FlowMapping<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FlowNode<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<FlowNodeChildren<'tree>>,
@@ -691,7 +691,7 @@ impl ::treesitter_types::Spanned for FlowNode<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FlowPair<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: ::core::option::Option<FlowNode<'tree>>,
@@ -726,7 +726,7 @@ impl ::treesitter_types::Spanned for FlowPair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FlowSequence<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<FlowSequenceChildren<'tree>>,
@@ -778,7 +778,7 @@ impl ::treesitter_types::Spanned for FlowSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PlainScalar<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: PlainScalarChildren<'tree>,
@@ -892,7 +892,7 @@ impl ::treesitter_types::Spanned for PlainScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ReservedDirective<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ReservedDirectiveChildren<'tree>>,
@@ -944,7 +944,7 @@ impl ::treesitter_types::Spanned for ReservedDirective<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SingleQuoteScalar<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<EscapeSequence<'tree>>,
@@ -994,7 +994,7 @@ impl ::treesitter_types::Spanned for SingleQuoteScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Stream<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Document<'tree>>,
@@ -1044,7 +1044,7 @@ impl ::treesitter_types::Spanned for Stream<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TagDirective<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TagDirectiveChildren<'tree>>,
@@ -1096,7 +1096,7 @@ impl ::treesitter_types::Spanned for TagDirective<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct YamlDirective<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: YamlVersion<'tree>,
@@ -1210,7 +1210,7 @@ impl ::treesitter_types::Spanned for YamlDirective<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AliasName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1237,7 +1237,7 @@ impl ::treesitter_types::Spanned for AliasName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AnchorName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1264,7 +1264,7 @@ impl ::treesitter_types::Spanned for AnchorName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BooleanScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1291,7 +1291,7 @@ impl ::treesitter_types::Spanned for BooleanScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1318,7 +1318,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DirectiveName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1345,7 +1345,7 @@ impl ::treesitter_types::Spanned for DirectiveName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DirectiveParameter<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1372,7 +1372,7 @@ impl ::treesitter_types::Spanned for DirectiveParameter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeSequence<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1399,7 +1399,7 @@ impl ::treesitter_types::Spanned for EscapeSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FloatScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1426,7 +1426,7 @@ impl ::treesitter_types::Spanned for FloatScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IntegerScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1453,7 +1453,7 @@ impl ::treesitter_types::Spanned for IntegerScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NullScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1480,7 +1480,7 @@ impl ::treesitter_types::Spanned for NullScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StringScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1507,7 +1507,7 @@ impl ::treesitter_types::Spanned for StringScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tag<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1534,7 +1534,7 @@ impl ::treesitter_types::Spanned for Tag<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TagHandle<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1561,7 +1561,7 @@ impl ::treesitter_types::Spanned for TagHandle<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TagPrefix<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1588,7 +1588,7 @@ impl ::treesitter_types::Spanned for TagPrefix<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TimestampScalar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1615,7 +1615,7 @@ impl ::treesitter_types::Spanned for TimestampScalar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct YamlVersion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1642,7 +1642,7 @@ impl ::treesitter_types::Spanned for YamlVersion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockMappingPairKey<'tree> {
     BlockNode(::std::boxed::Box<BlockNode<'tree>>),
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
@@ -1672,7 +1672,7 @@ impl ::treesitter_types::Spanned for BlockMappingPairKey<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockMappingPairValue<'tree> {
     BlockNode(::std::boxed::Box<BlockNode<'tree>>),
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
@@ -1702,7 +1702,7 @@ impl ::treesitter_types::Spanned for BlockMappingPairValue<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockNodeChildren<'tree> {
     Anchor(::std::boxed::Box<Anchor<'tree>>),
     BlockMapping(::std::boxed::Box<BlockMapping<'tree>>),
@@ -1747,7 +1747,7 @@ impl ::treesitter_types::Spanned for BlockNodeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockSequenceItemChildren<'tree> {
     BlockNode(::std::boxed::Box<BlockNode<'tree>>),
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
@@ -1777,7 +1777,7 @@ impl ::treesitter_types::Spanned for BlockSequenceItemChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DocumentChildren<'tree> {
     BlockNode(::std::boxed::Box<BlockNode<'tree>>),
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
@@ -1822,7 +1822,7 @@ impl ::treesitter_types::Spanned for DocumentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FlowMappingChildren<'tree> {
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
     FlowPair(::std::boxed::Box<FlowPair<'tree>>),
@@ -1852,7 +1852,7 @@ impl ::treesitter_types::Spanned for FlowMappingChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FlowNodeChildren<'tree> {
     Alias(::std::boxed::Box<Alias<'tree>>),
     Anchor(::std::boxed::Box<Anchor<'tree>>),
@@ -1912,7 +1912,7 @@ impl ::treesitter_types::Spanned for FlowNodeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FlowSequenceChildren<'tree> {
     FlowNode(::std::boxed::Box<FlowNode<'tree>>),
     FlowPair(::std::boxed::Box<FlowPair<'tree>>),
@@ -1942,7 +1942,7 @@ impl ::treesitter_types::Spanned for FlowSequenceChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PlainScalarChildren<'tree> {
     BooleanScalar(::std::boxed::Box<BooleanScalar<'tree>>),
     FloatScalar(::std::boxed::Box<FloatScalar<'tree>>),
@@ -1992,7 +1992,7 @@ impl ::treesitter_types::Spanned for PlainScalarChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ReservedDirectiveChildren<'tree> {
     DirectiveName(::std::boxed::Box<DirectiveName<'tree>>),
     DirectiveParameter(::std::boxed::Box<DirectiveParameter<'tree>>),
@@ -2022,7 +2022,7 @@ impl ::treesitter_types::Spanned for ReservedDirectiveChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TagDirectiveChildren<'tree> {
     TagHandle(::std::boxed::Box<TagHandle<'tree>>),
     TagPrefix(::std::boxed::Box<TagPrefix<'tree>>),
@@ -2052,7 +2052,7 @@ impl ::treesitter_types::Spanned for TagDirectiveChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     Alias(Alias<'tree>),
     Anchor(Anchor<'tree>),

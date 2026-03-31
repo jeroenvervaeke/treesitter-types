@@ -150,7 +150,7 @@ fn emit_struct(
 
     if needs_lifetime {
         quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, Eq)]
             pub struct #type_name<'tree> {
                 pub span: ::treesitter_types::Span,
                 #(#field_decls)*
@@ -188,7 +188,7 @@ fn emit_struct(
             quote! { _src: &'tree [u8] }
         };
         quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, Eq)]
             pub struct #type_name {
                 pub span: ::treesitter_types::Span,
                 #(#field_decls)*
@@ -519,7 +519,7 @@ fn emit_leaf_struct(def: &LeafStructDef) -> TokenStream {
     let kind_str = &def.kind;
 
     quote! {
-        #[derive(Debug, Clone)]
+        #[derive(Debug, Clone, PartialEq, Eq)]
         pub struct #type_name<'tree> {
             pub span: ::treesitter_types::Span,
             text: &'tree str,
@@ -677,7 +677,7 @@ fn emit_enum_common(
 
     if has_named {
         quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, Eq)]
             pub enum #type_name<'tree> {
                 #(#variant_decls)*
             }
@@ -710,7 +710,7 @@ fn emit_enum_common(
             quote! { _src: &'tree [u8] }
         };
         quote! {
-            #[derive(Debug, Clone)]
+            #[derive(Debug, Clone, PartialEq, Eq)]
             pub enum #type_name {
                 #(#variant_decls)*
             }
@@ -819,7 +819,7 @@ fn emit_any_node(
     }
 
     quote! {
-        #[derive(Debug, Clone)]
+        #[derive(Debug, Clone, PartialEq, Eq)]
         pub enum AnyNode<'tree> {
             #(#variant_decls)*
             Unknown(::tree_sitter::Node<'tree>),

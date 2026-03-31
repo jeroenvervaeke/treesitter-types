@@ -13,3 +13,6 @@ categories = ["development-tools", "parser-implementations"]
 [dependencies]
 treesitter-types = { version = "0.1.0", path = "../treesitter-types" }
 tree-sitter = "0.25"
+
+[dev-dependencies]
+tree-sitter-html = "0.23"

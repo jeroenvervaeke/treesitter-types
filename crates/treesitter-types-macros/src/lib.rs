@@ -1,3 +1,12 @@
+//! Proc-macro companion for [`treesitter-types`](https://docs.rs/treesitter-types).
+//!
+//! Provides the [`generate_types!`] macro, which reads a
+//! [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) `node-types.json` file at compile
+//! time and expands it into strongly-typed Rust AST structs and enums.
+//!
+//! If you don't need compile-time generation, consider using one of the pre-generated language
+//! crates (e.g. [`treesitter-types-go`](https://docs.rs/treesitter-types-go)) instead.
+
 use proc_macro::TokenStream;
 
 /// Generates typed AST structs and enums from a tree-sitter `node-types.json` file.
