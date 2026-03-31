@@ -19,7 +19,6 @@ members = [
     "crates/treesitter-types-json",
     "crates/treesitter-types-lua",
     "crates/treesitter-types-markdown",
-    "crates/treesitter-types-ocaml",
     "crates/treesitter-types-php",
     "crates/treesitter-types-python",
     "crates/treesitter-types-regex",

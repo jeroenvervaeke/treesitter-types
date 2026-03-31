@@ -332,25 +332,5 @@ integration-test-haskell:
     echo
     ./target/release/parse_all_haskell "$TMPDIR/cabal"
 
-# Run integration test: parse an entire real-world OCaml repository
-integration-test-ocaml:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    REPO_URL="https://github.com/ocaml/ocaml.git"
-    TMPDIR=$(mktemp -d)
-    trap 'rm -rf "$TMPDIR"' EXIT
-    echo "==> Cloning ocaml/ocaml (shallow, sparse checkout)..."
-    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/ocaml" 2>&1 | tail -1
-    cd "$TMPDIR/ocaml"
-    git sparse-checkout set stdlib 2>/dev/null
-    cd - > /dev/null
-    FILE_COUNT=$(find "$TMPDIR/ocaml" -name '*.ml' | wc -l)
-    echo "==> Found $FILE_COUNT .ml files"
-    echo "==> Building parse_all_ocaml..."
-    cargo build --release -p test-roundtrip --bin parse_all_ocaml 2>&1 | tail -1
-    echo "==> Parsing all .ml files..."
-    echo
-    ./target/release/parse_all_ocaml "$TMPDIR/ocaml"
-
 # Run all integration tests
-integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java integration-test-python integration-test-c integration-test-cpp integration-test-bash integration-test-ruby integration-test-c-sharp integration-test-css integration-test-php integration-test-json integration-test-html integration-test-scala integration-test-haskell integration-test-ocaml
+integration-test-all: integration-test-go integration-test-rust integration-test-typescript integration-test-javascript integration-test-java integration-test-python integration-test-c integration-test-cpp integration-test-bash integration-test-ruby integration-test-c-sharp integration-test-css integration-test-php integration-test-json integration-test-html integration-test-scala integration-test-haskell

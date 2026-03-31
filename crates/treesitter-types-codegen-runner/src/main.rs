@@ -73,12 +73,7 @@ fn languages() -> Vec<(&'static str, &'static str, &'static str)> {
             tree_sitter_md::NODE_TYPES_BLOCK,
             "crates/treesitter-types-markdown/src/generated.rs",
         ),
-        (
-            "ocaml",
-            tree_sitter_ocaml::OCAML_NODE_TYPES,
-            "crates/treesitter-types-ocaml/src/generated.rs",
-        ),
-        (
+(
             "php",
             tree_sitter_php::PHP_NODE_TYPES,
             "crates/treesitter-types-php/src/generated.rs",

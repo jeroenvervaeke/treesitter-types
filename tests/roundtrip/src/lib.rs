@@ -9,7 +9,6 @@ pub use treesitter_types_html as html;
 pub use treesitter_types_java as java;
 pub use treesitter_types_javascript as javascript;
 pub use treesitter_types_json as json;
-pub use treesitter_types_ocaml as ocaml;
 pub use treesitter_types_php as php;
 pub use treesitter_types_python as python;
 pub use treesitter_types_regex as regex;
@@ -103,14 +102,6 @@ pub fn parse_json(src: &[u8]) -> tree_sitter::Tree {
     parser
         .set_language(&tree_sitter_json::LANGUAGE.into())
         .expect("failed to set JSON language");
-    parser.parse(src, None).expect("parse failed")
-}
-
-pub fn parse_ocaml(src: &[u8]) -> tree_sitter::Tree {
-    let mut parser = tree_sitter::Parser::new();
-    parser
-        .set_language(&tree_sitter_ocaml::LANGUAGE_OCAML.into())
-        .expect("failed to set OCaml language");
     parser.parse(src, None).expect("parse failed")
 }
 

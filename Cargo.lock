@@ -201,7 +201,6 @@ dependencies = [
  "tree-sitter-java",
  "tree-sitter-javascript",
  "tree-sitter-json",
- "tree-sitter-ocaml",
  "tree-sitter-php",
  "tree-sitter-python",
  "tree-sitter-regex",
@@ -224,7 +223,6 @@ dependencies = [
  "treesitter-types-json",
  "treesitter-types-lua",
  "treesitter-types-markdown",
- "treesitter-types-ocaml",
  "treesitter-types-php",
  "treesitter-types-python",
  "treesitter-types-regex",
@@ -418,16 +416,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tree-sitter-ocaml"
-version = "0.24.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d19db582b3855f56b5f9ec484170fbfb9ee60b938ec7720d76d2ee788e8b640"
-dependencies = [
- "cc",
- "tree-sitter-language",
-]
-
-[[package]]
 name = "tree-sitter-php"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -590,7 +578,6 @@ dependencies = [
  "tree-sitter-json",
  "tree-sitter-lua",
  "tree-sitter-md",
- "tree-sitter-ocaml",
  "tree-sitter-php",
  "tree-sitter-python",
  "tree-sitter-regex",
@@ -695,14 +682,6 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-markdown"
-version = "0.1.0"
-dependencies = [
- "tree-sitter",
- "treesitter-types",
-]
-
-[[package]]
-name = "treesitter-types-ocaml"
 version = "0.1.0"
 dependencies = [
  "tree-sitter",

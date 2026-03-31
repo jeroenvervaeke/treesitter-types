@@ -109,7 +109,6 @@ Ready-to-use typed AST crates for 25 languages — no codegen step needed:
 | `treesitter-types-json` | tree-sitter-json |
 | `treesitter-types-lua` | tree-sitter-lua |
 | `treesitter-types-markdown` | tree-sitter-md |
-| `treesitter-types-ocaml` | tree-sitter-ocaml |
 | `treesitter-types-php` | tree-sitter-php |
 | `treesitter-types-python` | tree-sitter-python |
 | `treesitter-types-regex` | tree-sitter-regex |
@@ -149,7 +148,6 @@ The codegen is validated against real-world repositories with zero failures on c
 | [SchemaStore/schemastore](https://github.com/SchemaStore/schemastore) | JSON | - | - |
 | [apache/spark](https://github.com/apache/spark) | Scala | - | - |
 | [haskell/cabal](https://github.com/haskell/cabal) | Haskell | - | - |
-| [ocaml/ocaml](https://github.com/ocaml/ocaml) | OCaml | - | - |
 
 Run the integration tests yourself:
 
