@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AccessCall<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: AccessCallKey<'tree>,
@@ -33,7 +33,7 @@ impl ::treesitter_types::Spanned for AccessCall<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AfterBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<AfterBlockChildren<'tree>>,
@@ -85,7 +85,7 @@ impl ::treesitter_types::Spanned for AfterBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AnonymousFunction<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<StabClause<'tree>>,
@@ -135,7 +135,7 @@ impl ::treesitter_types::Spanned for AnonymousFunction<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Arguments<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ArgumentsChildren<'tree>>,
@@ -185,7 +185,7 @@ impl ::treesitter_types::Spanned for Arguments<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BinaryOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: BinaryOperatorLeft<'tree>,
@@ -227,7 +227,7 @@ impl ::treesitter_types::Spanned for BinaryOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bitstring<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BitstringChildren<'tree>>,
@@ -277,7 +277,7 @@ impl ::treesitter_types::Spanned for Bitstring<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Block<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockChildren<'tree>>,
@@ -327,7 +327,7 @@ impl ::treesitter_types::Spanned for Block<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Body<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BodyChildren<'tree>>,
@@ -377,7 +377,7 @@ impl ::treesitter_types::Spanned for Body<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Boolean<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -404,7 +404,7 @@ impl ::treesitter_types::Spanned for Boolean<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Call<'tree> {
     pub span: ::treesitter_types::Span,
     pub target: CallTarget<'tree>,
@@ -461,7 +461,7 @@ impl ::treesitter_types::Spanned for Call<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CatchBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<CatchBlockChildren<'tree>>,
@@ -513,7 +513,7 @@ impl ::treesitter_types::Spanned for CatchBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Charlist<'tree> {
     pub span: ::treesitter_types::Span,
     pub quoted_end: CharlistQuotedEnd,
@@ -577,7 +577,7 @@ impl ::treesitter_types::Spanned for Charlist<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DoBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DoBlockChildren<'tree>>,
@@ -627,7 +627,7 @@ impl ::treesitter_types::Spanned for DoBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Dot<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: DotLeft<'tree>,
@@ -669,7 +669,7 @@ impl ::treesitter_types::Spanned for Dot<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ElseBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ElseBlockChildren<'tree>>,
@@ -719,7 +719,7 @@ impl ::treesitter_types::Spanned for ElseBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Identifier<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -746,7 +746,7 @@ impl ::treesitter_types::Spanned for Identifier<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Interpolation<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<InterpolationChildren<'tree>>,
@@ -797,7 +797,7 @@ impl ::treesitter_types::Spanned for Interpolation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Keywords<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Pair<'tree>>,
@@ -847,7 +847,7 @@ impl ::treesitter_types::Spanned for Keywords<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct List<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ListChildren<'tree>>,
@@ -897,7 +897,7 @@ impl ::treesitter_types::Spanned for List<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Map<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<MapChildren<'tree>>,
@@ -947,7 +947,7 @@ impl ::treesitter_types::Spanned for Map<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MapContent<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<MapContentChildren<'tree>>,
@@ -999,7 +999,7 @@ impl ::treesitter_types::Spanned for MapContent<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Nil<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1026,7 +1026,7 @@ impl ::treesitter_types::Spanned for Nil<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OperatorIdentifier<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1053,7 +1053,7 @@ impl ::treesitter_types::Spanned for OperatorIdentifier<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pair<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: PairKey<'tree>,
@@ -1088,7 +1088,7 @@ impl ::treesitter_types::Spanned for Pair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedAtom<'tree> {
     pub span: ::treesitter_types::Span,
     pub quoted_end: QuotedAtomQuotedEnd,
@@ -1154,7 +1154,7 @@ impl ::treesitter_types::Spanned for QuotedAtom<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedKeyword<'tree> {
     pub span: ::treesitter_types::Span,
     pub quoted_end: QuotedKeywordQuotedEnd,
@@ -1220,7 +1220,7 @@ impl ::treesitter_types::Spanned for QuotedKeyword<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RescueBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<RescueBlockChildren<'tree>>,
@@ -1272,7 +1272,7 @@ impl ::treesitter_types::Spanned for RescueBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Sigil<'tree> {
     pub span: ::treesitter_types::Span,
     pub quoted_end: SigilQuotedEnd,
@@ -1336,7 +1336,7 @@ impl ::treesitter_types::Spanned for Sigil<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Source<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<SourceChildren<'tree>>,
@@ -1386,7 +1386,7 @@ impl ::treesitter_types::Spanned for Source<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StabClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: ::core::option::Option<StabClauseLeft<'tree>>,
@@ -1428,7 +1428,7 @@ impl ::treesitter_types::Spanned for StabClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct String<'tree> {
     pub span: ::treesitter_types::Span,
     pub quoted_end: StringQuotedEnd,
@@ -1492,7 +1492,7 @@ impl ::treesitter_types::Spanned for String<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Struct<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: StructChildren<'tree>,
@@ -1606,7 +1606,7 @@ impl ::treesitter_types::Spanned for Struct<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tuple<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TupleChildren<'tree>>,
@@ -1656,7 +1656,7 @@ impl ::treesitter_types::Spanned for Tuple<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnaryOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub operand: ::std::vec::Vec<UnaryOperatorOperand<'tree>>,
@@ -1697,7 +1697,7 @@ impl ::treesitter_types::Spanned for UnaryOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Alias<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1724,7 +1724,7 @@ impl ::treesitter_types::Spanned for Alias<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Atom<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1751,7 +1751,7 @@ impl ::treesitter_types::Spanned for Atom<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Char<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1778,7 +1778,7 @@ impl ::treesitter_types::Spanned for Char<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1805,7 +1805,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeSequence<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1832,7 +1832,7 @@ impl ::treesitter_types::Spanned for EscapeSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Float<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1859,7 +1859,7 @@ impl ::treesitter_types::Spanned for Float<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Integer<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1886,7 +1886,7 @@ impl ::treesitter_types::Spanned for Integer<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Keyword<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1913,7 +1913,7 @@ impl ::treesitter_types::Spanned for Keyword<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedContent<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1940,7 +1940,7 @@ impl ::treesitter_types::Spanned for QuotedContent<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SigilModifiers<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1967,7 +1967,7 @@ impl ::treesitter_types::Spanned for SigilModifiers<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SigilName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1994,7 +1994,7 @@ impl ::treesitter_types::Spanned for SigilName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AccessCallKey<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -2134,7 +2134,7 @@ impl ::treesitter_types::Spanned for AccessCallKey<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AccessCallTarget<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -2274,7 +2274,7 @@ impl ::treesitter_types::Spanned for AccessCallTarget<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AfterBlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -2419,7 +2419,7 @@ impl ::treesitter_types::Spanned for AfterBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArgumentsChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -2564,7 +2564,7 @@ impl ::treesitter_types::Spanned for ArgumentsChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BinaryOperatorLeft<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -2709,7 +2709,7 @@ impl ::treesitter_types::Spanned for BinaryOperatorLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BinaryOperatorOperator {
     NotEq(::treesitter_types::Span),
     BangEqEq(::treesitter_types::Span),
@@ -2869,7 +2869,7 @@ impl ::treesitter_types::Spanned for BinaryOperatorOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BinaryOperatorRight<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -3014,7 +3014,7 @@ impl ::treesitter_types::Spanned for BinaryOperatorRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BitstringChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -3159,7 +3159,7 @@ impl ::treesitter_types::Spanned for BitstringChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -3304,7 +3304,7 @@ impl ::treesitter_types::Spanned for BlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BodyChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -3444,7 +3444,7 @@ impl ::treesitter_types::Spanned for BodyChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CallTarget<'tree> {
     Call(::std::boxed::Box<Call<'tree>>),
     Dot(::std::boxed::Box<Dot<'tree>>),
@@ -3479,7 +3479,7 @@ impl ::treesitter_types::Spanned for CallTarget<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CallChildren<'tree> {
     Arguments(::std::boxed::Box<Arguments<'tree>>),
     DoBlock(::std::boxed::Box<DoBlock<'tree>>),
@@ -3509,7 +3509,7 @@ impl ::treesitter_types::Spanned for CallChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CatchBlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -3654,7 +3654,7 @@ impl ::treesitter_types::Spanned for CatchBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CharlistQuotedEnd {
     SingleQuote(::treesitter_types::Span),
     SQuoteSQuoteSQuote(::treesitter_types::Span),
@@ -3682,7 +3682,7 @@ impl ::treesitter_types::Spanned for CharlistQuotedEnd {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CharlistQuotedStart {
     SingleQuote(::treesitter_types::Span),
     SQuoteSQuoteSQuote(::treesitter_types::Span),
@@ -3710,7 +3710,7 @@ impl ::treesitter_types::Spanned for CharlistQuotedStart {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CharlistChildren<'tree> {
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
@@ -3745,7 +3745,7 @@ impl ::treesitter_types::Spanned for CharlistChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DoBlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     AfterBlock(::std::boxed::Box<AfterBlock<'tree>>),
@@ -3910,7 +3910,7 @@ impl ::treesitter_types::Spanned for DoBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DotLeft<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4050,7 +4050,7 @@ impl ::treesitter_types::Spanned for DotLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DotOperator {
     Dot(::treesitter_types::Span),
 }
@@ -4073,7 +4073,7 @@ impl ::treesitter_types::Spanned for DotOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DotRight<'tree> {
     Alias(::std::boxed::Box<Alias<'tree>>),
     Charlist(::std::boxed::Box<Charlist<'tree>>),
@@ -4123,7 +4123,7 @@ impl ::treesitter_types::Spanned for DotRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ElseBlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4268,7 +4268,7 @@ impl ::treesitter_types::Spanned for ElseBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InterpolationChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4408,7 +4408,7 @@ impl ::treesitter_types::Spanned for InterpolationChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4553,7 +4553,7 @@ impl ::treesitter_types::Spanned for ListChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MapChildren<'tree> {
     MapContent(::std::boxed::Box<MapContent<'tree>>),
     Struct(::std::boxed::Box<Struct<'tree>>),
@@ -4583,7 +4583,7 @@ impl ::treesitter_types::Spanned for MapChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MapContentChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4728,7 +4728,7 @@ impl ::treesitter_types::Spanned for MapContentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PairKey<'tree> {
     Keyword(::std::boxed::Box<Keyword<'tree>>),
     QuotedKeyword(::std::boxed::Box<QuotedKeyword<'tree>>),
@@ -4758,7 +4758,7 @@ impl ::treesitter_types::Spanned for PairKey<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PairValue<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -4898,7 +4898,7 @@ impl ::treesitter_types::Spanned for PairValue<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedAtomQuotedEnd {
     DoubleQuote(::treesitter_types::Span),
     SingleQuote(::treesitter_types::Span),
@@ -4924,7 +4924,7 @@ impl ::treesitter_types::Spanned for QuotedAtomQuotedEnd {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedAtomQuotedStart {
     DoubleQuote(::treesitter_types::Span),
     SingleQuote(::treesitter_types::Span),
@@ -4950,7 +4950,7 @@ impl ::treesitter_types::Spanned for QuotedAtomQuotedStart {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedAtomChildren<'tree> {
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
@@ -4985,7 +4985,7 @@ impl ::treesitter_types::Spanned for QuotedAtomChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedKeywordQuotedEnd {
     DoubleQuote(::treesitter_types::Span),
     SingleQuote(::treesitter_types::Span),
@@ -5011,7 +5011,7 @@ impl ::treesitter_types::Spanned for QuotedKeywordQuotedEnd {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedKeywordQuotedStart {
     DoubleQuote(::treesitter_types::Span),
     SingleQuote(::treesitter_types::Span),
@@ -5037,7 +5037,7 @@ impl ::treesitter_types::Spanned for QuotedKeywordQuotedStart {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum QuotedKeywordChildren<'tree> {
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
@@ -5072,7 +5072,7 @@ impl ::treesitter_types::Spanned for QuotedKeywordChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RescueBlockChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -5217,7 +5217,7 @@ impl ::treesitter_types::Spanned for RescueBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SigilQuotedEnd {
     DoubleQuote(::treesitter_types::Span),
     DQuoteDQuoteDQuote(::treesitter_types::Span),
@@ -5271,7 +5271,7 @@ impl ::treesitter_types::Spanned for SigilQuotedEnd {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SigilQuotedStart {
     DoubleQuote(::treesitter_types::Span),
     DQuoteDQuoteDQuote(::treesitter_types::Span),
@@ -5325,7 +5325,7 @@ impl ::treesitter_types::Spanned for SigilQuotedStart {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SigilChildren<'tree> {
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
@@ -5370,7 +5370,7 @@ impl ::treesitter_types::Spanned for SigilChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SourceChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -5510,7 +5510,7 @@ impl ::treesitter_types::Spanned for SourceChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StabClauseLeft<'tree> {
     Arguments(::std::boxed::Box<Arguments<'tree>>),
     BinaryOperator(::std::boxed::Box<BinaryOperator<'tree>>),
@@ -5540,7 +5540,7 @@ impl ::treesitter_types::Spanned for StabClauseLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StabClauseOperator {
     Arrow(::treesitter_types::Span),
 }
@@ -5563,7 +5563,7 @@ impl ::treesitter_types::Spanned for StabClauseOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringQuotedEnd {
     DoubleQuote(::treesitter_types::Span),
     DQuoteDQuoteDQuote(::treesitter_types::Span),
@@ -5591,7 +5591,7 @@ impl ::treesitter_types::Spanned for StringQuotedEnd {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringQuotedStart {
     DoubleQuote(::treesitter_types::Span),
     DQuoteDQuoteDQuote(::treesitter_types::Span),
@@ -5619,7 +5619,7 @@ impl ::treesitter_types::Spanned for StringQuotedStart {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringChildren<'tree> {
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
@@ -5654,7 +5654,7 @@ impl ::treesitter_types::Spanned for StringChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StructChildren<'tree> {
     Alias(::std::boxed::Box<Alias<'tree>>),
     Atom(::std::boxed::Box<Atom<'tree>>),
@@ -5709,7 +5709,7 @@ impl ::treesitter_types::Spanned for StructChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TupleChildren<'tree> {
     AccessCall(::std::boxed::Box<AccessCall<'tree>>),
     Alias(::std::boxed::Box<Alias<'tree>>),
@@ -5854,7 +5854,7 @@ impl ::treesitter_types::Spanned for TupleChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnaryOperatorOperand<'tree> {
     LParen(::treesitter_types::Span),
     RParen(::treesitter_types::Span),
@@ -6000,7 +6000,7 @@ impl ::treesitter_types::Spanned for UnaryOperatorOperand<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnaryOperatorOperator {
     Bang(::treesitter_types::Span),
     Amp(::treesitter_types::Span),
@@ -6044,7 +6044,7 @@ impl ::treesitter_types::Spanned for UnaryOperatorOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     AccessCall(AccessCall<'tree>),
     AfterBlock(AfterBlock<'tree>),

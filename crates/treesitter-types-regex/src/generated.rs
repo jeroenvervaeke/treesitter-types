@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Alternation<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Term<'tree>>,
@@ -48,7 +48,7 @@ impl ::treesitter_types::Spanned for Alternation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AnonymousCapturingGroup<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Pattern<'tree>,
@@ -162,7 +162,7 @@ impl ::treesitter_types::Spanned for AnonymousCapturingGroup<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BackreferenceEscape<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: GroupName<'tree>,
@@ -276,7 +276,7 @@ impl ::treesitter_types::Spanned for BackreferenceEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CharacterClass<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<CharacterClassChildren<'tree>>,
@@ -328,7 +328,7 @@ impl ::treesitter_types::Spanned for CharacterClass<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CharacterClassEscape<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<CharacterClassEscapeChildren<'tree>>,
@@ -379,7 +379,7 @@ impl ::treesitter_types::Spanned for CharacterClassEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ClassRange<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ClassRangeChildren<'tree>>,
@@ -431,7 +431,7 @@ impl ::treesitter_types::Spanned for ClassRange<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ControlEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -458,7 +458,7 @@ impl ::treesitter_types::Spanned for ControlEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CountQuantifier<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<CountQuantifierChildren<'tree>>,
@@ -510,7 +510,7 @@ impl ::treesitter_types::Spanned for CountQuantifier<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Flags<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -537,7 +537,7 @@ impl ::treesitter_types::Spanned for Flags<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InlineFlagsGroup<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<InlineFlagsGroupChildren<'tree>>,
@@ -589,7 +589,7 @@ impl ::treesitter_types::Spanned for InlineFlagsGroup<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LookaroundAssertion<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Pattern<'tree>,
@@ -703,7 +703,7 @@ impl ::treesitter_types::Spanned for LookaroundAssertion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NamedCapturingGroup<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<NamedCapturingGroupChildren<'tree>>,
@@ -755,7 +755,7 @@ impl ::treesitter_types::Spanned for NamedCapturingGroup<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NamedGroupBackreference<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: GroupName<'tree>,
@@ -869,7 +869,7 @@ impl ::treesitter_types::Spanned for NamedGroupBackreference<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NonCapturingGroup<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Pattern<'tree>,
@@ -983,7 +983,7 @@ impl ::treesitter_types::Spanned for NonCapturingGroup<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OneOrMore<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<Lazy<'tree>>,
@@ -1032,7 +1032,7 @@ impl ::treesitter_types::Spanned for OneOrMore<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Optional<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<Lazy<'tree>>,
@@ -1081,7 +1081,7 @@ impl ::treesitter_types::Spanned for Optional<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: PatternChildren<'tree>,
@@ -1195,7 +1195,7 @@ impl ::treesitter_types::Spanned for Pattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PosixCharacterClass<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: PosixClassName<'tree>,
@@ -1309,7 +1309,7 @@ impl ::treesitter_types::Spanned for PosixCharacterClass<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PosixClassName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1336,7 +1336,7 @@ impl ::treesitter_types::Spanned for PosixClassName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StartAssertion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1363,7 +1363,7 @@ impl ::treesitter_types::Spanned for StartAssertion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Term<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TermChildren<'tree>>,
@@ -1413,7 +1413,7 @@ impl ::treesitter_types::Spanned for Term<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnicodeCharacterEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1440,7 +1440,7 @@ impl ::treesitter_types::Spanned for UnicodeCharacterEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnicodePropertyValueExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<UnicodePropertyValueExpressionChildren<'tree>>,
@@ -1494,7 +1494,7 @@ impl ::treesitter_types::Spanned for UnicodePropertyValueExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ZeroOrMore<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<Lazy<'tree>>,
@@ -1543,7 +1543,7 @@ impl ::treesitter_types::Spanned for ZeroOrMore<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AnyCharacter<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1570,7 +1570,7 @@ impl ::treesitter_types::Spanned for AnyCharacter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BoundaryAssertion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1597,7 +1597,7 @@ impl ::treesitter_types::Spanned for BoundaryAssertion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ClassCharacter<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1624,7 +1624,7 @@ impl ::treesitter_types::Spanned for ClassCharacter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ControlLetterEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1651,7 +1651,7 @@ impl ::treesitter_types::Spanned for ControlLetterEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DecimalDigits<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1678,7 +1678,7 @@ impl ::treesitter_types::Spanned for DecimalDigits<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DecimalEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1705,7 +1705,7 @@ impl ::treesitter_types::Spanned for DecimalEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EndAssertion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1732,7 +1732,7 @@ impl ::treesitter_types::Spanned for EndAssertion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GroupName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1759,7 +1759,7 @@ impl ::treesitter_types::Spanned for GroupName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IdentityEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1786,7 +1786,7 @@ impl ::treesitter_types::Spanned for IdentityEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Lazy<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1813,7 +1813,7 @@ impl ::treesitter_types::Spanned for Lazy<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NonBoundaryAssertion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1840,7 +1840,7 @@ impl ::treesitter_types::Spanned for NonBoundaryAssertion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PatternCharacter<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1867,7 +1867,7 @@ impl ::treesitter_types::Spanned for PatternCharacter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnicodePropertyName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1894,7 +1894,7 @@ impl ::treesitter_types::Spanned for UnicodePropertyName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnicodePropertyValue<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1921,7 +1921,7 @@ impl ::treesitter_types::Spanned for UnicodePropertyValue<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CharacterClassChildren<'tree> {
     CharacterClassEscape(::std::boxed::Box<CharacterClassEscape<'tree>>),
     ClassCharacter(::std::boxed::Box<ClassCharacter<'tree>>),
@@ -1976,7 +1976,7 @@ impl ::treesitter_types::Spanned for CharacterClassChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CharacterClassEscapeChildren<'tree> {
     UnicodeCharacterEscape(::std::boxed::Box<UnicodeCharacterEscape<'tree>>),
     UnicodePropertyValueExpression(::std::boxed::Box<UnicodePropertyValueExpression<'tree>>),
@@ -2010,7 +2010,7 @@ impl ::treesitter_types::Spanned for CharacterClassEscapeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClassRangeChildren<'tree> {
     CharacterClassEscape(::std::boxed::Box<CharacterClassEscape<'tree>>),
     ClassCharacter(::std::boxed::Box<ClassCharacter<'tree>>),
@@ -2045,7 +2045,7 @@ impl ::treesitter_types::Spanned for ClassRangeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CountQuantifierChildren<'tree> {
     DecimalDigits(::std::boxed::Box<DecimalDigits<'tree>>),
     Lazy(::std::boxed::Box<Lazy<'tree>>),
@@ -2075,7 +2075,7 @@ impl ::treesitter_types::Spanned for CountQuantifierChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InlineFlagsGroupChildren<'tree> {
     Flags(::std::boxed::Box<Flags<'tree>>),
     Pattern(::std::boxed::Box<Pattern<'tree>>),
@@ -2105,7 +2105,7 @@ impl ::treesitter_types::Spanned for InlineFlagsGroupChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum NamedCapturingGroupChildren<'tree> {
     GroupName(::std::boxed::Box<GroupName<'tree>>),
     Pattern(::std::boxed::Box<Pattern<'tree>>),
@@ -2135,7 +2135,7 @@ impl ::treesitter_types::Spanned for NamedCapturingGroupChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PatternChildren<'tree> {
     Alternation(::std::boxed::Box<Alternation<'tree>>),
     Term(::std::boxed::Box<Term<'tree>>),
@@ -2165,7 +2165,7 @@ impl ::treesitter_types::Spanned for PatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TermChildren<'tree> {
     AnonymousCapturingGroup(::std::boxed::Box<AnonymousCapturingGroup<'tree>>),
     AnyCharacter(::std::boxed::Box<AnyCharacter<'tree>>),
@@ -2313,7 +2313,7 @@ impl ::treesitter_types::Spanned for TermChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnicodePropertyValueExpressionChildren<'tree> {
     UnicodePropertyName(::std::boxed::Box<UnicodePropertyName<'tree>>),
     UnicodePropertyValue(::std::boxed::Box<UnicodePropertyValue<'tree>>),
@@ -2343,7 +2343,7 @@ impl ::treesitter_types::Spanned for UnicodePropertyValueExpressionChildren<'_> 
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     Alternation(Alternation<'tree>),
     AnonymousCapturingGroup(AnonymousCapturingGroup<'tree>),

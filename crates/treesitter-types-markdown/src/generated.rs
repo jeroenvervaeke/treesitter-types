@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxHeading<'tree> {
     pub span: ::treesitter_types::Span,
     pub heading_content: ::core::option::Option<Inline<'tree>>,
@@ -57,7 +57,7 @@ impl ::treesitter_types::Spanned for AtxHeading<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BackslashEscape<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -84,7 +84,7 @@ impl ::treesitter_types::Spanned for BackslashEscape<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockQuote<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockQuoteChildren<'tree>>,
@@ -136,7 +136,7 @@ impl ::treesitter_types::Spanned for BlockQuote<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CodeFenceContent<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockContinuation<'tree>>,
@@ -186,7 +186,7 @@ impl ::treesitter_types::Spanned for CodeFenceContent<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Document<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DocumentChildren<'tree>>,
@@ -236,7 +236,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FencedCodeBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<FencedCodeBlockChildren<'tree>>,
@@ -288,7 +288,7 @@ impl ::treesitter_types::Spanned for FencedCodeBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct HtmlBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockContinuation<'tree>>,
@@ -338,7 +338,7 @@ impl ::treesitter_types::Spanned for HtmlBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IndentedCodeBlock<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockContinuation<'tree>>,
@@ -388,7 +388,7 @@ impl ::treesitter_types::Spanned for IndentedCodeBlock<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct InfoString<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<InfoStringChildren<'tree>>,
@@ -440,7 +440,7 @@ impl ::treesitter_types::Spanned for InfoString<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Inline<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<BlockContinuation<'tree>>,
@@ -490,7 +490,7 @@ impl ::treesitter_types::Spanned for Inline<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Language<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<LanguageChildren<'tree>>,
@@ -540,7 +540,7 @@ impl ::treesitter_types::Spanned for Language<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkDestination<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<LinkDestinationChildren<'tree>>,
@@ -592,7 +592,7 @@ impl ::treesitter_types::Spanned for LinkDestination<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkLabel<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<LinkLabelChildren<'tree>>,
@@ -642,7 +642,7 @@ impl ::treesitter_types::Spanned for LinkLabel<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkReferenceDefinition<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<LinkReferenceDefinitionChildren<'tree>>,
@@ -696,7 +696,7 @@ impl ::treesitter_types::Spanned for LinkReferenceDefinition<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkTitle<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<LinkTitleChildren<'tree>>,
@@ -746,7 +746,7 @@ impl ::treesitter_types::Spanned for LinkTitle<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct List<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ListItem<'tree>>,
@@ -796,7 +796,7 @@ impl ::treesitter_types::Spanned for List<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListItem<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ListItemChildren<'tree>>,
@@ -846,7 +846,7 @@ impl ::treesitter_types::Spanned for ListItem<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListMarkerDot<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -873,7 +873,7 @@ impl ::treesitter_types::Spanned for ListMarkerDot<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListMarkerMinus<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -900,7 +900,7 @@ impl ::treesitter_types::Spanned for ListMarkerMinus<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListMarkerParenthesis<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -927,7 +927,7 @@ impl ::treesitter_types::Spanned for ListMarkerParenthesis<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListMarkerPlus<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -954,7 +954,7 @@ impl ::treesitter_types::Spanned for ListMarkerPlus<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListMarkerStar<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -981,7 +981,7 @@ impl ::treesitter_types::Spanned for ListMarkerStar<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Paragraph<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ParagraphChildren<'tree>>,
@@ -1031,7 +1031,7 @@ impl ::treesitter_types::Spanned for Paragraph<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTable<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PipeTableChildren<'tree>>,
@@ -1081,7 +1081,7 @@ impl ::treesitter_types::Spanned for PipeTable<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableCell<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1108,7 +1108,7 @@ impl ::treesitter_types::Spanned for PipeTableCell<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableDelimiterCell<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PipeTableDelimiterCellChildren<'tree>>,
@@ -1162,7 +1162,7 @@ impl ::treesitter_types::Spanned for PipeTableDelimiterCell<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableDelimiterRow<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PipeTableDelimiterCell<'tree>>,
@@ -1214,7 +1214,7 @@ impl ::treesitter_types::Spanned for PipeTableDelimiterRow<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableHeader<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PipeTableCell<'tree>>,
@@ -1264,7 +1264,7 @@ impl ::treesitter_types::Spanned for PipeTableHeader<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableRow<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<PipeTableCell<'tree>>,
@@ -1314,7 +1314,7 @@ impl ::treesitter_types::Spanned for PipeTableRow<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Section<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<SectionChildren<'tree>>,
@@ -1364,7 +1364,7 @@ impl ::treesitter_types::Spanned for Section<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetextHeading<'tree> {
     pub span: ::treesitter_types::Span,
     pub heading_content: Paragraph<'tree>,
@@ -1423,7 +1423,7 @@ impl ::treesitter_types::Spanned for SetextHeading<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TaskListMarkerChecked<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1450,7 +1450,7 @@ impl ::treesitter_types::Spanned for TaskListMarkerChecked<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TaskListMarkerUnchecked<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1477,7 +1477,7 @@ impl ::treesitter_types::Spanned for TaskListMarkerUnchecked<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ThematicBreak<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<BlockContinuation<'tree>>,
@@ -1526,7 +1526,7 @@ impl ::treesitter_types::Spanned for ThematicBreak<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH1Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1553,7 +1553,7 @@ impl ::treesitter_types::Spanned for AtxH1Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH2Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1580,7 +1580,7 @@ impl ::treesitter_types::Spanned for AtxH2Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH3Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1607,7 +1607,7 @@ impl ::treesitter_types::Spanned for AtxH3Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH4Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1634,7 +1634,7 @@ impl ::treesitter_types::Spanned for AtxH4Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH5Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1661,7 +1661,7 @@ impl ::treesitter_types::Spanned for AtxH5Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AtxH6Marker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1688,7 +1688,7 @@ impl ::treesitter_types::Spanned for AtxH6Marker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockContinuation<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1715,7 +1715,7 @@ impl ::treesitter_types::Spanned for BlockContinuation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BlockQuoteMarker<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1742,7 +1742,7 @@ impl ::treesitter_types::Spanned for BlockQuoteMarker<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityReference<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1769,7 +1769,7 @@ impl ::treesitter_types::Spanned for EntityReference<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FencedCodeBlockDelimiter<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1796,7 +1796,7 @@ impl ::treesitter_types::Spanned for FencedCodeBlockDelimiter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MinusMetadata<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1823,7 +1823,7 @@ impl ::treesitter_types::Spanned for MinusMetadata<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NumericCharacterReference<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1850,7 +1850,7 @@ impl ::treesitter_types::Spanned for NumericCharacterReference<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableAlignLeft<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1877,7 +1877,7 @@ impl ::treesitter_types::Spanned for PipeTableAlignLeft<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PipeTableAlignRight<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1904,7 +1904,7 @@ impl ::treesitter_types::Spanned for PipeTableAlignRight<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PlusMetadata<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1931,7 +1931,7 @@ impl ::treesitter_types::Spanned for PlusMetadata<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetextH1Underline<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1958,7 +1958,7 @@ impl ::treesitter_types::Spanned for SetextH1Underline<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetextH2Underline<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1985,7 +1985,7 @@ impl ::treesitter_types::Spanned for SetextH2Underline<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AtxHeadingChildren<'tree> {
     AtxH1Marker(::std::boxed::Box<AtxH1Marker<'tree>>),
     AtxH2Marker(::std::boxed::Box<AtxH2Marker<'tree>>),
@@ -2040,7 +2040,7 @@ impl ::treesitter_types::Spanned for AtxHeadingChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockQuoteChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     BlockQuote(::std::boxed::Box<BlockQuote<'tree>>),
@@ -2129,7 +2129,7 @@ impl ::treesitter_types::Spanned for BlockQuoteChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DocumentChildren<'tree> {
     MinusMetadata(::std::boxed::Box<MinusMetadata<'tree>>),
     PlusMetadata(::std::boxed::Box<PlusMetadata<'tree>>),
@@ -2164,7 +2164,7 @@ impl ::treesitter_types::Spanned for DocumentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FencedCodeBlockChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     CodeFenceContent(::std::boxed::Box<CodeFenceContent<'tree>>),
@@ -2208,7 +2208,7 @@ impl ::treesitter_types::Spanned for FencedCodeBlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InfoStringChildren<'tree> {
     BackslashEscape(::std::boxed::Box<BackslashEscape<'tree>>),
     EntityReference(::std::boxed::Box<EntityReference<'tree>>),
@@ -2252,7 +2252,7 @@ impl ::treesitter_types::Spanned for InfoStringChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LanguageChildren<'tree> {
     BackslashEscape(::std::boxed::Box<BackslashEscape<'tree>>),
     EntityReference(::std::boxed::Box<EntityReference<'tree>>),
@@ -2291,7 +2291,7 @@ impl ::treesitter_types::Spanned for LanguageChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkDestinationChildren<'tree> {
     BackslashEscape(::std::boxed::Box<BackslashEscape<'tree>>),
     EntityReference(::std::boxed::Box<EntityReference<'tree>>),
@@ -2330,7 +2330,7 @@ impl ::treesitter_types::Spanned for LinkDestinationChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkLabelChildren<'tree> {
     BackslashEscape(::std::boxed::Box<BackslashEscape<'tree>>),
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
@@ -2374,7 +2374,7 @@ impl ::treesitter_types::Spanned for LinkLabelChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkReferenceDefinitionChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     LinkDestination(::std::boxed::Box<LinkDestination<'tree>>),
@@ -2414,7 +2414,7 @@ impl ::treesitter_types::Spanned for LinkReferenceDefinitionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkTitleChildren<'tree> {
     BackslashEscape(::std::boxed::Box<BackslashEscape<'tree>>),
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
@@ -2458,7 +2458,7 @@ impl ::treesitter_types::Spanned for LinkTitleChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListItemChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     BlockQuote(::std::boxed::Box<BlockQuote<'tree>>),
@@ -2581,7 +2581,7 @@ impl ::treesitter_types::Spanned for ListItemChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParagraphChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     Inline(::std::boxed::Box<Inline<'tree>>),
@@ -2611,7 +2611,7 @@ impl ::treesitter_types::Spanned for ParagraphChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PipeTableChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     PipeTableDelimiterRow(::std::boxed::Box<PipeTableDelimiterRow<'tree>>),
@@ -2651,7 +2651,7 @@ impl ::treesitter_types::Spanned for PipeTableChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PipeTableDelimiterCellChildren<'tree> {
     PipeTableAlignLeft(::std::boxed::Box<PipeTableAlignLeft<'tree>>),
     PipeTableAlignRight(::std::boxed::Box<PipeTableAlignRight<'tree>>),
@@ -2681,7 +2681,7 @@ impl ::treesitter_types::Spanned for PipeTableDelimiterCellChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SectionChildren<'tree> {
     AtxHeading(::std::boxed::Box<AtxHeading<'tree>>),
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
@@ -2770,7 +2770,7 @@ impl ::treesitter_types::Spanned for SectionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SetextHeadingChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     SetextH1Underline(::std::boxed::Box<SetextH1Underline<'tree>>),
@@ -2805,7 +2805,7 @@ impl ::treesitter_types::Spanned for SetextHeadingChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     AtxHeading(AtxHeading<'tree>),
     BackslashEscape(BackslashEscape<'tree>),

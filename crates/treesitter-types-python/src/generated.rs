@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CompoundStatement<'tree> {
     ClassDefinition(::std::boxed::Box<ClassDefinition<'tree>>),
     DecoratedDefinition(::std::boxed::Box<DecoratedDefinition<'tree>>),
@@ -63,7 +63,7 @@ impl ::treesitter_types::Spanned for CompoundStatement<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SimpleStatement<'tree> {
     AssertStatement(::std::boxed::Box<AssertStatement<'tree>>),
     BreakStatement(::std::boxed::Box<BreakStatement<'tree>>),
@@ -163,7 +163,7 @@ impl ::treesitter_types::Spanned for SimpleStatement<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Expression<'tree> {
     AsPattern(::std::boxed::Box<AsPattern<'tree>>),
     BooleanOperator(::std::boxed::Box<BooleanOperator<'tree>>),
@@ -230,7 +230,7 @@ impl ::treesitter_types::Spanned for Expression<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Parameter<'tree> {
     DefaultParameter(::std::boxed::Box<DefaultParameter<'tree>>),
     DictionarySplatPattern(::std::boxed::Box<DictionarySplatPattern<'tree>>),
@@ -295,7 +295,7 @@ impl ::treesitter_types::Spanned for Parameter<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Pattern<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Identifier(::std::boxed::Box<Identifier<'tree>>),
@@ -345,7 +345,7 @@ impl ::treesitter_types::Spanned for Pattern<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PrimaryExpression<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Await(::std::boxed::Box<Await<'tree>>),
@@ -498,7 +498,7 @@ impl ::treesitter_types::Spanned for PrimaryExpression<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AliasedImport<'tree> {
     pub span: ::treesitter_types::Span,
     pub alias: Identifier<'tree>,
@@ -533,7 +533,7 @@ impl ::treesitter_types::Spanned for AliasedImport<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ArgumentList<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ArgumentListChildren<'tree>>,
@@ -585,7 +585,7 @@ impl ::treesitter_types::Spanned for ArgumentList<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AsPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub alias: ::core::option::Option<AsPatternTarget<'tree>>,
@@ -642,7 +642,7 @@ impl ::treesitter_types::Spanned for AsPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AssertStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Expression<'tree>>,
@@ -692,7 +692,7 @@ impl ::treesitter_types::Spanned for AssertStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Assignment<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: AssignmentLeft<'tree>,
@@ -734,7 +734,7 @@ impl ::treesitter_types::Spanned for Assignment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Attribute<'tree> {
     pub span: ::treesitter_types::Span,
     pub attribute: Identifier<'tree>,
@@ -769,7 +769,7 @@ impl ::treesitter_types::Spanned for Attribute<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AugmentedAssignment<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: AugmentedAssignmentLeft<'tree>,
@@ -813,7 +813,7 @@ impl ::treesitter_types::Spanned for AugmentedAssignment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Await<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: PrimaryExpression<'tree>,
@@ -927,7 +927,7 @@ impl ::treesitter_types::Spanned for Await<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BinaryOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: PrimaryExpression<'tree>,
@@ -969,7 +969,7 @@ impl ::treesitter_types::Spanned for BinaryOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Block<'tree> {
     pub span: ::treesitter_types::Span,
     pub alternative: ::std::vec::Vec<CaseClause<'tree>>,
@@ -1030,7 +1030,7 @@ impl ::treesitter_types::Spanned for Block<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BooleanOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: Expression<'tree>,
@@ -1072,7 +1072,7 @@ impl ::treesitter_types::Spanned for BooleanOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BreakStatement<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1099,7 +1099,7 @@ impl ::treesitter_types::Spanned for BreakStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Call<'tree> {
     pub span: ::treesitter_types::Span,
     pub arguments: CallArguments<'tree>,
@@ -1134,7 +1134,7 @@ impl ::treesitter_types::Spanned for Call<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CaseClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub consequence: Block<'tree>,
@@ -1198,7 +1198,7 @@ impl ::treesitter_types::Spanned for CaseClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CasePattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<CasePatternChildren<'tree>>,
@@ -1249,7 +1249,7 @@ impl ::treesitter_types::Spanned for CasePattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Chevron<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Expression<'tree>,
@@ -1363,7 +1363,7 @@ impl ::treesitter_types::Spanned for Chevron<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ClassDefinition<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -1412,7 +1412,7 @@ impl ::treesitter_types::Spanned for ClassDefinition<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ClassPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ClassPatternChildren<'tree>>,
@@ -1464,7 +1464,7 @@ impl ::treesitter_types::Spanned for ClassPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComparisonOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub operators: ::std::vec::Vec<ComparisonOperatorOperators>,
@@ -1527,7 +1527,7 @@ impl ::treesitter_types::Spanned for ComparisonOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComplexPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ComplexPatternChildren<'tree>>,
@@ -1579,7 +1579,7 @@ impl ::treesitter_types::Spanned for ComplexPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ConcatenatedString<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<String<'tree>>,
@@ -1629,7 +1629,7 @@ impl ::treesitter_types::Spanned for ConcatenatedString<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ConditionalExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Expression<'tree>>,
@@ -1679,7 +1679,7 @@ impl ::treesitter_types::Spanned for ConditionalExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ConstrainedType<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Type<'tree>>,
@@ -1729,7 +1729,7 @@ impl ::treesitter_types::Spanned for ConstrainedType<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ContinueStatement<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -1756,7 +1756,7 @@ impl ::treesitter_types::Spanned for ContinueStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DecoratedDefinition<'tree> {
     pub span: ::treesitter_types::Span,
     pub definition: DecoratedDefinitionDefinition<'tree>,
@@ -1815,7 +1815,7 @@ impl ::treesitter_types::Spanned for DecoratedDefinition<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Decorator<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Expression<'tree>,
@@ -1929,7 +1929,7 @@ impl ::treesitter_types::Spanned for Decorator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DefaultParameter<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: DefaultParameterName<'tree>,
@@ -1964,7 +1964,7 @@ impl ::treesitter_types::Spanned for DefaultParameter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DeleteStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: DeleteStatementChildren<'tree>,
@@ -2078,7 +2078,7 @@ impl ::treesitter_types::Spanned for DeleteStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DictPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: ::std::vec::Vec<DictPatternKey<'tree>>,
@@ -2150,7 +2150,7 @@ impl ::treesitter_types::Spanned for DictPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Dictionary<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DictionaryChildren<'tree>>,
@@ -2202,7 +2202,7 @@ impl ::treesitter_types::Spanned for Dictionary<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DictionaryComprehension<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Pair<'tree>,
@@ -2263,7 +2263,7 @@ impl ::treesitter_types::Spanned for DictionaryComprehension<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DictionarySplat<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Expression<'tree>,
@@ -2377,7 +2377,7 @@ impl ::treesitter_types::Spanned for DictionarySplat<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DictionarySplatPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: DictionarySplatPatternChildren<'tree>,
@@ -2493,7 +2493,7 @@ impl ::treesitter_types::Spanned for DictionarySplatPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DottedName<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Identifier<'tree>>,
@@ -2543,7 +2543,7 @@ impl ::treesitter_types::Spanned for DottedName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ElifClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub condition: Expression<'tree>,
@@ -2578,7 +2578,7 @@ impl ::treesitter_types::Spanned for ElifClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ElseClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -2606,7 +2606,7 @@ impl ::treesitter_types::Spanned for ElseClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ExceptClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub alias: ::core::option::Option<Expression<'tree>>,
@@ -2738,7 +2738,7 @@ impl ::treesitter_types::Spanned for ExceptClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ExecStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub code: ExecStatementCode<'tree>,
@@ -2795,7 +2795,7 @@ impl ::treesitter_types::Spanned for ExecStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ExpressionList<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Expression<'tree>>,
@@ -2845,7 +2845,7 @@ impl ::treesitter_types::Spanned for ExpressionList<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ExpressionStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ExpressionStatementChildren<'tree>>,
@@ -2897,7 +2897,7 @@ impl ::treesitter_types::Spanned for ExpressionStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FinallyClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Block<'tree>,
@@ -3011,7 +3011,7 @@ impl ::treesitter_types::Spanned for FinallyClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ForInClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: ForInClauseLeft<'tree>,
@@ -3050,7 +3050,7 @@ impl ::treesitter_types::Spanned for ForInClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ForStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub alternative: ::core::option::Option<ElseClause<'tree>>,
@@ -3099,7 +3099,7 @@ impl ::treesitter_types::Spanned for ForStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FormatExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub expression: FormatExpressionExpression<'tree>,
@@ -3141,7 +3141,7 @@ impl ::treesitter_types::Spanned for FormatExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FormatSpecifier<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<FormatExpression<'tree>>,
@@ -3191,7 +3191,7 @@ impl ::treesitter_types::Spanned for FormatSpecifier<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FunctionDefinition<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -3247,7 +3247,7 @@ impl ::treesitter_types::Spanned for FunctionDefinition<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FutureImportStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: ::std::vec::Vec<FutureImportStatementName<'tree>>,
@@ -3281,7 +3281,7 @@ impl ::treesitter_types::Spanned for FutureImportStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GeneratorExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Expression<'tree>,
@@ -3340,7 +3340,7 @@ impl ::treesitter_types::Spanned for GeneratorExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GenericType<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<GenericTypeChildren<'tree>>,
@@ -3392,7 +3392,7 @@ impl ::treesitter_types::Spanned for GenericType<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GlobalStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Identifier<'tree>>,
@@ -3442,7 +3442,7 @@ impl ::treesitter_types::Spanned for GlobalStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IfClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Expression<'tree>,
@@ -3556,7 +3556,7 @@ impl ::treesitter_types::Spanned for IfClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct IfStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub alternative: ::std::vec::Vec<IfStatementAlternative<'tree>>,
@@ -3604,7 +3604,7 @@ impl ::treesitter_types::Spanned for IfStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ImportFromStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub module_name: ImportFromStatementModuleName<'tree>,
@@ -3675,7 +3675,7 @@ impl ::treesitter_types::Spanned for ImportFromStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ImportPrefix<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -3702,7 +3702,7 @@ impl ::treesitter_types::Spanned for ImportPrefix<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ImportStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: ::std::vec::Vec<ImportStatementName<'tree>>,
@@ -3736,7 +3736,7 @@ impl ::treesitter_types::Spanned for ImportStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Interpolation<'tree> {
     pub span: ::treesitter_types::Span,
     pub expression: InterpolationExpression<'tree>,
@@ -3778,7 +3778,7 @@ impl ::treesitter_types::Spanned for Interpolation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct KeywordArgument<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: Identifier<'tree>,
@@ -3813,7 +3813,7 @@ impl ::treesitter_types::Spanned for KeywordArgument<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct KeywordPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<KeywordPatternChildren<'tree>>,
@@ -3865,7 +3865,7 @@ impl ::treesitter_types::Spanned for KeywordPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct KeywordSeparator<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -3892,7 +3892,7 @@ impl ::treesitter_types::Spanned for KeywordSeparator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Lambda<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Expression<'tree>,
@@ -3927,7 +3927,7 @@ impl ::treesitter_types::Spanned for Lambda<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LambdaParameters<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Parameter<'tree>>,
@@ -3977,7 +3977,7 @@ impl ::treesitter_types::Spanned for LambdaParameters<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct List<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ListChildren<'tree>>,
@@ -4027,7 +4027,7 @@ impl ::treesitter_types::Spanned for List<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListComprehension<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Expression<'tree>,
@@ -4086,7 +4086,7 @@ impl ::treesitter_types::Spanned for ListComprehension<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ListPatternChildren<'tree>>,
@@ -4138,7 +4138,7 @@ impl ::treesitter_types::Spanned for ListPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListSplat<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ListSplatChildren<'tree>,
@@ -4252,7 +4252,7 @@ impl ::treesitter_types::Spanned for ListSplat<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListSplatPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ListSplatPatternChildren<'tree>,
@@ -4366,7 +4366,7 @@ impl ::treesitter_types::Spanned for ListSplatPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MatchStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -4405,7 +4405,7 @@ impl ::treesitter_types::Spanned for MatchStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct MemberType<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<MemberTypeChildren<'tree>>,
@@ -4457,7 +4457,7 @@ impl ::treesitter_types::Spanned for MemberType<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Module<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ModuleChildren<'tree>>,
@@ -4507,7 +4507,7 @@ impl ::treesitter_types::Spanned for Module<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NamedExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: Identifier<'tree>,
@@ -4542,7 +4542,7 @@ impl ::treesitter_types::Spanned for NamedExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NonlocalStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Identifier<'tree>>,
@@ -4592,7 +4592,7 @@ impl ::treesitter_types::Spanned for NonlocalStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NotOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub argument: Expression<'tree>,
@@ -4620,7 +4620,7 @@ impl ::treesitter_types::Spanned for NotOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Pair<'tree> {
     pub span: ::treesitter_types::Span,
     pub key: Expression<'tree>,
@@ -4655,7 +4655,7 @@ impl ::treesitter_types::Spanned for Pair<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Parameters<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Parameter<'tree>>,
@@ -4705,7 +4705,7 @@ impl ::treesitter_types::Spanned for Parameters<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ParenthesizedExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ParenthesizedExpressionChildren<'tree>,
@@ -4821,7 +4821,7 @@ impl ::treesitter_types::Spanned for ParenthesizedExpression<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ParenthesizedListSplat<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ParenthesizedListSplatChildren<'tree>,
@@ -4937,7 +4937,7 @@ impl ::treesitter_types::Spanned for ParenthesizedListSplat<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PassStatement<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -4964,7 +4964,7 @@ impl ::treesitter_types::Spanned for PassStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PatternList<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Pattern<'tree>>,
@@ -5014,7 +5014,7 @@ impl ::treesitter_types::Spanned for PatternList<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PositionalSeparator<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -5041,7 +5041,7 @@ impl ::treesitter_types::Spanned for PositionalSeparator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PrintStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub argument: ::std::vec::Vec<Expression<'tree>>,
@@ -5101,7 +5101,7 @@ impl ::treesitter_types::Spanned for PrintStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RaiseStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub cause: ::core::option::Option<Expression<'tree>>,
@@ -5159,7 +5159,7 @@ impl ::treesitter_types::Spanned for RaiseStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RelativeImport<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<RelativeImportChildren<'tree>>,
@@ -5211,7 +5211,7 @@ impl ::treesitter_types::Spanned for RelativeImport<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ReturnStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<ReturnStatementChildren<'tree>>,
@@ -5262,7 +5262,7 @@ impl ::treesitter_types::Spanned for ReturnStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Set<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<SetChildren<'tree>>,
@@ -5312,7 +5312,7 @@ impl ::treesitter_types::Spanned for Set<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetComprehension<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Expression<'tree>,
@@ -5371,7 +5371,7 @@ impl ::treesitter_types::Spanned for SetComprehension<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Slice<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Expression<'tree>>,
@@ -5421,7 +5421,7 @@ impl ::treesitter_types::Spanned for Slice<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SplatPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<Identifier<'tree>>,
@@ -5470,7 +5470,7 @@ impl ::treesitter_types::Spanned for SplatPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SplatType<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: Identifier<'tree>,
@@ -5584,7 +5584,7 @@ impl ::treesitter_types::Spanned for SplatType<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct String<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<StringChildren<'tree>>,
@@ -5634,7 +5634,7 @@ impl ::treesitter_types::Spanned for String<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StringContent<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<StringContentChildren<'tree>>,
@@ -5686,7 +5686,7 @@ impl ::treesitter_types::Spanned for StringContent<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Subscript<'tree> {
     pub span: ::treesitter_types::Span,
     pub subscript: ::std::vec::Vec<SubscriptSubscript<'tree>>,
@@ -5727,7 +5727,7 @@ impl ::treesitter_types::Spanned for Subscript<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TryStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -5786,7 +5786,7 @@ impl ::treesitter_types::Spanned for TryStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Tuple<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TupleChildren<'tree>>,
@@ -5836,7 +5836,7 @@ impl ::treesitter_types::Spanned for Tuple<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TuplePattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<TuplePatternChildren<'tree>>,
@@ -5888,7 +5888,7 @@ impl ::treesitter_types::Spanned for TuplePattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Type<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: TypeChildren<'tree>,
@@ -6002,7 +6002,7 @@ impl ::treesitter_types::Spanned for Type<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TypeAliasStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub left: Type<'tree>,
@@ -6037,7 +6037,7 @@ impl ::treesitter_types::Spanned for TypeAliasStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TypeParameter<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Type<'tree>>,
@@ -6087,7 +6087,7 @@ impl ::treesitter_types::Spanned for TypeParameter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TypedDefaultParameter<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: Identifier<'tree>,
@@ -6129,7 +6129,7 @@ impl ::treesitter_types::Spanned for TypedDefaultParameter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TypedParameter<'tree> {
     pub span: ::treesitter_types::Span,
     pub r#type: Type<'tree>,
@@ -6250,7 +6250,7 @@ impl ::treesitter_types::Spanned for TypedParameter<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnaryOperator<'tree> {
     pub span: ::treesitter_types::Span,
     pub argument: PrimaryExpression<'tree>,
@@ -6285,7 +6285,7 @@ impl ::treesitter_types::Spanned for UnaryOperator<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnionPattern<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<UnionPatternChildren<'tree>>,
@@ -6337,7 +6337,7 @@ impl ::treesitter_types::Spanned for UnionPattern<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct UnionType<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<Type<'tree>>,
@@ -6387,7 +6387,7 @@ impl ::treesitter_types::Spanned for UnionType<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WhileStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub alternative: ::core::option::Option<ElseClause<'tree>>,
@@ -6429,7 +6429,7 @@ impl ::treesitter_types::Spanned for WhileStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WildcardImport<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6456,7 +6456,7 @@ impl ::treesitter_types::Spanned for WildcardImport<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WithClause<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<WithItem<'tree>>,
@@ -6506,7 +6506,7 @@ impl ::treesitter_types::Spanned for WithClause<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WithItem<'tree> {
     pub span: ::treesitter_types::Span,
     pub value: Expression<'tree>,
@@ -6534,7 +6534,7 @@ impl ::treesitter_types::Spanned for WithItem<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WithStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub body: Block<'tree>,
@@ -6655,7 +6655,7 @@ impl ::treesitter_types::Spanned for WithStatement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Yield<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<YieldChildren<'tree>>,
@@ -6704,7 +6704,7 @@ impl ::treesitter_types::Spanned for Yield<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6731,7 +6731,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Ellipsis<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6758,7 +6758,7 @@ impl ::treesitter_types::Spanned for Ellipsis<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeInterpolation<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6785,7 +6785,7 @@ impl ::treesitter_types::Spanned for EscapeInterpolation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EscapeSequence<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6812,7 +6812,7 @@ impl ::treesitter_types::Spanned for EscapeSequence<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct False<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6839,7 +6839,7 @@ impl ::treesitter_types::Spanned for False<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Float<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6866,7 +6866,7 @@ impl ::treesitter_types::Spanned for Float<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Identifier<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6893,7 +6893,7 @@ impl ::treesitter_types::Spanned for Identifier<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Integer<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6920,7 +6920,7 @@ impl ::treesitter_types::Spanned for Integer<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LineContinuation<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6947,7 +6947,7 @@ impl ::treesitter_types::Spanned for LineContinuation<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct None<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -6974,7 +6974,7 @@ impl ::treesitter_types::Spanned for None<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StringEnd<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -7001,7 +7001,7 @@ impl ::treesitter_types::Spanned for StringEnd<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StringStart<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -7028,7 +7028,7 @@ impl ::treesitter_types::Spanned for StringStart<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct True<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -7055,7 +7055,7 @@ impl ::treesitter_types::Spanned for True<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TypeConversion<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -7082,7 +7082,7 @@ impl ::treesitter_types::Spanned for TypeConversion<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AsPatternTarget<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -7109,7 +7109,7 @@ impl ::treesitter_types::Spanned for AsPatternTarget<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArgumentListChildren<'tree> {
     DictionarySplat(::std::boxed::Box<DictionarySplat<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
@@ -7163,7 +7163,7 @@ impl ::treesitter_types::Spanned for ArgumentListChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AsPatternChildren<'tree> {
     CasePattern(::std::boxed::Box<CasePattern<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
@@ -7203,7 +7203,7 @@ impl ::treesitter_types::Spanned for AsPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssignmentLeft<'tree> {
     Pattern(::std::boxed::Box<Pattern<'tree>>),
     PatternList(::std::boxed::Box<PatternList<'tree>>),
@@ -7238,7 +7238,7 @@ impl ::treesitter_types::Spanned for AssignmentLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssignmentRight<'tree> {
     Assignment(::std::boxed::Box<Assignment<'tree>>),
     AugmentedAssignment(::std::boxed::Box<AugmentedAssignment<'tree>>),
@@ -7293,7 +7293,7 @@ impl ::treesitter_types::Spanned for AssignmentRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AugmentedAssignmentLeft<'tree> {
     Pattern(::std::boxed::Box<Pattern<'tree>>),
     PatternList(::std::boxed::Box<PatternList<'tree>>),
@@ -7328,7 +7328,7 @@ impl ::treesitter_types::Spanned for AugmentedAssignmentLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AugmentedAssignmentOperator {
     PercentEq(::treesitter_types::Span),
     AmpEq(::treesitter_types::Span),
@@ -7387,7 +7387,7 @@ impl ::treesitter_types::Spanned for AugmentedAssignmentOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AugmentedAssignmentRight<'tree> {
     Assignment(::std::boxed::Box<Assignment<'tree>>),
     AugmentedAssignment(::std::boxed::Box<AugmentedAssignment<'tree>>),
@@ -7442,7 +7442,7 @@ impl ::treesitter_types::Spanned for AugmentedAssignmentRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BinaryOperatorOperator {
     Percent(::treesitter_types::Span),
     Amp(::treesitter_types::Span),
@@ -7501,7 +7501,7 @@ impl ::treesitter_types::Spanned for BinaryOperatorOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BlockChildren<'tree> {
     CompoundStatement(::std::boxed::Box<CompoundStatement<'tree>>),
     SimpleStatement(::std::boxed::Box<SimpleStatement<'tree>>),
@@ -7534,7 +7534,7 @@ impl ::treesitter_types::Spanned for BlockChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum BooleanOperatorOperator {
     And(::treesitter_types::Span),
     Or(::treesitter_types::Span),
@@ -7560,7 +7560,7 @@ impl ::treesitter_types::Spanned for BooleanOperatorOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CallArguments<'tree> {
     ArgumentList(::std::boxed::Box<ArgumentList<'tree>>),
     GeneratorExpression(::std::boxed::Box<GeneratorExpression<'tree>>),
@@ -7590,7 +7590,7 @@ impl ::treesitter_types::Spanned for CallArguments<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CasePatternChildren<'tree> {
     AsPattern(::std::boxed::Box<AsPattern<'tree>>),
     ClassPattern(::std::boxed::Box<ClassPattern<'tree>>),
@@ -7695,7 +7695,7 @@ impl ::treesitter_types::Spanned for CasePatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClassPatternChildren<'tree> {
     CasePattern(::std::boxed::Box<CasePattern<'tree>>),
     DottedName(::std::boxed::Box<DottedName<'tree>>),
@@ -7725,7 +7725,7 @@ impl ::treesitter_types::Spanned for ClassPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ComparisonOperatorOperators {
     NotEq(::treesitter_types::Span),
     Lt(::treesitter_types::Span),
@@ -7778,7 +7778,7 @@ impl ::treesitter_types::Spanned for ComparisonOperatorOperators {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ComplexPatternChildren<'tree> {
     Float(::std::boxed::Box<Float<'tree>>),
     Integer(::std::boxed::Box<Integer<'tree>>),
@@ -7808,7 +7808,7 @@ impl ::treesitter_types::Spanned for ComplexPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DecoratedDefinitionDefinition<'tree> {
     ClassDefinition(::std::boxed::Box<ClassDefinition<'tree>>),
     FunctionDefinition(::std::boxed::Box<FunctionDefinition<'tree>>),
@@ -7838,7 +7838,7 @@ impl ::treesitter_types::Spanned for DecoratedDefinitionDefinition<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DefaultParameterName<'tree> {
     Identifier(::std::boxed::Box<Identifier<'tree>>),
     TuplePattern(::std::boxed::Box<TuplePattern<'tree>>),
@@ -7868,7 +7868,7 @@ impl ::treesitter_types::Spanned for DefaultParameterName<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DeleteStatementChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -7903,7 +7903,7 @@ impl ::treesitter_types::Spanned for DeleteStatementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictPatternKey<'tree> {
     Minus(::treesitter_types::Span),
     Blank(::treesitter_types::Span),
@@ -8004,7 +8004,7 @@ impl ::treesitter_types::Spanned for DictPatternKey<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionaryChildren<'tree> {
     DictionarySplat(::std::boxed::Box<DictionarySplat<'tree>>),
     Pair(::std::boxed::Box<Pair<'tree>>),
@@ -8034,7 +8034,7 @@ impl ::treesitter_types::Spanned for DictionaryChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionaryComprehensionChildren<'tree> {
     ForInClause(::std::boxed::Box<ForInClause<'tree>>),
     IfClause(::std::boxed::Box<IfClause<'tree>>),
@@ -8064,7 +8064,7 @@ impl ::treesitter_types::Spanned for DictionaryComprehensionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionarySplatPatternChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Identifier(::std::boxed::Box<Identifier<'tree>>),
@@ -8099,7 +8099,7 @@ impl ::treesitter_types::Spanned for DictionarySplatPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ExecStatementCode<'tree> {
     Identifier(::std::boxed::Box<Identifier<'tree>>),
     String(::std::boxed::Box<String<'tree>>),
@@ -8129,7 +8129,7 @@ impl ::treesitter_types::Spanned for ExecStatementCode<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ExpressionStatementChildren<'tree> {
     Assignment(::std::boxed::Box<Assignment<'tree>>),
     AugmentedAssignment(::std::boxed::Box<AugmentedAssignment<'tree>>),
@@ -8174,7 +8174,7 @@ impl ::treesitter_types::Spanned for ExpressionStatementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ForInClauseLeft<'tree> {
     Pattern(::std::boxed::Box<Pattern<'tree>>),
     PatternList(::std::boxed::Box<PatternList<'tree>>),
@@ -8209,7 +8209,7 @@ impl ::treesitter_types::Spanned for ForInClauseLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ForInClauseRight<'tree> {
     Comma(::treesitter_types::Span),
     Expression(::std::boxed::Box<Expression<'tree>>),
@@ -8242,7 +8242,7 @@ impl ::treesitter_types::Spanned for ForInClauseRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ForStatementLeft<'tree> {
     Pattern(::std::boxed::Box<Pattern<'tree>>),
     PatternList(::std::boxed::Box<PatternList<'tree>>),
@@ -8277,7 +8277,7 @@ impl ::treesitter_types::Spanned for ForStatementLeft<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ForStatementRight<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -8312,7 +8312,7 @@ impl ::treesitter_types::Spanned for ForStatementRight<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FormatExpressionExpression<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -8357,7 +8357,7 @@ impl ::treesitter_types::Spanned for FormatExpressionExpression<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FutureImportStatementName<'tree> {
     AliasedImport(::std::boxed::Box<AliasedImport<'tree>>),
     DottedName(::std::boxed::Box<DottedName<'tree>>),
@@ -8387,7 +8387,7 @@ impl ::treesitter_types::Spanned for FutureImportStatementName<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GeneratorExpressionChildren<'tree> {
     ForInClause(::std::boxed::Box<ForInClause<'tree>>),
     IfClause(::std::boxed::Box<IfClause<'tree>>),
@@ -8417,7 +8417,7 @@ impl ::treesitter_types::Spanned for GeneratorExpressionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GenericTypeChildren<'tree> {
     Identifier(::std::boxed::Box<Identifier<'tree>>),
     TypeParameter(::std::boxed::Box<TypeParameter<'tree>>),
@@ -8447,7 +8447,7 @@ impl ::treesitter_types::Spanned for GenericTypeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum IfStatementAlternative<'tree> {
     ElifClause(::std::boxed::Box<ElifClause<'tree>>),
     ElseClause(::std::boxed::Box<ElseClause<'tree>>),
@@ -8477,7 +8477,7 @@ impl ::treesitter_types::Spanned for IfStatementAlternative<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ImportFromStatementModuleName<'tree> {
     DottedName(::std::boxed::Box<DottedName<'tree>>),
     RelativeImport(::std::boxed::Box<RelativeImport<'tree>>),
@@ -8507,7 +8507,7 @@ impl ::treesitter_types::Spanned for ImportFromStatementModuleName<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ImportFromStatementName<'tree> {
     AliasedImport(::std::boxed::Box<AliasedImport<'tree>>),
     DottedName(::std::boxed::Box<DottedName<'tree>>),
@@ -8537,7 +8537,7 @@ impl ::treesitter_types::Spanned for ImportFromStatementName<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ImportStatementName<'tree> {
     AliasedImport(::std::boxed::Box<AliasedImport<'tree>>),
     DottedName(::std::boxed::Box<DottedName<'tree>>),
@@ -8567,7 +8567,7 @@ impl ::treesitter_types::Spanned for ImportStatementName<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InterpolationExpression<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -8612,7 +8612,7 @@ impl ::treesitter_types::Spanned for InterpolationExpression<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum KeywordPatternChildren<'tree> {
     ClassPattern(::std::boxed::Box<ClassPattern<'tree>>),
     ComplexPattern(::std::boxed::Box<ComplexPattern<'tree>>),
@@ -8712,7 +8712,7 @@ impl ::treesitter_types::Spanned for KeywordPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ListSplat(::std::boxed::Box<ListSplat<'tree>>),
@@ -8757,7 +8757,7 @@ impl ::treesitter_types::Spanned for ListChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListComprehensionChildren<'tree> {
     ForInClause(::std::boxed::Box<ForInClause<'tree>>),
     IfClause(::std::boxed::Box<IfClause<'tree>>),
@@ -8787,7 +8787,7 @@ impl ::treesitter_types::Spanned for ListComprehensionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListPatternChildren<'tree> {
     CasePattern(::std::boxed::Box<CasePattern<'tree>>),
     Pattern(::std::boxed::Box<Pattern<'tree>>),
@@ -8822,7 +8822,7 @@ impl ::treesitter_types::Spanned for ListPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListSplatChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
@@ -8867,7 +8867,7 @@ impl ::treesitter_types::Spanned for ListSplatChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ListSplatPatternChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Identifier(::std::boxed::Box<Identifier<'tree>>),
@@ -8902,7 +8902,7 @@ impl ::treesitter_types::Spanned for ListSplatPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MemberTypeChildren<'tree> {
     Identifier(::std::boxed::Box<Identifier<'tree>>),
     Type(::std::boxed::Box<Type<'tree>>),
@@ -8932,7 +8932,7 @@ impl ::treesitter_types::Spanned for MemberTypeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ModuleChildren<'tree> {
     CompoundStatement(::std::boxed::Box<CompoundStatement<'tree>>),
     SimpleStatement(::std::boxed::Box<SimpleStatement<'tree>>),
@@ -8965,7 +8965,7 @@ impl ::treesitter_types::Spanned for ModuleChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParenthesizedExpressionChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ListSplat(::std::boxed::Box<ListSplat<'tree>>),
@@ -9014,7 +9014,7 @@ impl ::treesitter_types::Spanned for ParenthesizedExpressionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParenthesizedListSplatChildren<'tree> {
     ListSplat(::std::boxed::Box<ListSplat<'tree>>),
     ParenthesizedExpression(::std::boxed::Box<ParenthesizedExpression<'tree>>),
@@ -9048,7 +9048,7 @@ impl ::treesitter_types::Spanned for ParenthesizedListSplatChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RaiseStatementChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -9083,7 +9083,7 @@ impl ::treesitter_types::Spanned for RaiseStatementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RelativeImportChildren<'tree> {
     DottedName(::std::boxed::Box<DottedName<'tree>>),
     ImportPrefix(::std::boxed::Box<ImportPrefix<'tree>>),
@@ -9113,7 +9113,7 @@ impl ::treesitter_types::Spanned for RelativeImportChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ReturnStatementChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -9148,7 +9148,7 @@ impl ::treesitter_types::Spanned for ReturnStatementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SetChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ListSplat(::std::boxed::Box<ListSplat<'tree>>),
@@ -9193,7 +9193,7 @@ impl ::treesitter_types::Spanned for SetChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SetComprehensionChildren<'tree> {
     ForInClause(::std::boxed::Box<ForInClause<'tree>>),
     IfClause(::std::boxed::Box<IfClause<'tree>>),
@@ -9223,7 +9223,7 @@ impl ::treesitter_types::Spanned for SetComprehensionChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringChildren<'tree> {
     Interpolation(::std::boxed::Box<Interpolation<'tree>>),
     StringContent(::std::boxed::Box<StringContent<'tree>>),
@@ -9263,7 +9263,7 @@ impl ::treesitter_types::Spanned for StringChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StringContentChildren<'tree> {
     EscapeInterpolation(::std::boxed::Box<EscapeInterpolation<'tree>>),
     EscapeSequence(::std::boxed::Box<EscapeSequence<'tree>>),
@@ -9293,7 +9293,7 @@ impl ::treesitter_types::Spanned for StringContentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SubscriptSubscript<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     Slice(::std::boxed::Box<Slice<'tree>>),
@@ -9328,7 +9328,7 @@ impl ::treesitter_types::Spanned for SubscriptSubscript<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TryStatementChildren<'tree> {
     ElseClause(::std::boxed::Box<ElseClause<'tree>>),
     ExceptClause(::std::boxed::Box<ExceptClause<'tree>>),
@@ -9363,7 +9363,7 @@ impl ::treesitter_types::Spanned for TryStatementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TupleChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ListSplat(::std::boxed::Box<ListSplat<'tree>>),
@@ -9408,7 +9408,7 @@ impl ::treesitter_types::Spanned for TupleChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TuplePatternChildren<'tree> {
     CasePattern(::std::boxed::Box<CasePattern<'tree>>),
     Pattern(::std::boxed::Box<Pattern<'tree>>),
@@ -9443,7 +9443,7 @@ impl ::treesitter_types::Spanned for TuplePatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeChildren<'tree> {
     ConstrainedType(::std::boxed::Box<ConstrainedType<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
@@ -9498,7 +9498,7 @@ impl ::treesitter_types::Spanned for TypeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypedParameterChildren<'tree> {
     DictionarySplatPattern(::std::boxed::Box<DictionarySplatPattern<'tree>>),
     Identifier(::std::boxed::Box<Identifier<'tree>>),
@@ -9533,7 +9533,7 @@ impl ::treesitter_types::Spanned for TypedParameterChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnaryOperatorOperator {
     Plus(::treesitter_types::Span),
     Minus(::treesitter_types::Span),
@@ -9562,7 +9562,7 @@ impl ::treesitter_types::Spanned for UnaryOperatorOperator {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnionPatternChildren<'tree> {
     ClassPattern(::std::boxed::Box<ClassPattern<'tree>>),
     ComplexPattern(::std::boxed::Box<ComplexPattern<'tree>>),
@@ -9657,7 +9657,7 @@ impl ::treesitter_types::Spanned for UnionPatternChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum YieldChildren<'tree> {
     Expression(::std::boxed::Box<Expression<'tree>>),
     ExpressionList(::std::boxed::Box<ExpressionList<'tree>>),
@@ -9692,7 +9692,7 @@ impl ::treesitter_types::Spanned for YieldChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     CompoundStatement(CompoundStatement<'tree>),
     SimpleStatement(SimpleStatement<'tree>),

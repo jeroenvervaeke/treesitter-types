@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Attribute<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<AttributeChildren<'tree>>,
@@ -48,7 +48,7 @@ impl ::treesitter_types::Spanned for Attribute<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Doctype<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -75,7 +75,7 @@ impl ::treesitter_types::Spanned for Doctype<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Document<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<DocumentChildren<'tree>>,
@@ -125,7 +125,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Element<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ElementChildren<'tree>>,
@@ -175,7 +175,7 @@ impl ::treesitter_types::Spanned for Element<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EndTag<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: TagName<'tree>,
@@ -289,7 +289,7 @@ impl ::treesitter_types::Spanned for EndTag<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ErroneousEndTag<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ErroneousEndTagName<'tree>,
@@ -403,7 +403,7 @@ impl ::treesitter_types::Spanned for ErroneousEndTag<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuotedAttributeValue<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::core::option::Option<AttributeValue<'tree>>,
@@ -452,7 +452,7 @@ impl ::treesitter_types::Spanned for QuotedAttributeValue<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ScriptElement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<ScriptElementChildren<'tree>>,
@@ -504,7 +504,7 @@ impl ::treesitter_types::Spanned for ScriptElement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SelfClosingTag<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<SelfClosingTagChildren<'tree>>,
@@ -556,7 +556,7 @@ impl ::treesitter_types::Spanned for SelfClosingTag<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StartTag<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<StartTagChildren<'tree>>,
@@ -606,7 +606,7 @@ impl ::treesitter_types::Spanned for StartTag<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct StyleElement<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<StyleElementChildren<'tree>>,
@@ -658,7 +658,7 @@ impl ::treesitter_types::Spanned for StyleElement<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AttributeName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -685,7 +685,7 @@ impl ::treesitter_types::Spanned for AttributeName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct AttributeValue<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -712,7 +712,7 @@ impl ::treesitter_types::Spanned for AttributeValue<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comment<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -739,7 +739,7 @@ impl ::treesitter_types::Spanned for Comment<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Entity<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -766,7 +766,7 @@ impl ::treesitter_types::Spanned for Entity<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ErroneousEndTagName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -793,7 +793,7 @@ impl ::treesitter_types::Spanned for ErroneousEndTagName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct RawText<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -820,7 +820,7 @@ impl ::treesitter_types::Spanned for RawText<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TagName<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -847,7 +847,7 @@ impl ::treesitter_types::Spanned for TagName<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Text<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -874,7 +874,7 @@ impl ::treesitter_types::Spanned for Text<'_> {
         self.span
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AttributeChildren<'tree> {
     AttributeName(::std::boxed::Box<AttributeName<'tree>>),
     AttributeValue(::std::boxed::Box<AttributeValue<'tree>>),
@@ -909,7 +909,7 @@ impl ::treesitter_types::Spanned for AttributeChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DocumentChildren<'tree> {
     Doctype(::std::boxed::Box<Doctype<'tree>>),
     Element(::std::boxed::Box<Element<'tree>>),
@@ -964,7 +964,7 @@ impl ::treesitter_types::Spanned for DocumentChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ElementChildren<'tree> {
     Doctype(::std::boxed::Box<Doctype<'tree>>),
     Element(::std::boxed::Box<Element<'tree>>),
@@ -1034,7 +1034,7 @@ impl ::treesitter_types::Spanned for ElementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ScriptElementChildren<'tree> {
     EndTag(::std::boxed::Box<EndTag<'tree>>),
     RawText(::std::boxed::Box<RawText<'tree>>),
@@ -1069,7 +1069,7 @@ impl ::treesitter_types::Spanned for ScriptElementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SelfClosingTagChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     TagName(::std::boxed::Box<TagName<'tree>>),
@@ -1099,7 +1099,7 @@ impl ::treesitter_types::Spanned for SelfClosingTagChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StartTagChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     TagName(::std::boxed::Box<TagName<'tree>>),
@@ -1129,7 +1129,7 @@ impl ::treesitter_types::Spanned for StartTagChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum StyleElementChildren<'tree> {
     EndTag(::std::boxed::Box<EndTag<'tree>>),
     RawText(::std::boxed::Box<RawText<'tree>>),
@@ -1164,7 +1164,7 @@ impl ::treesitter_types::Spanned for StyleElementChildren<'_> {
         }
     }
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AnyNode<'tree> {
     Attribute(Attribute<'tree>),
     Doctype(Doctype<'tree>),
