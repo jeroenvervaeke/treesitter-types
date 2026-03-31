@@ -16,14 +16,23 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCall<'tree> {
             key: {
                 let child = node
                     .child_by_field_name("key")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("key", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "key",
+                        node,
+                    ))?;
                 <AccessCallKey as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             target: {
                 let child = node
                     .child_by_field_name("target")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("target", node))?;
-                <AccessCallTarget as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "target",
+                        node,
+                    ))?;
+                <AccessCallTarget as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -54,8 +63,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AfterBlock<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -69,11 +77,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AfterBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <AfterBlockChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <AfterBlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -106,8 +116,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AnonymousFunction<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -121,9 +130,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AnonymousFunction<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<StabClause as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -156,8 +169,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Arguments<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -171,9 +183,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Arguments<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ArgumentsChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <ArgumentsChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -204,20 +220,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperator<'tree> {
             left: {
                 let child = node
                     .child_by_field_name("left")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("left", node))?;
-                <BinaryOperatorLeft as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "left",
+                        node,
+                    ))?;
+                <BinaryOperatorLeft as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <BinaryOperatorOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <BinaryOperatorOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             right: {
                 let child = node
                     .child_by_field_name("right")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("right", node))?;
-                <BinaryOperatorRight as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "right",
+                        node,
+                    ))?;
+                <BinaryOperatorRight as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -248,8 +282,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Bitstring<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -263,9 +296,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Bitstring<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <BitstringChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <BitstringChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -298,8 +335,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Block<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -313,9 +349,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Block<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<BlockChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <BlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -348,8 +388,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Body<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -363,9 +402,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Body<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<BodyChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <BodyChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -422,7 +465,10 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Call<'tree> {
             target: {
                 let child = node
                     .child_by_field_name("target")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("target", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "target",
+                        node,
+                    ))?;
                 <CallTarget as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             children: {
@@ -432,8 +478,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Call<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -447,9 +492,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Call<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<CallChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <CallChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -482,8 +531,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CatchBlock<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -497,11 +545,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CatchBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CatchBlockChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CatchBlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -530,16 +580,28 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             quoted_end: {
-                let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_end", node)
-                })?;
-                <CharlistQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_end")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_end",
+                        node,
+                    ))?;
+                <CharlistQuotedEnd as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             quoted_start: {
-                let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_start", node)
-                })?;
-                <CharlistQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_start")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_start",
+                        node,
+                    ))?;
+                <CharlistQuotedStart as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -548,8 +610,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -563,9 +624,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CharlistChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <CharlistChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -598,8 +663,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoBlock<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -613,9 +677,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <DoBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <DoBlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -646,19 +714,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Dot<'tree> {
             left: {
                 let child = node
                     .child_by_field_name("left")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("left", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "left",
+                        node,
+                    ))?;
                 <DotLeft as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
                 <DotOperator as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             right: match node.child_by_field_name("right") {
-                Some(child) => Some(<DotRight as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <DotRight as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
         })
@@ -690,8 +769,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseBlock<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -705,9 +783,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ElseBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <ElseBlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -767,8 +849,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Interpolation<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -781,12 +862,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Interpolation<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(
-                        <InterpolationChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    ),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <InterpolationChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <InterpolationChildren as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -818,8 +932,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Keywords<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -833,9 +946,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Keywords<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Pair as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Pair as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -868,8 +985,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for List<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -883,9 +999,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for List<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<ListChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <ListChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -918,8 +1038,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Map<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -933,9 +1052,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Map<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<MapChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <MapChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -968,8 +1091,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapContent<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -983,11 +1105,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapContent<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <MapContentChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <MapContentChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1071,13 +1195,19 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pair<'tree> {
             key: {
                 let child = node
                     .child_by_field_name("key")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("key", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "key",
+                        node,
+                    ))?;
                 <PairKey as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             value: {
                 let child = node
                     .child_by_field_name("value")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("value", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "value",
+                        node,
+                    ))?;
                 <PairValue as ::treesitter_types::FromNode>::from_node(child, src)?
             },
         })
@@ -1105,16 +1235,28 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             quoted_end: {
-                let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_end", node)
-                })?;
-                <QuotedAtomQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_end")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_end",
+                        node,
+                    ))?;
+                <QuotedAtomQuotedEnd as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             quoted_start: {
-                let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_start", node)
-                })?;
-                <QuotedAtomQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_start")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_start",
+                        node,
+                    ))?;
+                <QuotedAtomQuotedStart as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -1123,8 +1265,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1138,11 +1279,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <QuotedAtomChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <QuotedAtomChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1171,16 +1314,28 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             quoted_end: {
-                let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_end", node)
-                })?;
-                <QuotedKeywordQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_end")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_end",
+                        node,
+                    ))?;
+                <QuotedKeywordQuotedEnd as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             quoted_start: {
-                let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_start", node)
-                })?;
-                <QuotedKeywordQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_start")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_start",
+                        node,
+                    ))?;
+                <QuotedKeywordQuotedStart as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -1189,8 +1344,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1204,11 +1358,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <QuotedKeywordChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <QuotedKeywordChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1241,8 +1397,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RescueBlock<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1256,11 +1411,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RescueBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <RescueBlockChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <RescueBlockChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1289,16 +1446,25 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             quoted_end: {
-                let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_end", node)
-                })?;
+                let child = node
+                    .child_by_field_name("quoted_end")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_end",
+                        node,
+                    ))?;
                 <SigilQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             quoted_start: {
-                let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_start", node)
-                })?;
-                <SigilQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_start")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_start",
+                        node,
+                    ))?;
+                <SigilQuotedStart as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -1307,8 +1473,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1322,9 +1487,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<SigilChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <SigilChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1357,8 +1526,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Source<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1372,9 +1540,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Source<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<SourceChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <SourceChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1403,21 +1575,32 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StabClause<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             left: match node.child_by_field_name("left") {
-                Some(child) => Some(<StabClauseLeft as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <StabClauseLeft as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <StabClauseOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <StabClauseOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             right: match node.child_by_field_name("right") {
-                Some(child) => Some(<Body as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(<Body as ::treesitter_types::FromNode>::from_node(child, src)?)
+                }
                 None => None,
             },
         })
@@ -1445,16 +1628,25 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             quoted_end: {
-                let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_end", node)
-                })?;
+                let child = node
+                    .child_by_field_name("quoted_end")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_end",
+                        node,
+                    ))?;
                 <StringQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             quoted_start: {
-                let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("quoted_start", node)
-                })?;
-                <StringQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("quoted_start")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "quoted_start",
+                        node,
+                    ))?;
+                <StringQuotedStart as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -1463,8 +1655,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1478,9 +1669,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<StringChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <StringChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1513,8 +1708,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Struct<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1533,20 +1727,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Struct<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <StructChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <StructChildren as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -1579,8 +1789,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Tuple<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1594,9 +1803,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Tuple<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<TupleChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <TupleChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1627,19 +1840,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryOperator<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("operand", &mut cursor) {
-                    items.push(
-                        <UnaryOperatorOperand as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <UnaryOperatorOperand as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <UnaryOperatorOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <UnaryOperatorOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -1980,78 +2201,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCallKey<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2120,78 +2536,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCallTarget<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2261,81 +2872,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AfterBlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2406,81 +3221,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentsChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2551,81 +3570,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperatorLeft<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                <Arguments as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "arguments" => {
+                Ok(
+                    Self::Arguments(
+                        ::std::boxed::Box::new(
+                            <Arguments as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2750,9 +3973,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperatorOperator {
             ">" => Ok(Self::Gt(::treesitter_types::Span::from(node))),
             ">=" => Ok(Self::GtEq(::treesitter_types::Span::from(node))),
             ">>>" => Ok(Self::GtGtGt(::treesitter_types::Span::from(node))),
-            "\\\\" => Ok(Self::BackslashBackslash(::treesitter_types::Span::from(
-                node,
-            ))),
+            "\\\\" => Ok(Self::BackslashBackslash(::treesitter_types::Span::from(node))),
             "^^^" => Ok(Self::CaretCaretCaret(::treesitter_types::Span::from(node))),
             "and" => Ok(Self::And(::treesitter_types::Span::from(node))),
             "in" => Ok(Self::In(::treesitter_types::Span::from(node))),
@@ -2856,81 +4077,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperatorRight<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3001,81 +4426,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitstringChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3146,81 +4775,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3290,78 +5123,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BodyChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3409,15 +5437,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallTarget<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3443,12 +5492,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                <Arguments as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "do_block" => Ok(Self::DoBlock(::std::boxed::Box::new(
-                <DoBlock as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "arguments" => {
+                Ok(
+                    Self::Arguments(
+                        ::std::boxed::Box::new(
+                            <Arguments as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "do_block" => {
+                Ok(
+                    Self::DoBlock(
+                        ::std::boxed::Box::new(
+                            <DoBlock as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3496,81 +5563,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CatchBlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3619,9 +5890,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharlistQuotedEnd {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "'" => Ok(Self::SingleQuote(::treesitter_types::Span::from(node))),
-            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(node))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3647,9 +5916,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharlistQuotedStart {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "'" => Ok(Self::SingleQuote(::treesitter_types::Span::from(node))),
-            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(node))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3675,15 +5942,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharlistChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "escape_sequence" => {
+                Ok(
+                    Self::EscapeSequence(
+                        ::std::boxed::Box::new(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "interpolation" => {
+                Ok(
+                    Self::Interpolation(
+                        ::std::boxed::Box::new(
+                            <Interpolation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_content" => {
+                Ok(
+                    Self::QuotedContent(
+                        ::std::boxed::Box::new(
+                            <QuotedContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3736,93 +6030,333 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoBlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "after_block" => Ok(Self::AfterBlock(::std::boxed::Box::new(
-                <AfterBlock as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "catch_block" => Ok(Self::CatchBlock(::std::boxed::Box::new(
-                <CatchBlock as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "else_block" => Ok(Self::ElseBlock(::std::boxed::Box::new(
-                <ElseBlock as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "rescue_block" => Ok(Self::RescueBlock(::std::boxed::Box::new(
-                <RescueBlock as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "after_block" => {
+                Ok(
+                    Self::AfterBlock(
+                        ::std::boxed::Box::new(
+                            <AfterBlock as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "catch_block" => {
+                Ok(
+                    Self::CatchBlock(
+                        ::std::boxed::Box::new(
+                            <CatchBlock as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "else_block" => {
+                Ok(
+                    Self::ElseBlock(
+                        ::std::boxed::Box::new(
+                            <ElseBlock as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "rescue_block" => {
+                Ok(
+                    Self::RescueBlock(
+                        ::std::boxed::Box::new(
+                            <RescueBlock as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3896,78 +6430,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DotLeft<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4041,24 +6770,78 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DotRight<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4110,81 +6893,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseBlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4254,78 +7241,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolationChildren<'tree>
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4395,81 +7577,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ListChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4517,12 +7903,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "map_content" => Ok(Self::MapContent(::std::boxed::Box::new(
-                <MapContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "struct" => Ok(Self::Struct(::std::boxed::Box::new(
-                <Struct as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "map_content" => {
+                Ok(
+                    Self::MapContent(
+                        ::std::boxed::Box::new(
+                            <MapContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "struct" => {
+                Ok(
+                    Self::Struct(
+                        ::std::boxed::Box::new(
+                            <Struct as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4570,81 +7974,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapContentChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4692,12 +8300,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PairKey<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "keyword" => Ok(Self::Keyword(::std::boxed::Box::new(
-                <Keyword as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_keyword" => Ok(Self::QuotedKeyword(::std::boxed::Box::new(
-                <QuotedKeyword as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "keyword" => {
+                Ok(
+                    Self::Keyword(
+                        ::std::boxed::Box::new(
+                            <Keyword as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_keyword" => {
+                Ok(
+                    Self::QuotedKeyword(
+                        ::std::boxed::Box::new(
+                            <QuotedKeyword as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4744,78 +8370,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PairValue<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4915,15 +8736,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtomChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "escape_sequence" => {
+                Ok(
+                    Self::EscapeSequence(
+                        ::std::boxed::Box::new(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "interpolation" => {
+                Ok(
+                    Self::Interpolation(
+                        ::std::boxed::Box::new(
+                            <Interpolation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_content" => {
+                Ok(
+                    Self::QuotedContent(
+                        ::std::boxed::Box::new(
+                            <QuotedContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5002,15 +8850,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeywordChildren<'tree>
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "escape_sequence" => {
+                Ok(
+                    Self::EscapeSequence(
+                        ::std::boxed::Box::new(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "interpolation" => {
+                Ok(
+                    Self::Interpolation(
+                        ::std::boxed::Box::new(
+                            <Interpolation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_content" => {
+                Ok(
+                    Self::QuotedContent(
+                        ::std::boxed::Box::new(
+                            <QuotedContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5059,81 +8934,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RescueBlockChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "stab_clause" => {
+                Ok(
+                    Self::StabClause(
+                        ::std::boxed::Box::new(
+                            <StabClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5190,13 +9269,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SigilQuotedEnd {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "\"" => Ok(Self::DoubleQuote(::treesitter_types::Span::from(node))),
-            "\"\"\"" => Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "\"\"\"" => {
+                Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(node)))
+            }
             "'" => Ok(Self::SingleQuote(::treesitter_types::Span::from(node))),
-            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(node))),
             ")" => Ok(Self::RParen(::treesitter_types::Span::from(node))),
             "/" => Ok(Self::Slash(::treesitter_types::Span::from(node))),
             ">" => Ok(Self::Gt(::treesitter_types::Span::from(node))),
@@ -5244,13 +9321,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SigilQuotedStart {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "\"" => Ok(Self::DoubleQuote(::treesitter_types::Span::from(node))),
-            "\"\"\"" => Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "\"\"\"" => {
+                Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(node)))
+            }
             "'" => Ok(Self::SingleQuote(::treesitter_types::Span::from(node))),
-            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "'''" => Ok(Self::SQuoteSQuoteSQuote(::treesitter_types::Span::from(node))),
             "(" => Ok(Self::LParen(::treesitter_types::Span::from(node))),
             "/" => Ok(Self::Slash(::treesitter_types::Span::from(node))),
             "<" => Ok(Self::Lt(::treesitter_types::Span::from(node))),
@@ -5292,21 +9367,66 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SigilChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil_modifiers" => Ok(Self::SigilModifiers(::std::boxed::Box::new(
-                <SigilModifiers as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil_name" => Ok(Self::SigilName(::std::boxed::Box::new(
-                <SigilName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "escape_sequence" => {
+                Ok(
+                    Self::EscapeSequence(
+                        ::std::boxed::Box::new(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "interpolation" => {
+                Ok(
+                    Self::Interpolation(
+                        ::std::boxed::Box::new(
+                            <Interpolation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_content" => {
+                Ok(
+                    Self::QuotedContent(
+                        ::std::boxed::Box::new(
+                            <QuotedContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil_modifiers" => {
+                Ok(
+                    Self::SigilModifiers(
+                        ::std::boxed::Box::new(
+                            <SigilModifiers as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil_name" => {
+                Ok(
+                    Self::SigilName(
+                        ::std::boxed::Box::new(
+                            <SigilName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5356,78 +9476,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5474,12 +9789,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StabClauseLeft<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                <Arguments as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "arguments" => {
+                Ok(
+                    Self::Arguments(
+                        ::std::boxed::Box::new(
+                            <Arguments as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5528,9 +9861,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringQuotedEnd {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "\"" => Ok(Self::DoubleQuote(::treesitter_types::Span::from(node))),
-            "\"\"\"" => Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "\"\"\"" => {
+                Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(node)))
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5556,9 +9889,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringQuotedStart {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "\"" => Ok(Self::DoubleQuote(::treesitter_types::Span::from(node))),
-            "\"\"\"" => Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(
-                node,
-            ))),
+            "\"\"\"" => {
+                Ok(Self::DQuoteDQuoteDQuote(::treesitter_types::Span::from(node)))
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5584,15 +9917,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "escape_sequence" => {
+                Ok(
+                    Self::EscapeSequence(
+                        ::std::boxed::Box::new(
+                            <EscapeSequence as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "interpolation" => {
+                Ok(
+                    Self::Interpolation(
+                        ::std::boxed::Box::new(
+                            <Interpolation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_content" => {
+                Ok(
+                    Self::QuotedContent(
+                        ::std::boxed::Box::new(
+                            <QuotedContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5623,27 +9983,81 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StructChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5696,81 +10110,285 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "keywords" => {
+                Ok(
+                    Self::Keywords(
+                        ::std::boxed::Box::new(
+                            <Keywords as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5844,78 +10462,273 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryOperatorOperand<'tree> 
         match node.kind() {
             "(" => Ok(Self::LParen(::treesitter_types::Span::from(node))),
             ")" => Ok(Self::RParen(::treesitter_types::Span::from(node))),
-            "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                <Alias as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "block" => Ok(Self::Block(::std::boxed::Box::new(
-                <Block as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "call" => Ok(Self::Call(::std::boxed::Box::new(
-                <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "char" => Ok(Self::Char(::std::boxed::Box::new(
-                <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "float" => Ok(Self::Float(::std::boxed::Box::new(
-                <Float as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                <Integer as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "map" => Ok(Self::Map(::std::boxed::Box::new(
-                <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "access_call" => {
+                Ok(
+                    Self::AccessCall(
+                        ::std::boxed::Box::new(
+                            <AccessCall as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "alias" => {
+                Ok(
+                    Self::Alias(
+                        ::std::boxed::Box::new(
+                            <Alias as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "anonymous_function" => {
+                Ok(
+                    Self::AnonymousFunction(
+                        ::std::boxed::Box::new(
+                            <AnonymousFunction as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "atom" => {
+                Ok(
+                    Self::Atom(
+                        ::std::boxed::Box::new(
+                            <Atom as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "binary_operator" => {
+                Ok(
+                    Self::BinaryOperator(
+                        ::std::boxed::Box::new(
+                            <BinaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "bitstring" => {
+                Ok(
+                    Self::Bitstring(
+                        ::std::boxed::Box::new(
+                            <Bitstring as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "block" => {
+                Ok(
+                    Self::Block(
+                        ::std::boxed::Box::new(
+                            <Block as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boolean" => {
+                Ok(
+                    Self::Boolean(
+                        ::std::boxed::Box::new(
+                            <Boolean as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "call" => {
+                Ok(
+                    Self::Call(
+                        ::std::boxed::Box::new(
+                            <Call as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "char" => {
+                Ok(
+                    Self::Char(
+                        ::std::boxed::Box::new(
+                            <Char as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "charlist" => {
+                Ok(
+                    Self::Charlist(
+                        ::std::boxed::Box::new(
+                            <Charlist as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "dot" => {
+                Ok(
+                    Self::Dot(
+                        ::std::boxed::Box::new(
+                            <Dot as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "float" => {
+                Ok(
+                    Self::Float(
+                        ::std::boxed::Box::new(
+                            <Float as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identifier" => {
+                Ok(
+                    Self::Identifier(
+                        ::std::boxed::Box::new(
+                            <Identifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "integer" => {
+                Ok(
+                    Self::Integer(
+                        ::std::boxed::Box::new(
+                            <Integer as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "map" => {
+                Ok(
+                    Self::Map(
+                        ::std::boxed::Box::new(
+                            <Map as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "nil" => {
+                Ok(
+                    Self::Nil(
+                        ::std::boxed::Box::new(
+                            <Nil as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "operator_identifier" => {
+                Ok(
+                    Self::OperatorIdentifier(
+                        ::std::boxed::Box::new(
+                            <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "quoted_atom" => {
+                Ok(
+                    Self::QuotedAtom(
+                        ::std::boxed::Box::new(
+                            <QuotedAtom as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "sigil" => {
+                Ok(
+                    Self::Sigil(
+                        ::std::boxed::Box::new(
+                            <Sigil as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "tuple" => {
+                Ok(
+                    Self::Tuple(
+                        ::std::boxed::Box::new(
+                            <Tuple as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_operator" => {
+                Ok(
+                    Self::UnaryOperator(
+                        ::std::boxed::Box::new(
+                            <UnaryOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -6048,146 +10861,219 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "access_call" => <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::AccessCall)
-                .unwrap_or(Self::Unknown(node)),
-            "after_block" => <AfterBlock as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::AfterBlock)
-                .unwrap_or(Self::Unknown(node)),
+            "access_call" => {
+                <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::AccessCall)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "after_block" => {
+                <AfterBlock as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::AfterBlock)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "anonymous_function" => {
                 <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::AnonymousFunction)
                     .unwrap_or(Self::Unknown(node))
             }
-            "arguments" => <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Arguments)
-                .unwrap_or(Self::Unknown(node)),
+            "arguments" => {
+                <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Arguments)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "binary_operator" => {
                 <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::BinaryOperator)
                     .unwrap_or(Self::Unknown(node))
             }
-            "bitstring" => <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Bitstring)
-                .unwrap_or(Self::Unknown(node)),
-            "block" => <Block as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Block)
-                .unwrap_or(Self::Unknown(node)),
-            "body" => <Body as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Body)
-                .unwrap_or(Self::Unknown(node)),
-            "boolean" => <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Boolean)
-                .unwrap_or(Self::Unknown(node)),
-            "call" => <Call as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Call)
-                .unwrap_or(Self::Unknown(node)),
-            "catch_block" => <CatchBlock as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::CatchBlock)
-                .unwrap_or(Self::Unknown(node)),
-            "charlist" => <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Charlist)
-                .unwrap_or(Self::Unknown(node)),
-            "do_block" => <DoBlock as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::DoBlock)
-                .unwrap_or(Self::Unknown(node)),
-            "dot" => <Dot as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Dot)
-                .unwrap_or(Self::Unknown(node)),
-            "else_block" => <ElseBlock as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ElseBlock)
-                .unwrap_or(Self::Unknown(node)),
-            "identifier" => <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Identifier)
-                .unwrap_or(Self::Unknown(node)),
+            "bitstring" => {
+                <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Bitstring)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "block" => {
+                <Block as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Block)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "body" => {
+                <Body as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Body)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "boolean" => {
+                <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Boolean)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "call" => {
+                <Call as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Call)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "catch_block" => {
+                <CatchBlock as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::CatchBlock)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "charlist" => {
+                <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Charlist)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "do_block" => {
+                <DoBlock as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::DoBlock)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "dot" => {
+                <Dot as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Dot)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "else_block" => {
+                <ElseBlock as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ElseBlock)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "identifier" => {
+                <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Identifier)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "interpolation" => {
                 <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::Interpolation)
                     .unwrap_or(Self::Unknown(node))
             }
-            "keywords" => <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Keywords)
-                .unwrap_or(Self::Unknown(node)),
-            "list" => <List as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::List)
-                .unwrap_or(Self::Unknown(node)),
-            "map" => <Map as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Map)
-                .unwrap_or(Self::Unknown(node)),
-            "map_content" => <MapContent as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::MapContent)
-                .unwrap_or(Self::Unknown(node)),
-            "nil" => <Nil as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Nil)
-                .unwrap_or(Self::Unknown(node)),
+            "keywords" => {
+                <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Keywords)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "list" => {
+                <List as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::List)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "map" => {
+                <Map as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Map)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "map_content" => {
+                <MapContent as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::MapContent)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "nil" => {
+                <Nil as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Nil)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "operator_identifier" => {
-                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::OperatorIdentifier)
                     .unwrap_or(Self::Unknown(node))
             }
-            "pair" => <Pair as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Pair)
-                .unwrap_or(Self::Unknown(node)),
-            "quoted_atom" => <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::QuotedAtom)
-                .unwrap_or(Self::Unknown(node)),
+            "pair" => {
+                <Pair as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Pair)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "quoted_atom" => {
+                <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::QuotedAtom)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "quoted_keyword" => {
                 <QuotedKeyword as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::QuotedKeyword)
                     .unwrap_or(Self::Unknown(node))
             }
-            "rescue_block" => <RescueBlock as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::RescueBlock)
-                .unwrap_or(Self::Unknown(node)),
-            "sigil" => <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Sigil)
-                .unwrap_or(Self::Unknown(node)),
-            "source" => <Source as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Source)
-                .unwrap_or(Self::Unknown(node)),
-            "stab_clause" => <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::StabClause)
-                .unwrap_or(Self::Unknown(node)),
-            "string" => <String as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::String)
-                .unwrap_or(Self::Unknown(node)),
-            "struct" => <Struct as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Struct)
-                .unwrap_or(Self::Unknown(node)),
-            "tuple" => <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Tuple)
-                .unwrap_or(Self::Unknown(node)),
+            "rescue_block" => {
+                <RescueBlock as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::RescueBlock)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "sigil" => {
+                <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Sigil)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "source" => {
+                <Source as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Source)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "stab_clause" => {
+                <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::StabClause)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "string" => {
+                <String as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::String)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "struct" => {
+                <Struct as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Struct)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "tuple" => {
+                <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Tuple)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "unary_operator" => {
                 <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::UnaryOperator)
                     .unwrap_or(Self::Unknown(node))
             }
-            "alias" => <Alias as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Alias)
-                .unwrap_or(Self::Unknown(node)),
-            "atom" => <Atom as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Atom)
-                .unwrap_or(Self::Unknown(node)),
-            "char" => <Char as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Char)
-                .unwrap_or(Self::Unknown(node)),
-            "comment" => <Comment as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Comment)
-                .unwrap_or(Self::Unknown(node)),
+            "alias" => {
+                <Alias as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Alias)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "atom" => {
+                <Atom as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Atom)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "char" => {
+                <Char as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Char)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "comment" => {
+                <Comment as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Comment)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "escape_sequence" => {
                 <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::EscapeSequence)
                     .unwrap_or(Self::Unknown(node))
             }
-            "float" => <Float as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Float)
-                .unwrap_or(Self::Unknown(node)),
-            "integer" => <Integer as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Integer)
-                .unwrap_or(Self::Unknown(node)),
-            "keyword" => <Keyword as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Keyword)
-                .unwrap_or(Self::Unknown(node)),
+            "float" => {
+                <Float as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Float)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "integer" => {
+                <Integer as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Integer)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "keyword" => {
+                <Keyword as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Keyword)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "quoted_content" => {
                 <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::QuotedContent)
@@ -6198,9 +11084,11 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::SigilModifiers)
                     .unwrap_or(Self::Unknown(node))
             }
-            "sigil_name" => <SigilName as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::SigilName)
-                .unwrap_or(Self::Unknown(node)),
+            "sigil_name" => {
+                <SigilName as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::SigilName)
+                    .unwrap_or(Self::Unknown(node))
+            }
             _ => Self::Unknown(node),
         }
     }

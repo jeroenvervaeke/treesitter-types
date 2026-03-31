@@ -19,8 +19,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Alternation<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -34,9 +33,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Alternation<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Term as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Term as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -69,8 +72,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AnonymousCapturingGroup<'tre
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -89,20 +91,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AnonymousCapturingGroup<'tre
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <Pattern as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <Pattern as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -135,8 +153,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BackreferenceEscape<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -155,20 +172,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BackreferenceEscape<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <GroupName as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <GroupName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -201,8 +234,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClass<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -216,11 +248,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClass<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CharacterClassChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CharacterClassChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -253,8 +287,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClassEscape<'tree> 
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -267,12 +300,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClassEscape<'tree> 
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(
-                        <CharacterClassEscapeChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    ),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <CharacterClassEscapeChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <CharacterClassEscapeChildren as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -304,8 +370,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassRange<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -319,11 +384,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassRange<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ClassRangeChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <ClassRangeChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -383,8 +450,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CountQuantifier<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -398,11 +464,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CountQuantifier<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CountQuantifierChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CountQuantifierChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -462,8 +530,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InlineFlagsGroup<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -477,11 +544,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InlineFlagsGroup<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <InlineFlagsGroupChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <InlineFlagsGroupChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -514,8 +583,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LookaroundAssertion<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -534,20 +602,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LookaroundAssertion<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <Pattern as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <Pattern as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -580,8 +664,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NamedCapturingGroup<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -595,11 +678,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NamedCapturingGroup<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <NamedCapturingGroupChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <NamedCapturingGroupChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -632,8 +717,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NamedGroupBackreference<'tre
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -652,20 +736,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NamedGroupBackreference<'tre
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <GroupName as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <GroupName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -698,8 +798,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NonCapturingGroup<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -718,20 +817,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NonCapturingGroup<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <Pattern as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <Pattern as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -764,8 +879,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OneOrMore<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -778,10 +892,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OneOrMore<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(<Lazy as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <Lazy as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <Lazy as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -813,8 +962,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Optional<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -827,10 +975,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Optional<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(<Lazy as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <Lazy as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <Lazy as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -862,8 +1045,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pattern<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -882,20 +1064,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pattern<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <PatternChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <PatternChildren as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -928,8 +1126,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PosixCharacterClass<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -948,20 +1145,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PosixCharacterClass<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <PosixClassName as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <PosixClassName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -1048,8 +1261,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Term<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1063,9 +1275,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Term<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<TermChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <TermChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1109,7 +1325,8 @@ pub struct UnicodePropertyValueExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<UnicodePropertyValueExpressionChildren<'tree>>,
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for UnicodePropertyValueExpression<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree>
+for UnicodePropertyValueExpression<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
         node: ::tree_sitter::Node<'tree>,
@@ -1125,8 +1342,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnicodePropertyValueExpressi
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1179,8 +1395,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ZeroOrMore<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1193,10 +1408,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ZeroOrMore<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(<Lazy as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <Lazy as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <Lazy as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -1602,27 +1852,90 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClassChildren<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "character_class_escape" => Ok(Self::CharacterClassEscape(::std::boxed::Box::new(
-                <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "class_character" => Ok(Self::ClassCharacter(::std::boxed::Box::new(
-                <ClassCharacter as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "class_range" => Ok(Self::ClassRange(::std::boxed::Box::new(
-                <ClassRange as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "control_escape" => Ok(Self::ControlEscape(::std::boxed::Box::new(
-                <ControlEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "control_letter_escape" => Ok(Self::ControlLetterEscape(::std::boxed::Box::new(
-                <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identity_escape" => Ok(Self::IdentityEscape(::std::boxed::Box::new(
-                <IdentityEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "posix_character_class" => Ok(Self::PosixCharacterClass(::std::boxed::Box::new(
-                <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "character_class_escape" => {
+                Ok(
+                    Self::CharacterClassEscape(
+                        ::std::boxed::Box::new(
+                            <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "class_character" => {
+                Ok(
+                    Self::ClassCharacter(
+                        ::std::boxed::Box::new(
+                            <ClassCharacter as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "class_range" => {
+                Ok(
+                    Self::ClassRange(
+                        ::std::boxed::Box::new(
+                            <ClassRange as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "control_escape" => {
+                Ok(
+                    Self::ControlEscape(
+                        ::std::boxed::Box::new(
+                            <ControlEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "control_letter_escape" => {
+                Ok(
+                    Self::ControlLetterEscape(
+                        ::std::boxed::Box::new(
+                            <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identity_escape" => {
+                Ok(
+                    Self::IdentityEscape(
+                        ::std::boxed::Box::new(
+                            <IdentityEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "posix_character_class" => {
+                Ok(
+                    Self::PosixCharacterClass(
+                        ::std::boxed::Box::new(
+                            <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1643,7 +1956,9 @@ impl ::treesitter_types::Spanned for CharacterClassChildren<'_> {
 #[derive(Debug, Clone)]
 pub enum CharacterClassEscapeChildren<'tree> {
     UnicodeCharacterEscape(::std::boxed::Box<UnicodeCharacterEscape<'tree>>),
-    UnicodePropertyValueExpression(::std::boxed::Box<UnicodePropertyValueExpression<'tree>>),
+    UnicodePropertyValueExpression(
+        ::std::boxed::Box<UnicodePropertyValueExpression<'tree>>,
+    ),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClassEscapeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -1652,16 +1967,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharacterClassEscapeChildren
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "unicode_character_escape" => Ok(Self::UnicodeCharacterEscape(::std::boxed::Box::new(
-                <UnicodeCharacterEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unicode_property_value_expression" => Ok(Self::UnicodePropertyValueExpression(
-                ::std::boxed::Box::new(
-                    <UnicodePropertyValueExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                ),
-            )),
+            "unicode_character_escape" => {
+                Ok(
+                    Self::UnicodeCharacterEscape(
+                        ::std::boxed::Box::new(
+                            <UnicodeCharacterEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unicode_property_value_expression" => {
+                Ok(
+                    Self::UnicodePropertyValueExpression(
+                        ::std::boxed::Box::new(
+                            <UnicodePropertyValueExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1687,15 +2016,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassRangeChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "character_class_escape" => Ok(Self::CharacterClassEscape(::std::boxed::Box::new(
-                <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "class_character" => Ok(Self::ClassCharacter(::std::boxed::Box::new(
-                <ClassCharacter as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "control_escape" => Ok(Self::ControlEscape(::std::boxed::Box::new(
-                <ControlEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "character_class_escape" => {
+                Ok(
+                    Self::CharacterClassEscape(
+                        ::std::boxed::Box::new(
+                            <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "class_character" => {
+                Ok(
+                    Self::ClassCharacter(
+                        ::std::boxed::Box::new(
+                            <ClassCharacter as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "control_escape" => {
+                Ok(
+                    Self::ControlEscape(
+                        ::std::boxed::Box::new(
+                            <ControlEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1721,12 +2077,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CountQuantifierChildren<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "decimal_digits" => Ok(Self::DecimalDigits(::std::boxed::Box::new(
-                <DecimalDigits as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "lazy" => Ok(Self::Lazy(::std::boxed::Box::new(
-                <Lazy as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "decimal_digits" => {
+                Ok(
+                    Self::DecimalDigits(
+                        ::std::boxed::Box::new(
+                            <DecimalDigits as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "lazy" => {
+                Ok(
+                    Self::Lazy(
+                        ::std::boxed::Box::new(
+                            <Lazy as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1751,12 +2122,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InlineFlagsGroupChildren<'tr
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "flags" => Ok(Self::Flags(::std::boxed::Box::new(
-                <Flags as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pattern" => Ok(Self::Pattern(::std::boxed::Box::new(
-                <Pattern as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "flags" => {
+                Ok(
+                    Self::Flags(
+                        ::std::boxed::Box::new(
+                            <Flags as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pattern" => {
+                Ok(
+                    Self::Pattern(
+                        ::std::boxed::Box::new(
+                            <Pattern as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1781,12 +2170,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NamedCapturingGroupChildren<
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "group_name" => Ok(Self::GroupName(::std::boxed::Box::new(
-                <GroupName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pattern" => Ok(Self::Pattern(::std::boxed::Box::new(
-                <Pattern as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "group_name" => {
+                Ok(
+                    Self::GroupName(
+                        ::std::boxed::Box::new(
+                            <GroupName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pattern" => {
+                Ok(
+                    Self::Pattern(
+                        ::std::boxed::Box::new(
+                            <Pattern as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1811,12 +2218,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "alternation" => Ok(Self::Alternation(::std::boxed::Box::new(
-                <Alternation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "term" => Ok(Self::Term(::std::boxed::Box::new(
-                <Term as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "alternation" => {
+                Ok(
+                    Self::Alternation(
+                        ::std::boxed::Box::new(
+                            <Alternation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "term" => {
+                Ok(
+                    Self::Term(
+                        ::std::boxed::Box::new(
+                            <Term as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1864,85 +2286,293 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TermChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "anonymous_capturing_group" => {
-                Ok(Self::AnonymousCapturingGroup(::std::boxed::Box::new(
-                    <AnonymousCapturingGroup as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+                Ok(
+                    Self::AnonymousCapturingGroup(
+                        ::std::boxed::Box::new(
+                            <AnonymousCapturingGroup as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "any_character" => Ok(Self::AnyCharacter(::std::boxed::Box::new(
-                <AnyCharacter as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "backreference_escape" => Ok(Self::BackreferenceEscape(::std::boxed::Box::new(
-                <BackreferenceEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "boundary_assertion" => Ok(Self::BoundaryAssertion(::std::boxed::Box::new(
-                <BoundaryAssertion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "character_class" => Ok(Self::CharacterClass(::std::boxed::Box::new(
-                <CharacterClass as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "character_class_escape" => Ok(Self::CharacterClassEscape(::std::boxed::Box::new(
-                <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "control_escape" => Ok(Self::ControlEscape(::std::boxed::Box::new(
-                <ControlEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "control_letter_escape" => Ok(Self::ControlLetterEscape(::std::boxed::Box::new(
-                <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "count_quantifier" => Ok(Self::CountQuantifier(::std::boxed::Box::new(
-                <CountQuantifier as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "decimal_escape" => Ok(Self::DecimalEscape(::std::boxed::Box::new(
-                <DecimalEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "end_assertion" => Ok(Self::EndAssertion(::std::boxed::Box::new(
-                <EndAssertion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "identity_escape" => Ok(Self::IdentityEscape(::std::boxed::Box::new(
-                <IdentityEscape as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "inline_flags_group" => Ok(Self::InlineFlagsGroup(::std::boxed::Box::new(
-                <InlineFlagsGroup as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "lookaround_assertion" => Ok(Self::LookaroundAssertion(::std::boxed::Box::new(
-                <LookaroundAssertion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "named_capturing_group" => Ok(Self::NamedCapturingGroup(::std::boxed::Box::new(
-                <NamedCapturingGroup as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "any_character" => {
+                Ok(
+                    Self::AnyCharacter(
+                        ::std::boxed::Box::new(
+                            <AnyCharacter as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "backreference_escape" => {
+                Ok(
+                    Self::BackreferenceEscape(
+                        ::std::boxed::Box::new(
+                            <BackreferenceEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "boundary_assertion" => {
+                Ok(
+                    Self::BoundaryAssertion(
+                        ::std::boxed::Box::new(
+                            <BoundaryAssertion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "character_class" => {
+                Ok(
+                    Self::CharacterClass(
+                        ::std::boxed::Box::new(
+                            <CharacterClass as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "character_class_escape" => {
+                Ok(
+                    Self::CharacterClassEscape(
+                        ::std::boxed::Box::new(
+                            <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "control_escape" => {
+                Ok(
+                    Self::ControlEscape(
+                        ::std::boxed::Box::new(
+                            <ControlEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "control_letter_escape" => {
+                Ok(
+                    Self::ControlLetterEscape(
+                        ::std::boxed::Box::new(
+                            <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "count_quantifier" => {
+                Ok(
+                    Self::CountQuantifier(
+                        ::std::boxed::Box::new(
+                            <CountQuantifier as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "decimal_escape" => {
+                Ok(
+                    Self::DecimalEscape(
+                        ::std::boxed::Box::new(
+                            <DecimalEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "end_assertion" => {
+                Ok(
+                    Self::EndAssertion(
+                        ::std::boxed::Box::new(
+                            <EndAssertion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "identity_escape" => {
+                Ok(
+                    Self::IdentityEscape(
+                        ::std::boxed::Box::new(
+                            <IdentityEscape as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "inline_flags_group" => {
+                Ok(
+                    Self::InlineFlagsGroup(
+                        ::std::boxed::Box::new(
+                            <InlineFlagsGroup as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "lookaround_assertion" => {
+                Ok(
+                    Self::LookaroundAssertion(
+                        ::std::boxed::Box::new(
+                            <LookaroundAssertion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "named_capturing_group" => {
+                Ok(
+                    Self::NamedCapturingGroup(
+                        ::std::boxed::Box::new(
+                            <NamedCapturingGroup as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             "named_group_backreference" => {
-                Ok(Self::NamedGroupBackreference(::std::boxed::Box::new(
-                    <NamedGroupBackreference as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+                Ok(
+                    Self::NamedGroupBackreference(
+                        ::std::boxed::Box::new(
+                            <NamedGroupBackreference as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "non_boundary_assertion" => Ok(Self::NonBoundaryAssertion(::std::boxed::Box::new(
-                <NonBoundaryAssertion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "non_capturing_group" => Ok(Self::NonCapturingGroup(::std::boxed::Box::new(
-                <NonCapturingGroup as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "one_or_more" => Ok(Self::OneOrMore(::std::boxed::Box::new(
-                <OneOrMore as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "optional" => Ok(Self::Optional(::std::boxed::Box::new(
-                <Optional as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pattern_character" => Ok(Self::PatternCharacter(::std::boxed::Box::new(
-                <PatternCharacter as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "posix_character_class" => Ok(Self::PosixCharacterClass(::std::boxed::Box::new(
-                <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "start_assertion" => Ok(Self::StartAssertion(::std::boxed::Box::new(
-                <StartAssertion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "zero_or_more" => Ok(Self::ZeroOrMore(::std::boxed::Box::new(
-                <ZeroOrMore as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "non_boundary_assertion" => {
+                Ok(
+                    Self::NonBoundaryAssertion(
+                        ::std::boxed::Box::new(
+                            <NonBoundaryAssertion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "non_capturing_group" => {
+                Ok(
+                    Self::NonCapturingGroup(
+                        ::std::boxed::Box::new(
+                            <NonCapturingGroup as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "one_or_more" => {
+                Ok(
+                    Self::OneOrMore(
+                        ::std::boxed::Box::new(
+                            <OneOrMore as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "optional" => {
+                Ok(
+                    Self::Optional(
+                        ::std::boxed::Box::new(
+                            <Optional as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pattern_character" => {
+                Ok(
+                    Self::PatternCharacter(
+                        ::std::boxed::Box::new(
+                            <PatternCharacter as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "posix_character_class" => {
+                Ok(
+                    Self::PosixCharacterClass(
+                        ::std::boxed::Box::new(
+                            <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "start_assertion" => {
+                Ok(
+                    Self::StartAssertion(
+                        ::std::boxed::Box::new(
+                            <StartAssertion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "zero_or_more" => {
+                Ok(
+                    Self::ZeroOrMore(
+                        ::std::boxed::Box::new(
+                            <ZeroOrMore as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -1982,19 +2612,38 @@ pub enum UnicodePropertyValueExpressionChildren<'tree> {
     UnicodePropertyName(::std::boxed::Box<UnicodePropertyName<'tree>>),
     UnicodePropertyValue(::std::boxed::Box<UnicodePropertyValue<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for UnicodePropertyValueExpressionChildren<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree>
+for UnicodePropertyValueExpressionChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "unicode_property_name" => Ok(Self::UnicodePropertyName(::std::boxed::Box::new(
-                <UnicodePropertyName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unicode_property_value" => Ok(Self::UnicodePropertyValue(::std::boxed::Box::new(
-                <UnicodePropertyValue as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "unicode_property_name" => {
+                Ok(
+                    Self::UnicodePropertyName(
+                        ::std::boxed::Box::new(
+                            <UnicodePropertyName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unicode_property_value" => {
+                Ok(
+                    Self::UnicodePropertyValue(
+                        ::std::boxed::Box::new(
+                            <UnicodePropertyValue as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2052,16 +2701,24 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "alternation" => <Alternation as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Alternation)
-                .unwrap_or(Self::Unknown(node)),
+            "alternation" => {
+                <Alternation as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Alternation)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "anonymous_capturing_group" => {
-                <AnonymousCapturingGroup as ::treesitter_types::FromNode>::from_node(node, src)
+                <AnonymousCapturingGroup as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::AnonymousCapturingGroup)
                     .unwrap_or(Self::Unknown(node))
             }
             "backreference_escape" => {
-                <BackreferenceEscape as ::treesitter_types::FromNode>::from_node(node, src)
+                <BackreferenceEscape as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::BackreferenceEscape)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -2071,13 +2728,18 @@ impl<'tree> AnyNode<'tree> {
                     .unwrap_or(Self::Unknown(node))
             }
             "character_class_escape" => {
-                <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(node, src)
+                <CharacterClassEscape as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::CharacterClassEscape)
                     .unwrap_or(Self::Unknown(node))
             }
-            "class_range" => <ClassRange as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ClassRange)
-                .unwrap_or(Self::Unknown(node)),
+            "class_range" => {
+                <ClassRange as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ClassRange)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "control_escape" => {
                 <ControlEscape as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::ControlEscape)
@@ -2088,26 +2750,37 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::CountQuantifier)
                     .unwrap_or(Self::Unknown(node))
             }
-            "flags" => <Flags as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Flags)
-                .unwrap_or(Self::Unknown(node)),
+            "flags" => {
+                <Flags as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Flags)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "inline_flags_group" => {
                 <InlineFlagsGroup as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::InlineFlagsGroup)
                     .unwrap_or(Self::Unknown(node))
             }
             "lookaround_assertion" => {
-                <LookaroundAssertion as ::treesitter_types::FromNode>::from_node(node, src)
+                <LookaroundAssertion as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::LookaroundAssertion)
                     .unwrap_or(Self::Unknown(node))
             }
             "named_capturing_group" => {
-                <NamedCapturingGroup as ::treesitter_types::FromNode>::from_node(node, src)
+                <NamedCapturingGroup as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::NamedCapturingGroup)
                     .unwrap_or(Self::Unknown(node))
             }
             "named_group_backreference" => {
-                <NamedGroupBackreference as ::treesitter_types::FromNode>::from_node(node, src)
+                <NamedGroupBackreference as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::NamedGroupBackreference)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -2116,17 +2789,26 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::NonCapturingGroup)
                     .unwrap_or(Self::Unknown(node))
             }
-            "one_or_more" => <OneOrMore as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::OneOrMore)
-                .unwrap_or(Self::Unknown(node)),
-            "optional" => <Optional as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Optional)
-                .unwrap_or(Self::Unknown(node)),
-            "pattern" => <Pattern as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Pattern)
-                .unwrap_or(Self::Unknown(node)),
+            "one_or_more" => {
+                <OneOrMore as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::OneOrMore)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "optional" => {
+                <Optional as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Optional)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "pattern" => {
+                <Pattern as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Pattern)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "posix_character_class" => {
-                <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(node, src)
+                <PosixCharacterClass as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::PosixCharacterClass)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -2140,27 +2822,37 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::StartAssertion)
                     .unwrap_or(Self::Unknown(node))
             }
-            "term" => <Term as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Term)
-                .unwrap_or(Self::Unknown(node)),
+            "term" => {
+                <Term as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Term)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "unicode_character_escape" => {
-                <UnicodeCharacterEscape as ::treesitter_types::FromNode>::from_node(node, src)
+                <UnicodeCharacterEscape as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::UnicodeCharacterEscape)
                     .unwrap_or(Self::Unknown(node))
             }
             "unicode_property_value_expression" => {
                 <UnicodePropertyValueExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-                .map(Self::UnicodePropertyValueExpression)
-                .unwrap_or(Self::Unknown(node))
+                        node,
+                        src,
+                    )
+                    .map(Self::UnicodePropertyValueExpression)
+                    .unwrap_or(Self::Unknown(node))
             }
-            "zero_or_more" => <ZeroOrMore as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ZeroOrMore)
-                .unwrap_or(Self::Unknown(node)),
-            "any_character" => <AnyCharacter as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::AnyCharacter)
-                .unwrap_or(Self::Unknown(node)),
+            "zero_or_more" => {
+                <ZeroOrMore as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ZeroOrMore)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "any_character" => {
+                <AnyCharacter as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::AnyCharacter)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "boundary_assertion" => {
                 <BoundaryAssertion as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::BoundaryAssertion)
@@ -2172,7 +2864,10 @@ impl<'tree> AnyNode<'tree> {
                     .unwrap_or(Self::Unknown(node))
             }
             "control_letter_escape" => {
-                <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(node, src)
+                <ControlLetterEscape as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::ControlLetterEscape)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -2186,22 +2881,31 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::DecimalEscape)
                     .unwrap_or(Self::Unknown(node))
             }
-            "end_assertion" => <EndAssertion as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::EndAssertion)
-                .unwrap_or(Self::Unknown(node)),
-            "group_name" => <GroupName as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::GroupName)
-                .unwrap_or(Self::Unknown(node)),
+            "end_assertion" => {
+                <EndAssertion as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::EndAssertion)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "group_name" => {
+                <GroupName as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::GroupName)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "identity_escape" => {
                 <IdentityEscape as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::IdentityEscape)
                     .unwrap_or(Self::Unknown(node))
             }
-            "lazy" => <Lazy as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Lazy)
-                .unwrap_or(Self::Unknown(node)),
+            "lazy" => {
+                <Lazy as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Lazy)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "non_boundary_assertion" => {
-                <NonBoundaryAssertion as ::treesitter_types::FromNode>::from_node(node, src)
+                <NonBoundaryAssertion as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::NonBoundaryAssertion)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -2211,12 +2915,18 @@ impl<'tree> AnyNode<'tree> {
                     .unwrap_or(Self::Unknown(node))
             }
             "unicode_property_name" => {
-                <UnicodePropertyName as ::treesitter_types::FromNode>::from_node(node, src)
+                <UnicodePropertyName as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::UnicodePropertyName)
                     .unwrap_or(Self::Unknown(node))
             }
             "unicode_property_value" => {
-                <UnicodePropertyValue as ::treesitter_types::FromNode>::from_node(node, src)
+                <UnicodePropertyValue as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::UnicodePropertyValue)
                     .unwrap_or(Self::Unknown(node))
             }

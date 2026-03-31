@@ -16,40 +16,95 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Expression<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
-                <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "word" => Ok(Self::Word(::std::boxed::Box::new(
-                <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "ternary_expression" => {
+                Ok(
+                    Self::TernaryExpression(
+                        ::std::boxed::Box::new(
+                            <TernaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "word" => {
+                Ok(
+                    Self::Word(
+                        ::std::boxed::Box::new(
+                            <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -91,42 +146,147 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrimaryExpression<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "ansi_c_string" => Ok(Self::AnsiCString(::std::boxed::Box::new(
-                <AnsiCString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "arithmetic_expansion" => Ok(Self::ArithmeticExpansion(::std::boxed::Box::new(
-                <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "brace_expression" => Ok(Self::BraceExpression(::std::boxed::Box::new(
-                <BraceExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "process_substitution" => Ok(Self::ProcessSubstitution(::std::boxed::Box::new(
-                <ProcessSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "translated_string" => Ok(Self::TranslatedString(::std::boxed::Box::new(
-                <TranslatedString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "word" => Ok(Self::Word(::std::boxed::Box::new(
-                <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "ansi_c_string" => {
+                Ok(
+                    Self::AnsiCString(
+                        ::std::boxed::Box::new(
+                            <AnsiCString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "arithmetic_expansion" => {
+                Ok(
+                    Self::ArithmeticExpansion(
+                        ::std::boxed::Box::new(
+                            <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "brace_expression" => {
+                Ok(
+                    Self::BraceExpression(
+                        ::std::boxed::Box::new(
+                            <BraceExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "process_substitution" => {
+                Ok(
+                    Self::ProcessSubstitution(
+                        ::std::boxed::Box::new(
+                            <ProcessSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "translated_string" => {
+                Ok(
+                    Self::TranslatedString(
+                        ::std::boxed::Box::new(
+                            <TranslatedString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "word" => {
+                Ok(
+                    Self::Word(
+                        ::std::boxed::Box::new(
+                            <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -177,60 +337,219 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Statement<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "c_style_for_statement" => Ok(Self::CStyleForStatement(::std::boxed::Box::new(
-                <CStyleForStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "case_statement" => Ok(Self::CaseStatement(::std::boxed::Box::new(
-                <CaseStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command" => Ok(Self::Command(::std::boxed::Box::new(
-                <Command as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "compound_statement" => Ok(Self::CompoundStatement(::std::boxed::Box::new(
-                <CompoundStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "declaration_command" => Ok(Self::DeclarationCommand(::std::boxed::Box::new(
-                <DeclarationCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "for_statement" => Ok(Self::ForStatement(::std::boxed::Box::new(
-                <ForStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "function_definition" => Ok(Self::FunctionDefinition(::std::boxed::Box::new(
-                <FunctionDefinition as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "if_statement" => Ok(Self::IfStatement(::std::boxed::Box::new(
-                <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "list" => Ok(Self::List(::std::boxed::Box::new(
-                <List as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "negated_command" => Ok(Self::NegatedCommand(::std::boxed::Box::new(
-                <NegatedCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pipeline" => Ok(Self::Pipeline(::std::boxed::Box::new(
-                <Pipeline as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "redirected_statement" => Ok(Self::RedirectedStatement(::std::boxed::Box::new(
-                <RedirectedStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subshell" => Ok(Self::Subshell(::std::boxed::Box::new(
-                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "test_command" => Ok(Self::TestCommand(::std::boxed::Box::new(
-                <TestCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unset_command" => Ok(Self::UnsetCommand(::std::boxed::Box::new(
-                <UnsetCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignments" => Ok(Self::VariableAssignments(::std::boxed::Box::new(
-                <VariableAssignments as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "while_statement" => Ok(Self::WhileStatement(::std::boxed::Box::new(
-                <WhileStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "c_style_for_statement" => {
+                Ok(
+                    Self::CStyleForStatement(
+                        ::std::boxed::Box::new(
+                            <CStyleForStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "case_statement" => {
+                Ok(
+                    Self::CaseStatement(
+                        ::std::boxed::Box::new(
+                            <CaseStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "command" => {
+                Ok(
+                    Self::Command(
+                        ::std::boxed::Box::new(
+                            <Command as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "compound_statement" => {
+                Ok(
+                    Self::CompoundStatement(
+                        ::std::boxed::Box::new(
+                            <CompoundStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "declaration_command" => {
+                Ok(
+                    Self::DeclarationCommand(
+                        ::std::boxed::Box::new(
+                            <DeclarationCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "for_statement" => {
+                Ok(
+                    Self::ForStatement(
+                        ::std::boxed::Box::new(
+                            <ForStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "function_definition" => {
+                Ok(
+                    Self::FunctionDefinition(
+                        ::std::boxed::Box::new(
+                            <FunctionDefinition as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "if_statement" => {
+                Ok(
+                    Self::IfStatement(
+                        ::std::boxed::Box::new(
+                            <IfStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "list" => {
+                Ok(
+                    Self::List(
+                        ::std::boxed::Box::new(
+                            <List as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
+            "negated_command" => {
+                Ok(
+                    Self::NegatedCommand(
+                        ::std::boxed::Box::new(
+                            <NegatedCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pipeline" => {
+                Ok(
+                    Self::Pipeline(
+                        ::std::boxed::Box::new(
+                            <Pipeline as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "redirected_statement" => {
+                Ok(
+                    Self::RedirectedStatement(
+                        ::std::boxed::Box::new(
+                            <RedirectedStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subshell" => {
+                Ok(
+                    Self::Subshell(
+                        ::std::boxed::Box::new(
+                            <Subshell as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "test_command" => {
+                Ok(
+                    Self::TestCommand(
+                        ::std::boxed::Box::new(
+                            <TestCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unset_command" => {
+                Ok(
+                    Self::UnsetCommand(
+                        ::std::boxed::Box::new(
+                            <UnsetCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignments" => {
+                Ok(
+                    Self::VariableAssignments(
+                        ::std::boxed::Box::new(
+                            <VariableAssignments as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "while_statement" => {
+                Ok(
+                    Self::WhileStatement(
+                        ::std::boxed::Box::new(
+                            <WhileStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -280,8 +599,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArithmeticExpansion<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -295,11 +613,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArithmeticExpansion<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ArithmeticExpansionChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <ArithmeticExpansionChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -332,8 +652,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Array<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -347,9 +666,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Array<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<ArrayChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <ArrayChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -379,26 +702,39 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpression<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             left: match node.child_by_field_name("left") {
-                Some(child) => Some(
-                    <BinaryExpressionLeft as ::treesitter_types::FromNode>::from_node(child, src)?,
-                ),
+                Some(child) => {
+                    Some(
+                        <BinaryExpressionLeft as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <BinaryExpressionOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <BinaryExpressionOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             right: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("right", &mut cursor) {
-                    items.push(
-                        <BinaryExpressionRight as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <BinaryExpressionRight as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -409,8 +745,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpression<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -424,11 +759,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpression<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <BinaryExpressionChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <BinaryExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -461,8 +798,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BraceExpression<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -476,9 +812,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BraceExpression<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Number as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -510,18 +850,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatement<'tree> {
             body: {
                 let child = node
                     .child_by_field_name("body")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <CStyleForStatementBody as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "body",
+                        node,
+                    ))?;
+                <CStyleForStatementBody as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             condition: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("condition", &mut cursor) {
-                    items.push(
-                        <CStyleForStatementCondition as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CStyleForStatementCondition as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -529,11 +877,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatement<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("initializer", &mut cursor) {
-                    items.push(
-                        <CStyleForStatementInitializer as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CStyleForStatementInitializer as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -541,11 +891,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatement<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("update", &mut cursor) {
-                    items.push(
-                        <CStyleForStatementUpdate as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CStyleForStatementUpdate as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -575,24 +927,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseItem<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             fallthrough: match node.child_by_field_name("fallthrough") {
-                Some(child) => Some(
-                    <CaseItemFallthrough as ::treesitter_types::FromNode>::from_node(child, src)?,
-                ),
+                Some(child) => {
+                    Some(
+                        <CaseItemFallthrough as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             termination: match node.child_by_field_name("termination") {
-                Some(child) => Some(
-                    <CaseItemTermination as ::treesitter_types::FromNode>::from_node(child, src)?,
-                ),
+                Some(child) => {
+                    Some(
+                        <CaseItemTermination as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             value: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("value", &mut cursor) {
-                    items.push(<CaseItemValue as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <CaseItemValue as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -603,8 +969,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseItem<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -618,9 +983,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseItem<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -650,8 +1019,14 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseStatement<'tree> {
             value: {
                 let child = node
                     .child_by_field_name("value")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("value", node))?;
-                <CaseStatementValue as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "value",
+                        node,
+                    ))?;
+                <CaseStatementValue as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -660,8 +1035,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseStatement<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -675,9 +1049,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseStatement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<CaseItem as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <CaseItem as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -710,25 +1088,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Command<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("argument", &mut cursor) {
-                    items.push(
-                        <CommandArgument as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <CommandArgument as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
             name: {
                 let child = node
                     .child_by_field_name("name")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("name", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "name",
+                        node,
+                    ))?;
                 <CommandName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             redirect: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("redirect", &mut cursor) {
-                    items.push(
-                        <CommandRedirect as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <CommandRedirect as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -739,8 +1128,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Command<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -754,9 +1142,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Command<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CommandChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <CommandChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -789,8 +1181,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandName<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -809,22 +1200,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandName<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <CommandNameChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <CommandNameChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <CommandNameChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -850,9 +1260,14 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandSubstitution<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             redirect: match node.child_by_field_name("redirect") {
-                Some(child) => Some(<FileRedirect as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <FileRedirect as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             children: {
@@ -862,8 +1277,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandSubstitution<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -877,9 +1291,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandSubstitution<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -912,8 +1330,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CompoundStatement<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -927,11 +1344,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CompoundStatement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <CompoundStatementChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <CompoundStatementChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -964,8 +1383,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Concatenation<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -979,11 +1397,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Concatenation<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ConcatenationChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <ConcatenationChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1016,8 +1436,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DeclarationCommand<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1031,11 +1450,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DeclarationCommand<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <DeclarationCommandChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <DeclarationCommandChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1068,8 +1489,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoGroup<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1083,9 +1503,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoGroup<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1118,8 +1542,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElifClause<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1133,9 +1556,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElifClause<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1168,8 +1595,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseClause<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1183,9 +1609,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseClause<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1216,9 +1646,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Expansion<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("operator", &mut cursor) {
-                    items.push(
-                        <ExpansionOperator as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <ExpansionOperator as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1229,8 +1663,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Expansion<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1244,9 +1677,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Expansion<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <ExpansionChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <ExpansionChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1274,20 +1711,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FileRedirect<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             descriptor: match node.child_by_field_name("descriptor") {
-                Some(child) => Some(<FileDescriptor as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <FileDescriptor as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             destination: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("destination", &mut cursor) {
-                    items.push(
-                        <FileRedirectDestination as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <FileRedirectDestination as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1318,23 +1762,33 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatement<'tree> {
             body: {
                 let child = node
                     .child_by_field_name("body")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "body",
+                        node,
+                    ))?;
                 <DoGroup as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             value: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("value", &mut cursor) {
-                    items.push(
-                        <ForStatementValue as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    );
+                    items
+                        .push(
+                            <ForStatementValue as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
             variable: {
-                let child = node.child_by_field_name("variable").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("variable", node)
-                })?;
+                let child = node
+                    .child_by_field_name("variable")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "variable",
+                        node,
+                    ))?;
                 <VariableName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
         })
@@ -1364,21 +1818,33 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDefinition<'tree> {
             body: {
                 let child = node
                     .child_by_field_name("body")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
-                <FunctionDefinitionBody as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "body",
+                        node,
+                    ))?;
+                <FunctionDefinitionBody as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             name: {
                 let child = node
                     .child_by_field_name("name")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("name", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "name",
+                        node,
+                    ))?;
                 <Word as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             redirect: match node.child_by_field_name("redirect") {
-                Some(child) => Some(
-                    <FunctionDefinitionRedirect as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?,
-                ),
+                Some(child) => {
+                    Some(
+                        <FunctionDefinitionRedirect as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
         })
@@ -1410,8 +1876,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocBody<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1425,11 +1890,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocBody<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <HeredocBodyChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <HeredocBodyChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1464,44 +1931,61 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirect<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("argument", &mut cursor) {
-                    items.push(
-                        <HeredocRedirectArgument as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <HeredocRedirectArgument as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
             descriptor: match node.child_by_field_name("descriptor") {
-                Some(child) => Some(<FileDescriptor as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <FileDescriptor as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             operator: match node.child_by_field_name("operator") {
-                Some(child) => Some(
-                    <HeredocRedirectOperator as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?,
-                ),
+                Some(child) => {
+                    Some(
+                        <HeredocRedirectOperator as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             redirect: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("redirect", &mut cursor) {
-                    items.push(
-                        <HeredocRedirectRedirect as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <HeredocRedirectRedirect as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
             right: match node.child_by_field_name("right") {
-                Some(child) => Some(<Statement as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <Statement as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             children: {
@@ -1511,8 +1995,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirect<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1526,11 +2009,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirect<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <HeredocRedirectChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <HeredocRedirectChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1558,9 +2043,14 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HerestringRedirect<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             descriptor: match node.child_by_field_name("descriptor") {
-                Some(child) => Some(<FileDescriptor as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <FileDescriptor as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             children: {
@@ -1570,8 +2060,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HerestringRedirect<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1590,22 +2079,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HerestringRedirect<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <HerestringRedirectChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <HerestringRedirectChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <HerestringRedirectChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -1634,11 +2142,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatement<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("condition", &mut cursor) {
-                    items.push(
-                        <IfStatementCondition as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <IfStatementCondition as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1649,8 +2159,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatement<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1664,11 +2173,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <IfStatementChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <IfStatementChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1701,8 +2212,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for List<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1716,9 +2226,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for List<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1751,8 +2265,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NegatedCommand<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1771,22 +2284,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NegatedCommand<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <NegatedCommandChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <NegatedCommandChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <NegatedCommandChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -1817,8 +2349,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Number<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1831,10 +2362,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Number<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(
-                        <NumberChildren as ::treesitter_types::FromNode>::from_node(child, src)?,
-                    ),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <NumberChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <NumberChildren as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -1866,8 +2432,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpression<'tre
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1920,8 +2485,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pipeline<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1935,9 +2499,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pipeline<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -1965,10 +2533,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpression<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <PostfixExpressionOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <PostfixExpressionOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -1977,8 +2551,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpression<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -1997,22 +2570,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpression<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <PostfixExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <PostfixExpressionChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <PostfixExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -2043,8 +2635,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProcessSubstitution<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2058,9 +2649,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProcessSubstitution<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2093,8 +2688,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Program<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2108,9 +2702,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Program<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2139,20 +2737,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RedirectedStatement<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             body: match node.child_by_field_name("body") {
-                Some(child) => Some(<Statement as ::treesitter_types::FromNode>::from_node(
-                    child, src,
-                )?),
+                Some(child) => {
+                    Some(
+                        <Statement as ::treesitter_types::FromNode>::from_node(
+                            child,
+                            src,
+                        )?,
+                    )
+                }
                 None => None,
             },
             redirect: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("redirect", &mut cursor) {
-                    items.push(
-                        <RedirectedStatementRedirect as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <RedirectedStatementRedirect as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2163,8 +2768,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RedirectedStatement<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2177,12 +2781,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RedirectedStatement<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(
-                        <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    ),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -2214,8 +2851,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleExpansion<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2234,22 +2870,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleExpansion<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <SimpleExpansionChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <SimpleExpansionChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <SimpleExpansionChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -2280,8 +2935,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2295,9 +2949,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<StringChildren as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <StringChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2327,13 +2985,19 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Subscript<'tree> {
             index: {
                 let child = node
                     .child_by_field_name("index")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("index", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "index",
+                        node,
+                    ))?;
                 <SubscriptIndex as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             name: {
                 let child = node
                     .child_by_field_name("name")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("name", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "name",
+                        node,
+                    ))?;
                 <VariableName as ::treesitter_types::FromNode>::from_node(child, src)?
             },
         })
@@ -2365,8 +3029,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Subshell<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2380,9 +3043,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Subshell<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(<Statement as ::treesitter_types::FromNode>::from_node(
-                        child, src,
-                    )?);
+                    items
+                        .push(
+                            <Statement as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2411,25 +3078,39 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpression<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             alternative: {
-                let child = node.child_by_field_name("alternative").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("alternative", node)
-                })?;
+                let child = node
+                    .child_by_field_name("alternative")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "alternative",
+                        node,
+                    ))?;
                 <TernaryExpressionAlternative as ::treesitter_types::FromNode>::from_node(
-                    child, src,
+                    child,
+                    src,
                 )?
             },
             condition: {
-                let child = node.child_by_field_name("condition").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("condition", node)
-                })?;
-                <TernaryExpressionCondition as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("condition")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "condition",
+                        node,
+                    ))?;
+                <TernaryExpressionCondition as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             consequence: {
-                let child = node.child_by_field_name("consequence").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("consequence", node)
-                })?;
+                let child = node
+                    .child_by_field_name("consequence")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "consequence",
+                        node,
+                    ))?;
                 <TernaryExpressionConsequence as ::treesitter_types::FromNode>::from_node(
-                    child, src,
+                    child,
+                    src,
                 )?
             },
         })
@@ -2461,8 +3142,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TestCommand<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2475,12 +3155,45 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TestCommand<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(
-                        <TestCommandChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    ),
-                    None => None,
+                    Some(&child) => {
+                        Some(
+                            <TestCommandChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        )
+                    }
+                    None => {
+                        let mut _result = None;
+                        let mut _fc = node.walk();
+                        if _fc.goto_first_child() {
+                            loop {
+                                if !_fc.node().is_extra() {
+                                    let child = _fc.node();
+                                    if let Ok(v) = (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        Ok(
+                                            Some(
+                                                <TestCommandChildren as ::treesitter_types::FromNode>::from_node(
+                                                    child,
+                                                    src,
+                                                )?,
+                                            ),
+                                        )
+                                    })() {
+                                        _result = Some(v);
+                                        break;
+                                    }
+                                }
+                                if !_fc.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                        _result.flatten()
+                    }
                 }
             },
         })
@@ -2512,8 +3225,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TranslatedString<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2532,20 +3244,36 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TranslatedString<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <String as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
                 <String as ::treesitter_types::FromNode>::from_node(child, src)?
             },
@@ -2573,10 +3301,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpression<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             operator: {
-                let child = node.child_by_field_name("operator").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("operator", node)
-                })?;
-                <UnaryExpressionOperator as ::treesitter_types::FromNode>::from_node(child, src)?
+                let child = node
+                    .child_by_field_name("operator")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "operator",
+                        node,
+                    ))?;
+                <UnaryExpressionOperator as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -2585,8 +3319,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpression<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2605,22 +3338,41 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpression<'tree> {
                     let mut fallback_child = None;
                     if fallback_cursor.goto_first_child() {
                         loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                fallback_child = Some(fallback_cursor.node());
-                                break;
+                            if !fallback_cursor.node().is_extra() {
+                                let candidate = fallback_cursor.node();
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        <UnaryExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        )?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
                             }
                             if !fallback_cursor.goto_next_sibling() {
                                 break;
                             }
                         }
                     }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
+                    fallback_child
+                        .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                            "children",
+                            node,
+                        ))?
                 };
-                <UnaryExpressionChildren as ::treesitter_types::FromNode>::from_node(child, src)?
+                <UnaryExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -2651,8 +3403,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnsetCommand<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2666,11 +3417,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnsetCommand<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <UnsetCommandChildren as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <UnsetCommandChildren as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2700,14 +3453,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for VariableAssignment<'tree> {
             name: {
                 let child = node
                     .child_by_field_name("name")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("name", node))?;
-                <VariableAssignmentName as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "name",
+                        node,
+                    ))?;
+                <VariableAssignmentName as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
             value: {
                 let child = node
                     .child_by_field_name("value")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("value", node))?;
-                <VariableAssignmentValue as ::treesitter_types::FromNode>::from_node(child, src)?
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "value",
+                        node,
+                    ))?;
+                <VariableAssignmentValue as ::treesitter_types::FromNode>::from_node(
+                    child,
+                    src,
+                )?
             },
         })
     }
@@ -2738,8 +3503,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for VariableAssignments<'tree> {
                     let mut result = ::std::vec::Vec::new();
                     if cursor.goto_first_child() {
                         loop {
-                            if cursor.field_name().is_none()
-                                && cursor.node().is_named()
+                            if cursor.field_name().is_none() && cursor.node().is_named()
                                 && !cursor.node().is_extra()
                             {
                                 result.push(cursor.node());
@@ -2753,11 +3517,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for VariableAssignments<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(
-                        <VariableAssignment as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -2787,18 +3553,23 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatement<'tree> {
             body: {
                 let child = node
                     .child_by_field_name("body")
-                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("body", node))?;
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field(
+                        "body",
+                        node,
+                    ))?;
                 <DoGroup as ::treesitter_types::FromNode>::from_node(child, src)?
             },
             condition: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("condition", &mut cursor) {
-                    items.push(
-                        <WhileStatementCondition as ::treesitter_types::FromNode>::from_node(
-                            child, src,
-                        )?,
-                    );
+                    items
+                        .push(
+                            <WhileStatementCondition as ::treesitter_types::FromNode>::from_node(
+                                child,
+                                src,
+                            )?,
+                        );
                 }
                 items
             },
@@ -3211,49 +3982,162 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArithmeticExpansionChildren<
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
-                <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "ternary_expression" => {
+                Ok(
+                    Self::TernaryExpression(
+                        ::std::boxed::Box::new(
+                            <TernaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3289,18 +4173,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -3333,37 +4225,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpressionLeft<'tree> 
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -3460,9 +4425,18 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpressionOperator<'tr
             ">>=" => Ok(Self::ShrEq(::treesitter_types::Span::from(node))),
             "^" => Ok(Self::Caret(::treesitter_types::Span::from(node))),
             "^=" => Ok(Self::CaretEq(::treesitter_types::Span::from(node))),
-            "test_operator" => Ok(Self::TestOperator(::std::boxed::Box::new(
-                <TestOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "test_operator" => {
+                Ok(
+                    Self::TestOperator(
+                        ::std::boxed::Box::new(
+                            <TestOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             "|" => Ok(Self::Pipe(::treesitter_types::Span::from(node))),
             "|=" => Ok(Self::PipeEq(::treesitter_types::Span::from(node))),
             "||" => Ok(Self::PipePipe(::treesitter_types::Span::from(node))),
@@ -3532,43 +4506,134 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpressionRight<'tree>
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "extglob_pattern" => Ok(Self::ExtglobPattern(::std::boxed::Box::new(
-                <ExtglobPattern as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "regex" => Ok(Self::Regex(::std::boxed::Box::new(
-                <Regex as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "extglob_pattern" => {
+                Ok(
+                    Self::ExtglobPattern(
+                        ::std::boxed::Box::new(
+                            <ExtglobPattern as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "regex" => {
+                Ok(
+                    Self::Regex(
+                        ::std::boxed::Box::new(
+                            <Regex as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -3605,18 +4670,54 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryExpressionChildren<'tr
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3643,12 +4744,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatementBody<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "compound_statement" => Ok(Self::CompoundStatement(::std::boxed::Box::new(
-                <CompoundStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "do_group" => Ok(Self::DoGroup(::std::boxed::Box::new(
-                <DoGroup as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "compound_statement" => {
+                Ok(
+                    Self::CompoundStatement(
+                        ::std::boxed::Box::new(
+                            <CompoundStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "do_group" => {
+                Ok(
+                    Self::DoGroup(
+                        ::std::boxed::Box::new(
+                            <DoGroup as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3684,43 +4803,135 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatementCondition<
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "," => Ok(Self::Comma(::treesitter_types::Span::from(node))),
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "word" => Ok(Self::Word(::std::boxed::Box::new(
-                <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "word" => {
+                Ok(
+                    Self::Word(
+                        ::std::boxed::Box::new(
+                            <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3758,7 +4969,8 @@ pub enum CStyleForStatementInitializer<'tree> {
     VariableAssignment(::std::boxed::Box<VariableAssignment<'tree>>),
     Word(::std::boxed::Box<Word<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatementInitializer<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree>
+for CStyleForStatementInitializer<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::tree_sitter::Node<'tree>,
@@ -3766,43 +4978,135 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatementInitialize
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "," => Ok(Self::Comma(::treesitter_types::Span::from(node))),
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "word" => Ok(Self::Word(::std::boxed::Box::new(
-                <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "word" => {
+                Ok(
+                    Self::Word(
+                        ::std::boxed::Box::new(
+                            <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3848,43 +5152,135 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CStyleForStatementUpdate<'tr
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "," => Ok(Self::Comma(::treesitter_types::Span::from(node))),
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "word" => Ok(Self::Word(::std::boxed::Box::new(
-                <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "word" => {
+                Ok(
+                    Self::Word(
+                        ::std::boxed::Box::new(
+                            <Word as ::treesitter_types::FromNode>::from_node(node, src)?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -3969,21 +5365,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseItemValue<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "extglob_pattern" => Ok(Self::ExtglobPattern(::std::boxed::Box::new(
-                <ExtglobPattern as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "extglob_pattern" => {
+                Ok(
+                    Self::ExtglobPattern(
+                        ::std::boxed::Box::new(
+                            <ExtglobPattern as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4010,18 +5423,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaseStatementValue<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4054,21 +5475,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandArgument<'tree> {
             "$" => Ok(Self::Dollar(::treesitter_types::Span::from(node))),
             "==" => Ok(Self::EqEq(::treesitter_types::Span::from(node))),
             "=~" => Ok(Self::EqTilde(::treesitter_types::Span::from(node))),
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "regex" => Ok(Self::Regex(::std::boxed::Box::new(
-                <Regex as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "regex" => {
+                Ok(
+                    Self::Regex(
+                        ::std::boxed::Box::new(
+                            <Regex as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4098,12 +5536,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandRedirect<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "file_redirect" => Ok(Self::FileRedirect(::std::boxed::Box::new(
-                <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "herestring_redirect" => Ok(Self::HerestringRedirect(::std::boxed::Box::new(
-                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "file_redirect" => {
+                Ok(
+                    Self::FileRedirect(
+                        ::std::boxed::Box::new(
+                            <FileRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "herestring_redirect" => {
+                Ok(
+                    Self::HerestringRedirect(
+                        ::std::boxed::Box::new(
+                            <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4128,12 +5584,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "subshell" => Ok(Self::Subshell(::std::boxed::Box::new(
-                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "subshell" => {
+                Ok(
+                    Self::Subshell(
+                        ::std::boxed::Box::new(
+                            <Subshell as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4158,18 +5632,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CommandNameChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4207,56 +5689,170 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CompoundStatementChildren<'t
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
-                <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "ternary_expression" => {
+                Ok(
+                    Self::TernaryExpression(
+                        ::std::boxed::Box::new(
+                            <TernaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Statement(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4295,21 +5891,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConcatenationChildren<'tree>
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "array" => Ok(Self::Array(::std::boxed::Box::new(
-                <Array as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "array" => {
+                Ok(
+                    Self::Array(
+                        ::std::boxed::Box::new(
+                            <Array as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4338,24 +5951,50 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DeclarationCommandChildren<'
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4503,43 +6142,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ExpansionChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "array" => Ok(Self::Array(::std::boxed::Box::new(
-                <Array as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "array" => {
+                Ok(
+                    Self::Array(
+                        ::std::boxed::Box::new(
+                            <Array as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "regex" => Ok(Self::Regex(::std::boxed::Box::new(
-                <Regex as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "special_variable_name" => Ok(Self::SpecialVariableName(::std::boxed::Box::new(
-                <SpecialVariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "regex" => {
+                Ok(
+                    Self::Regex(
+                        ::std::boxed::Box::new(
+                            <Regex as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "special_variable_name" => {
+                Ok(
+                    Self::SpecialVariableName(
+                        ::std::boxed::Box::new(
+                            <SpecialVariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4572,18 +6278,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FileRedirectDestination<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4609,18 +6323,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatementValue<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4648,18 +6370,54 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDefinitionBody<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "compound_statement" => Ok(Self::CompoundStatement(::std::boxed::Box::new(
-                <CompoundStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "if_statement" => Ok(Self::IfStatement(::std::boxed::Box::new(
-                <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subshell" => Ok(Self::Subshell(::std::boxed::Box::new(
-                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "test_command" => Ok(Self::TestCommand(::std::boxed::Box::new(
-                <TestCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "compound_statement" => {
+                Ok(
+                    Self::CompoundStatement(
+                        ::std::boxed::Box::new(
+                            <CompoundStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "if_statement" => {
+                Ok(
+                    Self::IfStatement(
+                        ::std::boxed::Box::new(
+                            <IfStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subshell" => {
+                Ok(
+                    Self::Subshell(
+                        ::std::boxed::Box::new(
+                            <Subshell as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "test_command" => {
+                Ok(
+                    Self::TestCommand(
+                        ::std::boxed::Box::new(
+                            <TestCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4686,12 +6444,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDefinitionRedirect<'
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "file_redirect" => Ok(Self::FileRedirect(::std::boxed::Box::new(
-                <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "herestring_redirect" => Ok(Self::HerestringRedirect(::std::boxed::Box::new(
-                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "file_redirect" => {
+                Ok(
+                    Self::FileRedirect(
+                        ::std::boxed::Box::new(
+                            <FileRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "herestring_redirect" => {
+                Ok(
+                    Self::HerestringRedirect(
+                        ::std::boxed::Box::new(
+                            <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4718,18 +6494,54 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocBodyChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "heredoc_content" => Ok(Self::HeredocContent(::std::boxed::Box::new(
-                <HeredocContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "heredoc_content" => {
+                Ok(
+                    Self::HeredocContent(
+                        ::std::boxed::Box::new(
+                            <HeredocContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4756,18 +6568,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirectArgument<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4819,12 +6639,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirectRedirect<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "file_redirect" => Ok(Self::FileRedirect(::std::boxed::Box::new(
-                <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "herestring_redirect" => Ok(Self::HerestringRedirect(::std::boxed::Box::new(
-                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "file_redirect" => {
+                Ok(
+                    Self::FileRedirect(
+                        ::std::boxed::Box::new(
+                            <FileRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "herestring_redirect" => {
+                Ok(
+                    Self::HerestringRedirect(
+                        ::std::boxed::Box::new(
+                            <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4851,18 +6689,54 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HeredocRedirectChildren<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "heredoc_body" => Ok(Self::HeredocBody(::std::boxed::Box::new(
-                <HeredocBody as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "heredoc_end" => Ok(Self::HeredocEnd(::std::boxed::Box::new(
-                <HeredocEnd as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "heredoc_start" => Ok(Self::HeredocStart(::std::boxed::Box::new(
-                <HeredocStart as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "pipeline" => Ok(Self::Pipeline(::std::boxed::Box::new(
-                <Pipeline as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "heredoc_body" => {
+                Ok(
+                    Self::HeredocBody(
+                        ::std::boxed::Box::new(
+                            <HeredocBody as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "heredoc_end" => {
+                Ok(
+                    Self::HeredocEnd(
+                        ::std::boxed::Box::new(
+                            <HeredocEnd as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "heredoc_start" => {
+                Ok(
+                    Self::HeredocStart(
+                        ::std::boxed::Box::new(
+                            <HeredocStart as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "pipeline" => {
+                Ok(
+                    Self::Pipeline(
+                        ::std::boxed::Box::new(
+                            <Pipeline as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -4889,18 +6763,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for HerestringRedirectChildren<'
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4932,12 +6814,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
             ";" => Ok(Self::Semicolon(::treesitter_types::Span::from(node))),
             ";;" => Ok(Self::SemiSemi(::treesitter_types::Span::from(node))),
             _other => {
-                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Statement(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -4966,19 +6849,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "elif_clause" => Ok(Self::ElifClause(::std::boxed::Box::new(
-                <ElifClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "else_clause" => Ok(Self::ElseClause(::std::boxed::Box::new(
-                <ElseClause as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "elif_clause" => {
+                Ok(
+                    Self::ElifClause(
+                        ::std::boxed::Box::new(
+                            <ElifClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "else_clause" => {
+                Ok(
+                    Self::ElseClause(
+                        ::std::boxed::Box::new(
+                            <ElseClause as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Statement(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5007,18 +6909,54 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NegatedCommandChildren<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command" => Ok(Self::Command(::std::boxed::Box::new(
-                <Command as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subshell" => Ok(Self::Subshell(::std::boxed::Box::new(
-                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "test_command" => Ok(Self::TestCommand(::std::boxed::Box::new(
-                <TestCommand as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command" => {
+                Ok(
+                    Self::Command(
+                        ::std::boxed::Box::new(
+                            <Command as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subshell" => {
+                Ok(
+                    Self::Subshell(
+                        ::std::boxed::Box::new(
+                            <Subshell as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "test_command" => {
+                Ok(
+                    Self::TestCommand(
+                        ::std::boxed::Box::new(
+                            <TestCommand as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5045,12 +6983,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NumberChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5076,47 +7032,130 @@ pub enum ParenthesizedExpressionChildren<'tree> {
     VariableAssignment(::std::boxed::Box<VariableAssignment<'tree>>),
     VariableName(::std::boxed::Box<VariableName<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for ParenthesizedExpressionChildren<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree>
+for ParenthesizedExpressionChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5183,37 +7222,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpressionChildren<'t
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5247,15 +7359,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RedirectedStatementRedirect<
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "file_redirect" => Ok(Self::FileRedirect(::std::boxed::Box::new(
-                <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "heredoc_redirect" => Ok(Self::HeredocRedirect(::std::boxed::Box::new(
-                <HeredocRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "herestring_redirect" => Ok(Self::HerestringRedirect(::std::boxed::Box::new(
-                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "file_redirect" => {
+                Ok(
+                    Self::FileRedirect(
+                        ::std::boxed::Box::new(
+                            <FileRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "heredoc_redirect" => {
+                Ok(
+                    Self::HeredocRedirect(
+                        ::std::boxed::Box::new(
+                            <HeredocRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "herestring_redirect" => {
+                Ok(
+                    Self::HerestringRedirect(
+                        ::std::boxed::Box::new(
+                            <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5281,12 +7420,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SimpleExpansionChildren<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "special_variable_name" => Ok(Self::SpecialVariableName(::std::boxed::Box::new(
-                <SpecialVariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "special_variable_name" => {
+                Ok(
+                    Self::SpecialVariableName(
+                        ::std::boxed::Box::new(
+                            <SpecialVariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5314,21 +7471,66 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "arithmetic_expansion" => Ok(Self::ArithmeticExpansion(::std::boxed::Box::new(
-                <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string_content" => Ok(Self::StringContent(::std::boxed::Box::new(
-                <StringContent as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "arithmetic_expansion" => {
+                Ok(
+                    Self::ArithmeticExpansion(
+                        ::std::boxed::Box::new(
+                            <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string_content" => {
+                Ok(
+                    Self::StringContent(
+                        ::std::boxed::Box::new(
+                            <StringContent as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5360,30 +7562,74 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptIndex<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "compound_statement" => Ok(Self::CompoundStatement(::std::boxed::Box::new(
-                <CompoundStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subshell" => Ok(Self::Subshell(::std::boxed::Box::new(
-                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "compound_statement" => {
+                Ok(
+                    Self::CompoundStatement(
+                        ::std::boxed::Box::new(
+                            <CompoundStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subshell" => {
+                Ok(
+                    Self::Subshell(
+                        ::std::boxed::Box::new(
+                            <Subshell as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5420,37 +7666,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionAlternative
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5490,37 +7809,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionCondition<'
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5560,37 +7952,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionConsequence
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5623,16 +8088,26 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TestCommandChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "redirected_statement" => Ok(Self::RedirectedStatement(::std::boxed::Box::new(
-                <RedirectedStatement as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "redirected_statement" => {
+                Ok(
+                    Self::RedirectedStatement(
+                        ::std::boxed::Box::new(
+                            <RedirectedStatement as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5668,9 +8143,18 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpressionOperator<'tre
             "++" => Ok(Self::PlusPlus(::treesitter_types::Span::from(node))),
             "-" => Ok(Self::Minus(::treesitter_types::Span::from(node))),
             "--" => Ok(Self::MinusMinus(::treesitter_types::Span::from(node))),
-            "test_operator" => Ok(Self::TestOperator(::std::boxed::Box::new(
-                <TestOperator as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "test_operator" => {
+                Ok(
+                    Self::TestOperator(
+                        ::std::boxed::Box::new(
+                            <TestOperator as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             "~" => Ok(Self::Tilde(::treesitter_types::Span::from(node))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
@@ -5708,37 +8192,110 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryExpressionChildren<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "command_substitution" => Ok(Self::CommandSubstitution(::std::boxed::Box::new(
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "expansion" => Ok(Self::Expansion(::std::boxed::Box::new(
-                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "number" => Ok(Self::Number(::std::boxed::Box::new(
-                <Number as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "raw_string" => Ok(Self::RawString(::std::boxed::Box::new(
-                <RawString as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "simple_expansion" => Ok(Self::SimpleExpansion(::std::boxed::Box::new(
-                <SimpleExpansion as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "string" => Ok(Self::String(::std::boxed::Box::new(
-                <String as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "command_substitution" => {
+                Ok(
+                    Self::CommandSubstitution(
+                        ::std::boxed::Box::new(
+                            <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "expansion" => {
+                Ok(
+                    Self::Expansion(
+                        ::std::boxed::Box::new(
+                            <Expansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "number" => {
+                Ok(
+                    Self::Number(
+                        ::std::boxed::Box::new(
+                            <Number as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "raw_string" => {
+                Ok(
+                    Self::RawString(
+                        ::std::boxed::Box::new(
+                            <RawString as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "simple_expansion" => {
+                Ok(
+                    Self::SimpleExpansion(
+                        ::std::boxed::Box::new(
+                            <SimpleExpansion as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "string" => {
+                Ok(
+                    Self::String(
+                        ::std::boxed::Box::new(
+                            <String as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Expression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Expression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5772,21 +8329,38 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnsetCommandChildren<'tree> 
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5813,12 +8387,30 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for VariableAssignmentName<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "subscript" => Ok(Self::Subscript(::std::boxed::Box::new(
-                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_name" => Ok(Self::VariableName(::std::boxed::Box::new(
-                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "subscript" => {
+                Ok(
+                    Self::Subscript(
+                        ::std::boxed::Box::new(
+                            <Subscript as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_name" => {
+                Ok(
+                    Self::VariableName(
+                        ::std::boxed::Box::new(
+                            <VariableName as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -5849,40 +8441,98 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for VariableAssignmentValue<'tre
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "array" => Ok(Self::Array(::std::boxed::Box::new(
-                <Array as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
-                <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "concatenation" => Ok(Self::Concatenation(::std::boxed::Box::new(
-                <Concatenation as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "parenthesized_expression" => {
-                Ok(Self::ParenthesizedExpression(::std::boxed::Box::new(
-                    <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )?,
-                )))
+            "array" => {
+                Ok(
+                    Self::Array(
+                        ::std::boxed::Box::new(
+                            <Array as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
             }
-            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
-                <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "unary_expression" => Ok(Self::UnaryExpression(::std::boxed::Box::new(
-                <UnaryExpression as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
-            "variable_assignment" => Ok(Self::VariableAssignment(::std::boxed::Box::new(
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)?,
-            ))),
+            "binary_expression" => {
+                Ok(
+                    Self::BinaryExpression(
+                        ::std::boxed::Box::new(
+                            <BinaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "concatenation" => {
+                Ok(
+                    Self::Concatenation(
+                        ::std::boxed::Box::new(
+                            <Concatenation as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "parenthesized_expression" => {
+                Ok(
+                    Self::ParenthesizedExpression(
+                        ::std::boxed::Box::new(
+                            <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "postfix_expression" => {
+                Ok(
+                    Self::PostfixExpression(
+                        ::std::boxed::Box::new(
+                            <PostfixExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "unary_expression" => {
+                Ok(
+                    Self::UnaryExpression(
+                        ::std::boxed::Box::new(
+                            <UnaryExpression as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
+            "variable_assignment" => {
+                Ok(
+                    Self::VariableAssignment(
+                        ::std::boxed::Box::new(
+                            <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                                node,
+                                src,
+                            )?,
+                        ),
+                    ),
+                )
+            }
             _other => {
-                if let Ok(v) =
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                {
+                if let Ok(v) = <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -5920,12 +8570,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
             ";" => Ok(Self::Semicolon(::treesitter_types::Span::from(node))),
             ";;" => Ok(Self::SemiSemi(::treesitter_types::Span::from(node))),
             _other => {
-                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(node, src) {
+                if let Ok(v) = <Statement as ::treesitter_types::FromNode>::from_node(
+                    node,
+                    src,
+                ) {
                     Ok(Self::Statement(::std::boxed::Box::new(v)))
                 } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
+                    Err(::treesitter_types::ParseError::unexpected_kind(_other, node))
                 }
             }
         }
@@ -6010,25 +8661,34 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "_expression" => <Expression as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Expression)
-                .unwrap_or(Self::Unknown(node)),
+            "_expression" => {
+                <Expression as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Expression)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "_primary_expression" => {
                 <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::PrimaryExpression)
                     .unwrap_or(Self::Unknown(node))
             }
-            "_statement" => <Statement as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Statement)
-                .unwrap_or(Self::Unknown(node)),
+            "_statement" => {
+                <Statement as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Statement)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "arithmetic_expansion" => {
-                <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                <ArithmeticExpansion as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::ArithmeticExpansion)
                     .unwrap_or(Self::Unknown(node))
             }
-            "array" => <Array as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Array)
-                .unwrap_or(Self::Unknown(node)),
+            "array" => {
+                <Array as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Array)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "binary_expression" => {
                 <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::BinaryExpression)
@@ -6040,26 +8700,38 @@ impl<'tree> AnyNode<'tree> {
                     .unwrap_or(Self::Unknown(node))
             }
             "c_style_for_statement" => {
-                <CStyleForStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                <CStyleForStatement as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::CStyleForStatement)
                     .unwrap_or(Self::Unknown(node))
             }
-            "case_item" => <CaseItem as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::CaseItem)
-                .unwrap_or(Self::Unknown(node)),
+            "case_item" => {
+                <CaseItem as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::CaseItem)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "case_statement" => {
                 <CaseStatement as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::CaseStatement)
                     .unwrap_or(Self::Unknown(node))
             }
-            "command" => <Command as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Command)
-                .unwrap_or(Self::Unknown(node)),
-            "command_name" => <CommandName as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::CommandName)
-                .unwrap_or(Self::Unknown(node)),
+            "command" => {
+                <Command as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Command)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "command_name" => {
+                <CommandName as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::CommandName)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "command_substitution" => {
-                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(node, src)
+                <CommandSubstitution as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::CommandSubstitution)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -6074,83 +8746,125 @@ impl<'tree> AnyNode<'tree> {
                     .unwrap_or(Self::Unknown(node))
             }
             "declaration_command" => {
-                <DeclarationCommand as ::treesitter_types::FromNode>::from_node(node, src)
+                <DeclarationCommand as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::DeclarationCommand)
                     .unwrap_or(Self::Unknown(node))
             }
-            "do_group" => <DoGroup as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::DoGroup)
-                .unwrap_or(Self::Unknown(node)),
-            "elif_clause" => <ElifClause as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ElifClause)
-                .unwrap_or(Self::Unknown(node)),
-            "else_clause" => <ElseClause as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ElseClause)
-                .unwrap_or(Self::Unknown(node)),
-            "expansion" => <Expansion as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Expansion)
-                .unwrap_or(Self::Unknown(node)),
-            "file_redirect" => <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::FileRedirect)
-                .unwrap_or(Self::Unknown(node)),
-            "for_statement" => <ForStatement as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::ForStatement)
-                .unwrap_or(Self::Unknown(node)),
+            "do_group" => {
+                <DoGroup as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::DoGroup)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "elif_clause" => {
+                <ElifClause as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ElifClause)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "else_clause" => {
+                <ElseClause as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ElseClause)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "expansion" => {
+                <Expansion as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Expansion)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "file_redirect" => {
+                <FileRedirect as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::FileRedirect)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "for_statement" => {
+                <ForStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::ForStatement)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "function_definition" => {
-                <FunctionDefinition as ::treesitter_types::FromNode>::from_node(node, src)
+                <FunctionDefinition as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::FunctionDefinition)
                     .unwrap_or(Self::Unknown(node))
             }
-            "heredoc_body" => <HeredocBody as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::HeredocBody)
-                .unwrap_or(Self::Unknown(node)),
+            "heredoc_body" => {
+                <HeredocBody as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::HeredocBody)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "heredoc_redirect" => {
                 <HeredocRedirect as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::HeredocRedirect)
                     .unwrap_or(Self::Unknown(node))
             }
             "herestring_redirect" => {
-                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(node, src)
+                <HerestringRedirect as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::HerestringRedirect)
                     .unwrap_or(Self::Unknown(node))
             }
-            "if_statement" => <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::IfStatement)
-                .unwrap_or(Self::Unknown(node)),
-            "list" => <List as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::List)
-                .unwrap_or(Self::Unknown(node)),
+            "if_statement" => {
+                <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::IfStatement)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "list" => {
+                <List as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::List)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "negated_command" => {
                 <NegatedCommand as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::NegatedCommand)
                     .unwrap_or(Self::Unknown(node))
             }
-            "number" => <Number as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Number)
-                .unwrap_or(Self::Unknown(node)),
+            "number" => {
+                <Number as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Number)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "parenthesized_expression" => {
-                <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                <ParenthesizedExpression as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::ParenthesizedExpression)
                     .unwrap_or(Self::Unknown(node))
             }
-            "pipeline" => <Pipeline as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Pipeline)
-                .unwrap_or(Self::Unknown(node)),
+            "pipeline" => {
+                <Pipeline as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Pipeline)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "postfix_expression" => {
                 <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::PostfixExpression)
                     .unwrap_or(Self::Unknown(node))
             }
             "process_substitution" => {
-                <ProcessSubstitution as ::treesitter_types::FromNode>::from_node(node, src)
+                <ProcessSubstitution as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::ProcessSubstitution)
                     .unwrap_or(Self::Unknown(node))
             }
-            "program" => <Program as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Program)
-                .unwrap_or(Self::Unknown(node)),
+            "program" => {
+                <Program as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Program)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "redirected_statement" => {
-                <RedirectedStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                <RedirectedStatement as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::RedirectedStatement)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -6159,23 +8873,31 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::SimpleExpansion)
                     .unwrap_or(Self::Unknown(node))
             }
-            "string" => <String as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::String)
-                .unwrap_or(Self::Unknown(node)),
-            "subscript" => <Subscript as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Subscript)
-                .unwrap_or(Self::Unknown(node)),
-            "subshell" => <Subshell as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Subshell)
-                .unwrap_or(Self::Unknown(node)),
+            "string" => {
+                <String as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::String)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "subscript" => {
+                <Subscript as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Subscript)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "subshell" => {
+                <Subshell as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Subshell)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "ternary_expression" => {
                 <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::TernaryExpression)
                     .unwrap_or(Self::Unknown(node))
             }
-            "test_command" => <TestCommand as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::TestCommand)
-                .unwrap_or(Self::Unknown(node)),
+            "test_command" => {
+                <TestCommand as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::TestCommand)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "translated_string" => {
                 <TranslatedString as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::TranslatedString)
@@ -6186,16 +8908,24 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::UnaryExpression)
                     .unwrap_or(Self::Unknown(node))
             }
-            "unset_command" => <UnsetCommand as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::UnsetCommand)
-                .unwrap_or(Self::Unknown(node)),
+            "unset_command" => {
+                <UnsetCommand as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::UnsetCommand)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "variable_assignment" => {
-                <VariableAssignment as ::treesitter_types::FromNode>::from_node(node, src)
+                <VariableAssignment as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::VariableAssignment)
                     .unwrap_or(Self::Unknown(node))
             }
             "variable_assignments" => {
-                <VariableAssignments as ::treesitter_types::FromNode>::from_node(node, src)
+                <VariableAssignments as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::VariableAssignments)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -6204,15 +8934,21 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::WhileStatement)
                     .unwrap_or(Self::Unknown(node))
             }
-            "word" => <Word as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Word)
-                .unwrap_or(Self::Unknown(node)),
-            "ansi_c_string" => <AnsiCString as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::AnsiCString)
-                .unwrap_or(Self::Unknown(node)),
-            "comment" => <Comment as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Comment)
-                .unwrap_or(Self::Unknown(node)),
+            "word" => {
+                <Word as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Word)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "ansi_c_string" => {
+                <AnsiCString as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::AnsiCString)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "comment" => {
+                <Comment as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Comment)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "extglob_pattern" => {
                 <ExtglobPattern as ::treesitter_types::FromNode>::from_node(node, src)
                     .map(Self::ExtglobPattern)
@@ -6228,20 +8964,31 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::HeredocContent)
                     .unwrap_or(Self::Unknown(node))
             }
-            "heredoc_end" => <HeredocEnd as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::HeredocEnd)
-                .unwrap_or(Self::Unknown(node)),
-            "heredoc_start" => <HeredocStart as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::HeredocStart)
-                .unwrap_or(Self::Unknown(node)),
-            "raw_string" => <RawString as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::RawString)
-                .unwrap_or(Self::Unknown(node)),
-            "regex" => <Regex as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::Regex)
-                .unwrap_or(Self::Unknown(node)),
+            "heredoc_end" => {
+                <HeredocEnd as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::HeredocEnd)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "heredoc_start" => {
+                <HeredocStart as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::HeredocStart)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "raw_string" => {
+                <RawString as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::RawString)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "regex" => {
+                <Regex as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::Regex)
+                    .unwrap_or(Self::Unknown(node))
+            }
             "special_variable_name" => {
-                <SpecialVariableName as ::treesitter_types::FromNode>::from_node(node, src)
+                <SpecialVariableName as ::treesitter_types::FromNode>::from_node(
+                        node,
+                        src,
+                    )
                     .map(Self::SpecialVariableName)
                     .unwrap_or(Self::Unknown(node))
             }
@@ -6250,12 +8997,16 @@ impl<'tree> AnyNode<'tree> {
                     .map(Self::StringContent)
                     .unwrap_or(Self::Unknown(node))
             }
-            "test_operator" => <TestOperator as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::TestOperator)
-                .unwrap_or(Self::Unknown(node)),
-            "variable_name" => <VariableName as ::treesitter_types::FromNode>::from_node(node, src)
-                .map(Self::VariableName)
-                .unwrap_or(Self::Unknown(node)),
+            "test_operator" => {
+                <TestOperator as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::TestOperator)
+                    .unwrap_or(Self::Unknown(node))
+            }
+            "variable_name" => {
+                <VariableName as ::treesitter_types::FromNode>::from_node(node, src)
+                    .map(Self::VariableName)
+                    .unwrap_or(Self::Unknown(node))
+            }
             _ => Self::Unknown(node),
         }
     }
