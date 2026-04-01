@@ -8,7 +8,13 @@
       "exclude": []
     }
   },
-  "bypass_actors": [],
+  "bypass_actors": [
+    {
+      "actor_id": 3241445,
+      "actor_type": "Integration",
+      "bypass_mode": "always"
+    }
+  ],
   "rules": [
     {
       "type": "pull_request",
