@@ -42,13 +42,9 @@ jobs:
           tool: git-cliff,cargo-release
 
       - name: Configure git identity
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          APP_SLUG=$(gh api /app --jq '.slug')
-          APP_ID=$(gh api /app --jq '.id')
-          git config user.name "${APP_SLUG}[bot]"
-          git config user.email "${APP_ID}+${APP_SLUG}[bot]@users.noreply.github.com"
+          git config user.name "${{ vars.RELEASE_APP_SLUG }}[bot]"
+          git config user.email "${{ vars.RELEASE_APP_ID }}+${{ vars.RELEASE_APP_SLUG }}[bot]@users.noreply.github.com"
 
       - name: Authenticate with crates.io
         if: inputs.dry-run != true
