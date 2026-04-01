@@ -39,17 +39,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Obtain crates.io trusted publishing token
+      - name: Authenticate with crates.io
         if: inputs.dry-run != true
-        run: |
-          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=crates.io" \
-            -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" | jq -r '.value')
-          CARGO_REGISTRY_TOKEN=$(curl -sLS 'https://crates.io/api/v1/trusted_publishing/tokens' \
-            -X POST -H 'Content-Type: application/json' -d "{\"jwt\": \"$OIDC_TOKEN\"}" | jq -r '.token')
-          echo "::add-mask::${CARGO_REGISTRY_TOKEN}"
-          echo "CARGO_REGISTRY_TOKEN=${CARGO_REGISTRY_TOKEN}" >> "$GITHUB_ENV"
+        uses: rust-lang/crates-io-auth-action@v1
+        id: crates-io-auth
 
       - name: Release
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.crates-io-auth.outputs.token }}
         run: |
           FLAGS="${{ inputs.level }}"
           if [ "${{ inputs.dry-run }}" != "true" ]; then
