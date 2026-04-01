@@ -7,6 +7,9 @@ rust-version = "1.77"
 description = "Proc-macro companion for treesitter-types"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/jeroenvervaeke/treesitter-types"
+keywords = ["tree-sitter", "parser", "codegen", "ast", "proc-macro"]
+categories = ["development-tools", "parser-implementations"]
+readme = "../../README.md"
 
 [lib]
 proc-macro = true

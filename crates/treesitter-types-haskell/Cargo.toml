@@ -9,6 +9,7 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/jeroenvervaeke/treesitter-types"
 keywords = ["tree-sitter", "haskell", "ast", "parser", "codegen"]
 categories = ["development-tools", "parser-implementations"]
+readme = "../../README.md"
 
 [dependencies]
 treesitter-types = { version = "0.1.1", path = "../treesitter-types" }

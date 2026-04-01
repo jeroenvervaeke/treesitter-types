@@ -9,6 +9,8 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/jeroenvervaeke/treesitter-types"
 keywords = ["tree-sitter", "parser", "codegen", "ast"]
 categories = ["development-tools", "parser-implementations"]
+readme = "../../README.md"
+exclude = ["tests/"]
 
 [dependencies]
 tree-sitter = "0.25"
