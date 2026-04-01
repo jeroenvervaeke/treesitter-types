@@ -1,5 +1,10 @@
 # treesitter-types
 
+[![CI](https://github.com/jeroenvervaeke/treesitter-types/actions/workflows/ci.yml/badge.svg)](https://github.com/jeroenvervaeke/treesitter-types/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/treesitter-types.svg)](https://crates.io/crates/treesitter-types)
+[![docs.rs](https://docs.rs/treesitter-types/badge.svg)](https://docs.rs/treesitter-types)
+[![license](https://img.shields.io/crates/l/treesitter-types)](LICENSE-MIT)
+
 Generate fully-typed Rust structs and enums from any tree-sitter grammar's `node-types.json`.
 
 Instead of stringly-typed access like `node.kind() == "function_declaration"`, get compile-time checked types with proper field access, `Option<T>` for optional fields, `Vec<T>` for repeated fields, and enums for alternations.
