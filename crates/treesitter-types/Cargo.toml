@@ -1,6 +1,6 @@
 [package]
 name = "treesitter-types"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Jeroen Vervaeke <treesitter-types.uvyaj@simplelogin.com>"]
 edition = "2021"
 rust-version = "1.77"
