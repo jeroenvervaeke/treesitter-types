@@ -13,7 +13,7 @@ readme = "../../README.md"
 exclude = ["tests/"]
 
 [dependencies]
-tree-sitter = "0.25"
+tree-sitter = "0.26"
 thiserror = "2"
 quote = "1"
 proc-macro2 = "1"

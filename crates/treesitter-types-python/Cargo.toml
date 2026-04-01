@@ -13,7 +13,7 @@ readme = "../../README.md"
 
 [dependencies]
 treesitter-types = { version = "0.1.1", path = "../treesitter-types" }
-tree-sitter = "0.25"
+tree-sitter = "0.26"
 
 [dev-dependencies]
 tree-sitter-python = "0.25"

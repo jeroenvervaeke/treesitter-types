@@ -29,7 +29,7 @@ treesitter-types-swift = { path = "../../crates/treesitter-types-swift" }
 treesitter-types-toml = { path = "../../crates/treesitter-types-toml" }
 treesitter-types-typescript = { path = "../../crates/treesitter-types-typescript" }
 treesitter-types-yaml = { path = "../../crates/treesitter-types-yaml" }
-tree-sitter = "0.25"
+tree-sitter = "0.26"
 tree-sitter-c = "0.24"
 tree-sitter-c-sharp = "0.23"
 tree-sitter-cpp = "0.23"
