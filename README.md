@@ -56,8 +56,10 @@ treesitter_types_macros::generate_types!("path/to/node-types.json");
 Given tree-sitter-go's `node-types.json`, the generated types let you write:
 
 ```rust
-use treesitter_types::{FromNode, LeafNode};
+use treesitter_types_go::*;
 
+let mut parser = tree_sitter::Parser::new();
+parser.set_language(&tree_sitter_go::LANGUAGE.into()).unwrap();
 let tree = parser.parse(src, None).unwrap();
 let source_file = SourceFile::from_node(tree.root_node(), src).unwrap();
 
@@ -128,8 +130,9 @@ Ready-to-use typed AST crates for 25 languages — no codegen step needed:
 ```toml
 [dependencies]
 treesitter-types-python = "0.1"
-tree-sitter = "0.25"
 ```
+
+Each language crate re-exports `tree_sitter` and its grammar crate (e.g. `tree_sitter_python`), so no extra dependencies are needed.
 
 ## Tested against
 
