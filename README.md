@@ -18,7 +18,6 @@ Add to your `Cargo.toml`:
 ```toml
 [dependencies]
 treesitter-types = "0.1"
-tree-sitter = "0.26"
 
 [build-dependencies]
 treesitter-types = "0.1"
@@ -44,7 +43,6 @@ include!(concat!(env!("OUT_DIR"), "/treesitter_types_generated.rs"));
 [dependencies]
 treesitter-types = "0.1"
 treesitter-types-macros = "0.1"
-tree-sitter = "0.26"
 ```
 
 ```rust

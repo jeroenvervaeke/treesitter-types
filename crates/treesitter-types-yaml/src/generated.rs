@@ -6,7 +6,7 @@ pub struct Alias<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Alias<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "alias");
@@ -122,7 +122,7 @@ pub struct Anchor<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Anchor<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "anchor");
@@ -238,7 +238,7 @@ pub struct BlockMapping<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMapping<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_mapping");
@@ -289,7 +289,7 @@ pub struct BlockMappingPair<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPair<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_mapping_pair");
@@ -323,7 +323,7 @@ pub struct BlockNode<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockNode<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_node");
@@ -372,7 +372,7 @@ pub struct BlockScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_scalar");
@@ -400,7 +400,7 @@ pub struct BlockSequence<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequence<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_sequence");
@@ -450,7 +450,7 @@ pub struct BlockSequenceItem<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequenceItem<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "block_sequence_item");
@@ -501,7 +501,7 @@ pub struct Document<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "document");
@@ -551,7 +551,7 @@ pub struct DoubleQuoteScalar<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for DoubleQuoteScalar<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "double_quote_scalar");
@@ -601,7 +601,7 @@ pub struct FlowMapping<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowMapping<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "flow_mapping");
@@ -651,7 +651,7 @@ pub struct FlowNode<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowNode<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "flow_node");
@@ -702,7 +702,7 @@ pub struct FlowPair<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowPair<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "flow_pair");
@@ -736,7 +736,7 @@ pub struct FlowSequence<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowSequence<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "flow_sequence");
@@ -788,7 +788,7 @@ pub struct PlainScalar<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalar<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "plain_scalar");
@@ -904,7 +904,7 @@ pub struct ReservedDirective<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ReservedDirective<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "reserved_directive");
@@ -956,7 +956,7 @@ pub struct SingleQuoteScalar<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for SingleQuoteScalar<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "single_quote_scalar");
@@ -1006,7 +1006,7 @@ pub struct Stream<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Stream<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "stream");
@@ -1056,7 +1056,7 @@ pub struct TagDirective<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for TagDirective<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "tag_directive");
@@ -1108,7 +1108,7 @@ pub struct YamlDirective<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for YamlDirective<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "yaml_directive");
@@ -1223,7 +1223,7 @@ pub struct AliasName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for AliasName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "alias_name");
@@ -1250,7 +1250,7 @@ pub struct AnchorName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for AnchorName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "anchor_name");
@@ -1277,7 +1277,7 @@ pub struct BooleanScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for BooleanScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "boolean_scalar");
@@ -1304,7 +1304,7 @@ pub struct Comment<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Comment<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "comment");
@@ -1331,7 +1331,7 @@ pub struct DirectiveName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for DirectiveName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "directive_name");
@@ -1358,7 +1358,7 @@ pub struct DirectiveParameter<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for DirectiveParameter<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "directive_parameter");
@@ -1385,7 +1385,7 @@ pub struct EscapeSequence<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for EscapeSequence<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "escape_sequence");
@@ -1412,7 +1412,7 @@ pub struct FloatScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FloatScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "float_scalar");
@@ -1439,7 +1439,7 @@ pub struct IntegerScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for IntegerScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "integer_scalar");
@@ -1466,7 +1466,7 @@ pub struct NullScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for NullScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "null_scalar");
@@ -1493,7 +1493,7 @@ pub struct StringScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for StringScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "string_scalar");
@@ -1520,7 +1520,7 @@ pub struct Tag<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Tag<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "tag");
@@ -1547,7 +1547,7 @@ pub struct TagHandle<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TagHandle<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "tag_handle");
@@ -1574,7 +1574,7 @@ pub struct TagPrefix<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TagPrefix<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "tag_prefix");
@@ -1601,7 +1601,7 @@ pub struct TimestampScalar<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TimestampScalar<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "timestamp_scalar");
@@ -1628,7 +1628,7 @@ pub struct YamlVersion<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for YamlVersion<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "yaml_version");
@@ -1656,7 +1656,7 @@ pub enum BlockMappingPairKey<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPairKey<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1690,7 +1690,7 @@ pub enum BlockMappingPairValue<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPairValue<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1727,7 +1727,7 @@ pub enum BlockNodeChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockNodeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1779,7 +1779,7 @@ pub enum BlockSequenceItemChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequenceItemChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1816,7 +1816,7 @@ pub enum DocumentChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for DocumentChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1868,7 +1868,7 @@ pub enum FlowMappingChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowMappingChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1908,7 +1908,7 @@ pub enum FlowNodeChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowNodeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -1978,7 +1978,7 @@ pub enum FlowSequenceChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for FlowSequenceChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -2016,7 +2016,7 @@ pub enum PlainScalarChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalarChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -2074,7 +2074,7 @@ pub enum ReservedDirectiveChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ReservedDirectiveChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -2108,7 +2108,7 @@ pub enum TagDirectiveChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for TagDirectiveChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
@@ -2172,10 +2172,10 @@ pub enum AnyNode<'tree> {
     TagPrefix(TagPrefix<'tree>),
     TimestampScalar(TimestampScalar<'tree>),
     YamlVersion(YamlVersion<'tree>),
-    Unknown(::tree_sitter::Node<'tree>),
+    Unknown(::treesitter_types::tree_sitter::Node<'tree>),
 }
 impl<'tree> AnyNode<'tree> {
-    pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
+    pub fn from_node(node: ::treesitter_types::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
             "alias" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Alias as ::treesitter_types::FromNode>::from_node(node, src)
