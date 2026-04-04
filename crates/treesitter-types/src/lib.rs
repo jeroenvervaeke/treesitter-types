@@ -20,4 +20,4 @@
 pub mod codegen;
 pub mod runtime;
 
-pub use runtime::{maybe_grow_stack, FromNode, LeafNode, ParseError, Span, Spanned};
+pub use runtime::{FromNode, LeafNode, ParseError, Span, Spanned};
