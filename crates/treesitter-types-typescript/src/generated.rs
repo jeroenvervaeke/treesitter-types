@@ -16445,13 +16445,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AssignmentPattern)
             .unwrap_or(Self::Unknown(node)),
-            "augmented_assignment_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AugmentedAssignmentExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::AugmentedAssignmentExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "augmented_assignment_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AugmentedAssignmentExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AugmentedAssignmentExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "await_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AwaitExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16667,11 +16669,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::GeneratorFunction)
             .unwrap_or(Self::Unknown(node)),
-            "generator_function_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <GeneratorFunctionDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::GeneratorFunctionDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "generator_function_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <GeneratorFunctionDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::GeneratorFunctionDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "generic_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <GenericType as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -17202,18 +17208,24 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::RegexPattern)
             .unwrap_or(Self::Unknown(node)),
-            "shorthand_property_identifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ShorthandPropertyIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ShorthandPropertyIdentifier)
-            .unwrap_or(Self::Unknown(node)),
-            "shorthand_property_identifier_pattern" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ShorthandPropertyIdentifierPattern as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ShorthandPropertyIdentifierPattern)
-            .unwrap_or(Self::Unknown(node)),
+            "shorthand_property_identifier" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ShorthandPropertyIdentifier as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ShorthandPropertyIdentifier)
+                .unwrap_or(Self::Unknown(node))
+            }
+            "shorthand_property_identifier_pattern" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ShorthandPropertyIdentifierPattern as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ShorthandPropertyIdentifierPattern)
+                .unwrap_or(Self::Unknown(node))
+            }
             "statement_identifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <StatementIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
             })

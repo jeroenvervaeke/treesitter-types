@@ -26,9 +26,9 @@
 //! assert_eq!(pattern.span.end.column, 14);
 //! ```
 
-pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
-pub use treesitter_types::tree_sitter;
 pub use tree_sitter_regex;
+pub use treesitter_types::tree_sitter;
+pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;
 pub use generated::*;

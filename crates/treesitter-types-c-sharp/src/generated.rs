@@ -19795,13 +19795,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AnonymousMethodExpression)
             .unwrap_or(Self::Unknown(node)),
-            "anonymous_object_creation_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AnonymousObjectCreationExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::AnonymousObjectCreationExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "anonymous_object_creation_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AnonymousObjectCreationExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AnonymousObjectCreationExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "argument" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Argument as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -19957,11 +19959,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::CompilationUnit)
             .unwrap_or(Self::Unknown(node)),
-            "conditional_access_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ConditionalAccessExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ConditionalAccessExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "conditional_access_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConditionalAccessExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ConditionalAccessExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "conditional_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ConditionalExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -19992,13 +19998,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ContinueStatement)
             .unwrap_or(Self::Unknown(node)),
-            "conversion_operator_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ConversionOperatorDeclaration as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ConversionOperatorDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "conversion_operator_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConversionOperatorDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ConversionOperatorDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "declaration_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DeclarationExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20094,13 +20102,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::FieldDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "file_scoped_namespace_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <FileScopedNamespaceDeclaration as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::FileScopedNamespaceDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "file_scoped_namespace_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FileScopedNamespaceDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::FileScopedNamespaceDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "finally_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FinallyClause as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20171,30 +20181,38 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::IfStatement)
             .unwrap_or(Self::Unknown(node)),
-            "implicit_array_creation_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ImplicitArrayCreationExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ImplicitArrayCreationExpression)
-            .unwrap_or(Self::Unknown(node)),
-            "implicit_object_creation_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ImplicitObjectCreationExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ImplicitObjectCreationExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "implicit_array_creation_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ImplicitArrayCreationExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ImplicitArrayCreationExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
+            "implicit_object_creation_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ImplicitObjectCreationExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ImplicitObjectCreationExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "implicit_parameter" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ImplicitParameter as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ImplicitParameter)
             .unwrap_or(Self::Unknown(node)),
-            "implicit_stackalloc_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ImplicitStackallocExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ImplicitStackallocExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "implicit_stackalloc_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ImplicitStackallocExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ImplicitStackallocExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "implicit_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ImplicitType as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20215,21 +20233,29 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::InterfaceDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "interpolated_string_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <InterpolatedStringExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::InterpolatedStringExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "interpolated_string_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InterpolatedStringExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::InterpolatedStringExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "interpolation" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Interpolation)
             .unwrap_or(Self::Unknown(node)),
-            "interpolation_alignment_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <InterpolationAlignmentClause as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::InterpolationAlignmentClause)
-            .unwrap_or(Self::Unknown(node)),
+            "interpolation_alignment_clause" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InterpolationAlignmentClause as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::InterpolationAlignmentClause)
+                .unwrap_or(Self::Unknown(node))
+            }
             "interpolation_format_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <InterpolationFormatClause as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20375,13 +20401,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ParenthesizedPattern)
             .unwrap_or(Self::Unknown(node)),
-            "parenthesized_variable_designation" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ParenthesizedVariableDesignation as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ParenthesizedVariableDesignation)
-            .unwrap_or(Self::Unknown(node)),
+            "parenthesized_variable_designation" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ParenthesizedVariableDesignation as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ParenthesizedVariableDesignation)
+                .unwrap_or(Self::Unknown(node))
+            }
             "pointer_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <PointerType as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20462,11 +20490,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::PreprocWarning)
             .unwrap_or(Self::Unknown(node)),
-            "primary_constructor_base_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <PrimaryConstructorBaseType as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::PrimaryConstructorBaseType)
-            .unwrap_or(Self::Unknown(node)),
+            "primary_constructor_base_type" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PrimaryConstructorBaseType as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::PrimaryConstructorBaseType)
+                .unwrap_or(Self::Unknown(node))
+            }
             "property_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <PropertyDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -20652,13 +20684,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::TypeParameterConstraint)
             .unwrap_or(Self::Unknown(node)),
-            "type_parameter_constraints_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <TypeParameterConstraintsClause as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::TypeParameterConstraintsClause)
-            .unwrap_or(Self::Unknown(node)),
+            "type_parameter_constraints_clause" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeParameterConstraintsClause as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::TypeParameterConstraintsClause)
+                .unwrap_or(Self::Unknown(node))
+            }
             "type_parameter_list" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TypeParameterList as ::treesitter_types::FromNode>::from_node(node, src)
             })

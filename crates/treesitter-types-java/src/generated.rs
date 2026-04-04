@@ -12652,13 +12652,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AnnotationTypeDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "annotation_type_element_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AnnotationTypeElementDeclaration as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::AnnotationTypeElementDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "annotation_type_element_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AnnotationTypeElementDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AnnotationTypeElementDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "argument_list" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ArgumentList as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -12749,13 +12751,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ClassLiteral)
             .unwrap_or(Self::Unknown(node)),
-            "compact_constructor_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <CompactConstructorDeclaration as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::CompactConstructorDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "compact_constructor_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CompactConstructorDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::CompactConstructorDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "constant_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ConstantDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -12791,11 +12795,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::DoStatement)
             .unwrap_or(Self::Unknown(node)),
-            "element_value_array_initializer" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ElementValueArrayInitializer as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ElementValueArrayInitializer)
-            .unwrap_or(Self::Unknown(node)),
+            "element_value_array_initializer" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ElementValueArrayInitializer as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ElementValueArrayInitializer)
+                .unwrap_or(Self::Unknown(node))
+            }
             "element_value_pair" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ElementValuePair as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -12826,13 +12834,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::EnumDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "explicit_constructor_invocation" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ExplicitConstructorInvocation as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ExplicitConstructorInvocation)
-            .unwrap_or(Self::Unknown(node)),
+            "explicit_constructor_invocation" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ExplicitConstructorInvocation as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ExplicitConstructorInvocation)
+                .unwrap_or(Self::Unknown(node))
+            }
             "exports_module_directive" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ExportsModuleDirective as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -13258,11 +13268,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::CharacterLiteral)
             .unwrap_or(Self::Unknown(node)),
-            "decimal_floating_point_literal" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <DecimalFloatingPointLiteral as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::DecimalFloatingPointLiteral)
-            .unwrap_or(Self::Unknown(node)),
+            "decimal_floating_point_literal" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DecimalFloatingPointLiteral as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::DecimalFloatingPointLiteral)
+                .unwrap_or(Self::Unknown(node))
+            }
             "decimal_integer_literal" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DecimalIntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
             })

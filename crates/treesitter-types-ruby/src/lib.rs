@@ -40,9 +40,9 @@
 //! assert!(program.span.end.row >= 4);
 //! ```
 
-pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
-pub use treesitter_types::tree_sitter;
 pub use tree_sitter_ruby;
+pub use treesitter_types::tree_sitter;
+pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;
 pub use generated::*;

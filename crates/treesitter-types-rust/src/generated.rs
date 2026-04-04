@@ -15438,11 +15438,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::OrPattern)
             .unwrap_or(Self::Unknown(node)),
-            "ordered_field_declaration_list" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <OrderedFieldDeclarationList as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::OrderedFieldDeclarationList)
-            .unwrap_or(Self::Unknown(node)),
+            "ordered_field_declaration_list" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OrderedFieldDeclarationList as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::OrderedFieldDeclarationList)
+                .unwrap_or(Self::Unknown(node))
+            }
             "outer_doc_comment_marker" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <OuterDocCommentMarker as ::treesitter_types::FromNode>::from_node(node, src)
             })

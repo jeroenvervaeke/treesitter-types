@@ -16098,11 +16098,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AnonymousFunction)
             .unwrap_or(Self::Unknown(node)),
-            "anonymous_function_use_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AnonymousFunctionUseClause as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::AnonymousFunctionUseClause)
-            .unwrap_or(Self::Unknown(node)),
+            "anonymous_function_use_clause" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AnonymousFunctionUseClause as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AnonymousFunctionUseClause)
+                .unwrap_or(Self::Unknown(node))
+            }
             "argument" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Argument as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16148,13 +16152,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AttributeList)
             .unwrap_or(Self::Unknown(node)),
-            "augmented_assignment_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AugmentedAssignmentExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::AugmentedAssignmentExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "augmented_assignment_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AugmentedAssignmentExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AugmentedAssignmentExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "base_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BaseClause as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16200,13 +16206,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::CatchClause)
             .unwrap_or(Self::Unknown(node)),
-            "class_constant_access_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ClassConstantAccessExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "class_constant_access_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ClassConstantAccessExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "class_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ClassDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16527,18 +16535,24 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::Null)
             .unwrap_or(Self::Unknown(node)),
-            "nullsafe_member_access_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <NullsafeMemberAccessExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::NullsafeMemberAccessExpression)
-            .unwrap_or(Self::Unknown(node)),
-            "nullsafe_member_call_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <NullsafeMemberCallExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::NullsafeMemberCallExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "nullsafe_member_access_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NullsafeMemberAccessExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::NullsafeMemberAccessExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
+            "nullsafe_member_call_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NullsafeMemberCallExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::NullsafeMemberCallExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "object_creation_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ObjectCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16609,13 +16623,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ReadonlyModifier)
             .unwrap_or(Self::Unknown(node)),
-            "reference_assignment_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ReferenceAssignmentExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ReferenceAssignmentExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "reference_assignment_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ReferenceAssignmentExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ReferenceAssignmentExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "reference_modifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ReferenceModifier as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -16651,13 +16667,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ScopedCallExpression)
             .unwrap_or(Self::Unknown(node)),
-            "scoped_property_access_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ScopedPropertyAccessExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::ScopedPropertyAccessExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "scoped_property_access_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ScopedPropertyAccessExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ScopedPropertyAccessExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "sequence_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <SequenceExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })

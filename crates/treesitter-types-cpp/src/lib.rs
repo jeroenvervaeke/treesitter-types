@@ -47,9 +47,9 @@
 //! assert!(func.body.is_some()); // has a function body
 //! ```
 
-pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
-pub use treesitter_types::tree_sitter;
 pub use tree_sitter_cpp;
+pub use treesitter_types::tree_sitter;
+pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;
 pub use generated::*;

@@ -8203,11 +8203,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::TypeElem)
             .unwrap_or(Self::Unknown(node)),
-            "type_instantiation_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <TypeInstantiationExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::TypeInstantiationExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "type_instantiation_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeInstantiationExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::TypeInstantiationExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "type_parameter_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TypeParameterDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -8253,11 +8257,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::VariadicArgument)
             .unwrap_or(Self::Unknown(node)),
-            "variadic_parameter_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <VariadicParameterDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::VariadicParameterDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "variadic_parameter_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <VariadicParameterDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::VariadicParameterDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "blank_identifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlankIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -8303,13 +8311,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::IntLiteral)
             .unwrap_or(Self::Unknown(node)),
-            "interpreted_string_literal_content" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <InterpretedStringLiteralContent as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::InterpretedStringLiteralContent)
-            .unwrap_or(Self::Unknown(node)),
+            "interpreted_string_literal_content" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InterpretedStringLiteralContent as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::InterpretedStringLiteralContent)
+                .unwrap_or(Self::Unknown(node))
+            }
             "iota" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Iota as ::treesitter_types::FromNode>::from_node(node, src)
             })

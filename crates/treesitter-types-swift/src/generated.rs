@@ -54826,13 +54826,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::DeinitDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "deprecated_operator_declaration_body" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <DeprecatedOperatorDeclarationBody as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::DeprecatedOperatorDeclarationBody)
-            .unwrap_or(Self::Unknown(node)),
+            "deprecated_operator_declaration_body" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DeprecatedOperatorDeclarationBody as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::DeprecatedOperatorDeclarationBody)
+                .unwrap_or(Self::Unknown(node))
+            }
             "diagnostic" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Diagnostic as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -54858,11 +54860,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::Directive)
             .unwrap_or(Self::Unknown(node)),
-            "directly_assignable_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <DirectlyAssignableExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::DirectlyAssignableExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "directly_assignable_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DirectlyAssignableExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::DirectlyAssignableExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "disjunction_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DisjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -55008,11 +55014,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::LambdaFunctionType)
             .unwrap_or(Self::Unknown(node)),
-            "lambda_function_type_parameters" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <LambdaFunctionTypeParameters as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::LambdaFunctionTypeParameters)
-            .unwrap_or(Self::Unknown(node)),
+            "lambda_function_type_parameters" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LambdaFunctionTypeParameters as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::LambdaFunctionTypeParameters)
+                .unwrap_or(Self::Unknown(node))
+            }
             "lambda_literal" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <LambdaLiteral as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -55213,21 +55223,33 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ProtocolDeclaration)
             .unwrap_or(Self::Unknown(node)),
-            "protocol_function_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ProtocolFunctionDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ProtocolFunctionDeclaration)
-            .unwrap_or(Self::Unknown(node)),
-            "protocol_property_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ProtocolPropertyDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ProtocolPropertyDeclaration)
-            .unwrap_or(Self::Unknown(node)),
-            "protocol_property_requirements" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ProtocolPropertyRequirements as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ProtocolPropertyRequirements)
-            .unwrap_or(Self::Unknown(node)),
+            "protocol_function_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ProtocolFunctionDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ProtocolFunctionDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
+            "protocol_property_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ProtocolPropertyDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ProtocolPropertyDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
+            "protocol_property_requirements" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ProtocolPropertyRequirements as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ProtocolPropertyRequirements)
+                .unwrap_or(Self::Unknown(node))
+            }
             "range_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <RangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })

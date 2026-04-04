@@ -3596,11 +3596,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::IfStatement)
             .unwrap_or(Self::Unknown(node)),
-            "implicit_variable_declaration" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <ImplicitVariableDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::ImplicitVariableDeclaration)
-            .unwrap_or(Self::Unknown(node)),
+            "implicit_variable_declaration" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ImplicitVariableDeclaration as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::ImplicitVariableDeclaration)
+                .unwrap_or(Self::Unknown(node))
+            }
             "label_statement" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <LabelStatement as ::treesitter_types::FromNode>::from_node(node, src)
             })

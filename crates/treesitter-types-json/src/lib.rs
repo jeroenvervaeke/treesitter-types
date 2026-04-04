@@ -50,9 +50,9 @@
 //! assert_eq!(num.text(), "42");
 //! ```
 
-pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
-pub use treesitter_types::tree_sitter;
 pub use tree_sitter_json;
+pub use treesitter_types::tree_sitter;
+pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;
 pub use generated::*;

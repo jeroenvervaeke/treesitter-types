@@ -2592,13 +2592,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::UnicodeCharacterEscape)
             .unwrap_or(Self::Unknown(node)),
-            "unicode_property_value_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <UnicodePropertyValueExpression as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::UnicodePropertyValueExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "unicode_property_value_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnicodePropertyValueExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::UnicodePropertyValueExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "zero_or_more" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ZeroOrMore as ::treesitter_types::FromNode>::from_node(node, src)
             })

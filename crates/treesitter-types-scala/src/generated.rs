@@ -21661,11 +21661,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::InterpolatedString)
             .unwrap_or(Self::Unknown(node)),
-            "interpolated_string_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <InterpolatedStringExpression as ::treesitter_types::FromNode>::from_node(node, src)
-            })
-            .map(Self::InterpolatedStringExpression)
-            .unwrap_or(Self::Unknown(node)),
+            "interpolated_string_expression" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InterpolatedStringExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::InterpolatedStringExpression)
+                .unwrap_or(Self::Unknown(node))
+            }
             "interpolation" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
             })

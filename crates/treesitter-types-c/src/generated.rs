@@ -11520,13 +11520,15 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::AbstractFunctionDeclarator)
             .unwrap_or(Self::Unknown(node)),
-            "abstract_parenthesized_declarator" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <AbstractParenthesizedDeclarator as ::treesitter_types::FromNode>::from_node(
-                    node, src,
-                )
-            })
-            .map(Self::AbstractParenthesizedDeclarator)
-            .unwrap_or(Self::Unknown(node)),
+            "abstract_parenthesized_declarator" => {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AbstractParenthesizedDeclarator as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })
+                .map(Self::AbstractParenthesizedDeclarator)
+                .unwrap_or(Self::Unknown(node))
+            }
             "abstract_pointer_declarator" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AbstractPointerDeclarator as ::treesitter_types::FromNode>::from_node(node, src)
             })
