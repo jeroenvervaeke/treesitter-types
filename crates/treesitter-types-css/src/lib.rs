@@ -41,6 +41,8 @@
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
+pub use tree_sitter;
+pub use tree_sitter_css;
 
 mod generated;
 pub use generated::*;

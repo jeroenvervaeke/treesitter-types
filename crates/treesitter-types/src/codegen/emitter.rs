@@ -493,11 +493,11 @@ fn emit_children_parser(children: &ChildrenDef, parent_type: &proc_macro2::Ident
 fn emit_from_node_call(type_ref: &TypeReference) -> TokenStream {
     match type_ref {
         TypeReference::Named(ident) => {
-            quote! { ::treesitter_types::maybe_grow_stack(|| <#ident as ::treesitter_types::FromNode>::from_node(child, src))? }
+            quote! { ::treesitter_types::runtime::maybe_grow_stack(|| <#ident as ::treesitter_types::FromNode>::from_node(child, src))? }
         }
         TypeReference::Alternation(alt) => {
             let name = &alt.type_name;
-            quote! { ::treesitter_types::maybe_grow_stack(|| <#name as ::treesitter_types::FromNode>::from_node(child, src))? }
+            quote! { ::treesitter_types::runtime::maybe_grow_stack(|| <#name as ::treesitter_types::FromNode>::from_node(child, src))? }
         }
     }
 }
@@ -505,11 +505,11 @@ fn emit_from_node_call(type_ref: &TypeReference) -> TokenStream {
 fn emit_from_node_call_named_children(type_ref: &TypeReference) -> TokenStream {
     match type_ref {
         TypeReference::Named(ident) => {
-            quote! { ::treesitter_types::maybe_grow_stack(|| <#ident as ::treesitter_types::FromNode>::from_node(child, src))? }
+            quote! { ::treesitter_types::runtime::maybe_grow_stack(|| <#ident as ::treesitter_types::FromNode>::from_node(child, src))? }
         }
         TypeReference::Alternation(alt) => {
             let name = &alt.type_name;
-            quote! { ::treesitter_types::maybe_grow_stack(|| <#name as ::treesitter_types::FromNode>::from_node(child, src))? }
+            quote! { ::treesitter_types::runtime::maybe_grow_stack(|| <#name as ::treesitter_types::FromNode>::from_node(child, src))? }
         }
     }
 }
@@ -636,7 +636,7 @@ fn emit_enum_common(
             let name = &v.variant_name;
             let type_name = format_ident!("{}", name);
             chain = quote! {
-                if let Ok(v) = ::treesitter_types::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src)) {
+                if let Ok(v) = ::treesitter_types::runtime::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src)) {
                     Ok(Self::#name(::std::boxed::Box::new(v)))
                 } else {
                     #chain
@@ -656,7 +656,7 @@ fn emit_enum_common(
             let name = &v.variant_name;
             let type_name = format_ident!("{}", name);
             chain = quote! {
-                if let Ok(v) = ::treesitter_types::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src)) {
+                if let Ok(v) = ::treesitter_types::runtime::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src)) {
                     Ok(Self::#name(::std::boxed::Box::new(v)))
                 } else {
                     #chain
@@ -762,7 +762,7 @@ fn emit_enum_match_arm(variant: &VariantDef) -> TokenStream {
         let type_name = format_ident!("{}", name);
         quote! {
             #kind_str #(| #extra)* => Ok(Self::#name(
-                ::std::boxed::Box::new(::treesitter_types::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src))?)
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src))?)
             )),
         }
     } else {
@@ -808,7 +808,7 @@ fn emit_any_node(
         }
 
         match_arms.push(quote! {
-            #kind_str => ::treesitter_types::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src))
+            #kind_str => ::treesitter_types::runtime::maybe_grow_stack(|| <#type_name as ::treesitter_types::FromNode>::from_node(node, src))
                 .map(Self::#type_name)
                 .unwrap_or(Self::Unknown(node)),
         });

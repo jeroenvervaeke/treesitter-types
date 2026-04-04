@@ -50,6 +50,8 @@
 //! ```
 
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
+pub use tree_sitter;
+pub use tree_sitter_scala;
 
 mod generated;
 pub use generated::*;

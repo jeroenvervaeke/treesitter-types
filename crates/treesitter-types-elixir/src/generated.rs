@@ -17,7 +17,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCall<'tree> {
                 let child = node
                     .child_by_field_name("key")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("key", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCallKey as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -25,7 +25,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCall<'tree> {
                 let child = node
                     .child_by_field_name("target")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("target", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCallTarget as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -73,7 +73,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AfterBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <AfterBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -123,7 +123,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AnonymousFunction<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <StabClause as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -173,7 +173,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Arguments<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ArgumentsChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -207,7 +207,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperator<'tree> {
                 let child = node
                     .child_by_field_name("left")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("left", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperatorLeft as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -215,7 +215,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperator<'tree> {
                 let child = node.child_by_field_name("operator").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("operator", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperatorOperator as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -223,7 +223,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperator<'tree> {
                 let child = node
                     .child_by_field_name("right")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("right", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperatorRight as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -271,7 +271,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Bitstring<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BitstringChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -321,7 +321,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Block<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -371,7 +371,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Body<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BodyChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -431,7 +431,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Call<'tree> {
                 let child = node
                     .child_by_field_name("target")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("target", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CallTarget as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -457,7 +457,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Call<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <CallChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -507,7 +507,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CatchBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <CatchBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -541,7 +541,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
                 let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_end", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CharlistQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -549,7 +549,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
                 let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_start", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CharlistQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -575,7 +575,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Charlist<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <CharlistChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -625,7 +625,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <DoBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -659,7 +659,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Dot<'tree> {
                 let child = node
                     .child_by_field_name("left")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("left", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DotLeft as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -667,12 +667,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Dot<'tree> {
                 let child = node.child_by_field_name("operator").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("operator", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DotOperator as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
             right: match node.child_by_field_name("right") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DotRight as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
@@ -721,7 +721,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ElseBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -797,7 +797,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Interpolation<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <InterpolationChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -849,7 +849,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Keywords<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <Pair as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -899,7 +899,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for List<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ListChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -949,7 +949,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Map<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <MapChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -999,7 +999,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapContent<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <MapContentChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1086,7 +1086,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pair<'tree> {
                 let child = node
                     .child_by_field_name("key")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("key", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <PairKey as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1094,7 +1094,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Pair<'tree> {
                 let child = node
                     .child_by_field_name("value")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("value", node))?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <PairValue as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1126,7 +1126,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
                 let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_end", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtomQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1134,7 +1134,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
                 let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_start", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtomQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1160,7 +1160,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtom<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <QuotedAtomChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1194,7 +1194,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
                 let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_end", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedKeywordQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1202,7 +1202,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
                 let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_start", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedKeywordQuotedStart as ::treesitter_types::FromNode>::from_node(
                         child, src,
                     )
@@ -1230,7 +1230,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeyword<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <QuotedKeywordChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -1282,7 +1282,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RescueBlock<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <RescueBlockChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1316,7 +1316,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
                 let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_end", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SigilQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1324,7 +1324,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
                 let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_start", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SigilQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1350,7 +1350,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Sigil<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <SigilChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1400,7 +1400,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Source<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <SourceChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1431,7 +1431,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StabClause<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             left: match node.child_by_field_name("left") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClauseLeft as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
@@ -1440,12 +1440,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StabClause<'tree> {
                 let child = node.child_by_field_name("operator").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("operator", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClauseOperator as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
             right: match node.child_by_field_name("right") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Body as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
@@ -1478,7 +1478,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 let child = node.child_by_field_name("quoted_end").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_end", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StringQuotedEnd as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1486,7 +1486,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 let child = node.child_by_field_name("quoted_start").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("quoted_start", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StringQuotedStart as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1512,7 +1512,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for String<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <StringChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1578,7 +1578,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Struct<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <StructChildren as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <StructChildren as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -1608,7 +1608,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Struct<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <StructChildren as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <StructChildren as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -1630,7 +1630,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Struct<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StructChildren as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1678,7 +1678,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Tuple<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <TupleChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1711,7 +1711,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryOperator<'tree> {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
                 for child in node.children_by_field_name("operand", &mut cursor) {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <UnaryOperatorOperand as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -1723,7 +1723,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryOperator<'tree> {
                 let child = node.child_by_field_name("operator").ok_or_else(|| {
                     ::treesitter_types::ParseError::missing_field("operator", node)
                 })?;
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperatorOperator as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -2067,122 +2067,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCallKey<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2255,122 +2255,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AccessCallTarget<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2444,127 +2444,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AfterBlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2639,127 +2639,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentsChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2834,127 +2834,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperatorLeft<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3189,127 +3189,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BinaryOperatorRight<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3384,127 +3384,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitstringChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3579,127 +3579,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3773,122 +3773,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BodyChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3940,17 +3940,17 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallTarget<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -3980,12 +3980,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "do_block" => Ok(Self::DoBlock(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DoBlock as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4037,127 +4037,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CatchBlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4266,17 +4266,17 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CharlistChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4333,147 +4333,147 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoBlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "after_block" => Ok(Self::AfterBlock(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AfterBlock as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "catch_block" => Ok(Self::CatchBlock(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CatchBlock as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "else_block" => Ok(Self::ElseBlock(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ElseBlock as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "rescue_block" => Ok(Self::RescueBlock(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <RescueBlock as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4551,122 +4551,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DotLeft<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4744,32 +4744,32 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DotRight<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -4825,127 +4825,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ElseBlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5019,122 +5019,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolationChildren<'tree>
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5208,127 +5208,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ListChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5380,12 +5380,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "map_content" => Ok(Self::MapContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <MapContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "struct" => Ok(Self::Struct(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Struct as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5437,127 +5437,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MapContentChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5609,12 +5609,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PairKey<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "keyword" => Ok(Self::Keyword(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keyword as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_keyword" => Ok(Self::QuotedKeyword(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedKeyword as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5665,122 +5665,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PairValue<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5884,17 +5884,17 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAtomChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -5977,17 +5977,17 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedKeywordChildren<'tree>
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6040,127 +6040,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RescueBlockChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "stab_clause" => Ok(Self::StabClause(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6323,27 +6323,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SigilChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil_modifiers" => Ok(Self::SigilModifiers(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SigilModifiers as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil_name" => Ok(Self::SigilName(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SigilName as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6397,122 +6397,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6563,12 +6563,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StabClauseLeft<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "arguments" => Ok(Self::Arguments(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6677,17 +6677,17 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StringChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "escape_sequence" => Ok(Self::EscapeSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "interpolation" => Ok(Self::Interpolation(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_content" => Ok(Self::QuotedContent(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6722,37 +6722,37 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StructChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -6809,127 +6809,127 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "keywords" => Ok(Self::Keywords(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -7007,122 +7007,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnaryOperatorOperand<'tree> 
             "(" => Ok(Self::LParen(::treesitter_types::Span::from(node))),
             ")" => Ok(Self::RParen(::treesitter_types::Span::from(node))),
             "access_call" => Ok(Self::AccessCall(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anonymous_function" => Ok(Self::AnonymousFunction(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "atom" => Ok(Self::Atom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Atom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "binary_operator" => Ok(Self::BinaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "bitstring" => Ok(Self::Bitstring(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block" => Ok(Self::Block(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Block as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "boolean" => Ok(Self::Boolean(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "call" => Ok(Self::Call(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Call as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "char" => Ok(Self::Char(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Char as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "charlist" => Ok(Self::Charlist(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dot" => Ok(Self::Dot(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Dot as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float" => Ok(Self::Float(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Float as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "identifier" => Ok(Self::Identifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer" => Ok(Self::Integer(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Integer as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "list" => Ok(Self::List(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <List as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "map" => Ok(Self::Map(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Map as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "nil" => Ok(Self::Nil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Nil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "operator_identifier" => Ok(Self::OperatorIdentifier(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_atom" => Ok(Self::QuotedAtom(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "sigil" => Ok(Self::Sigil(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string" => Ok(Self::String(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <String as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tuple" => Ok(Self::Tuple(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "unary_operator" => Ok(Self::UnaryOperator(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -7258,227 +7258,227 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "access_call" => ::treesitter_types::maybe_grow_stack(|| {
+            "access_call" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AccessCall as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AccessCall)
             .unwrap_or(Self::Unknown(node)),
-            "after_block" => ::treesitter_types::maybe_grow_stack(|| {
+            "after_block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AfterBlock as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AfterBlock)
             .unwrap_or(Self::Unknown(node)),
-            "anonymous_function" => ::treesitter_types::maybe_grow_stack(|| {
+            "anonymous_function" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AnonymousFunction as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AnonymousFunction)
             .unwrap_or(Self::Unknown(node)),
-            "arguments" => ::treesitter_types::maybe_grow_stack(|| {
+            "arguments" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Arguments)
             .unwrap_or(Self::Unknown(node)),
-            "binary_operator" => ::treesitter_types::maybe_grow_stack(|| {
+            "binary_operator" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BinaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BinaryOperator)
             .unwrap_or(Self::Unknown(node)),
-            "bitstring" => ::treesitter_types::maybe_grow_stack(|| {
+            "bitstring" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Bitstring as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Bitstring)
             .unwrap_or(Self::Unknown(node)),
-            "block" => ::treesitter_types::maybe_grow_stack(|| {
+            "block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Block as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Block)
             .unwrap_or(Self::Unknown(node)),
-            "body" => ::treesitter_types::maybe_grow_stack(|| {
+            "body" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Body as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Body)
             .unwrap_or(Self::Unknown(node)),
-            "boolean" => ::treesitter_types::maybe_grow_stack(|| {
+            "boolean" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Boolean as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Boolean)
             .unwrap_or(Self::Unknown(node)),
-            "call" => ::treesitter_types::maybe_grow_stack(|| {
+            "call" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Call as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Call)
             .unwrap_or(Self::Unknown(node)),
-            "catch_block" => ::treesitter_types::maybe_grow_stack(|| {
+            "catch_block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <CatchBlock as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::CatchBlock)
             .unwrap_or(Self::Unknown(node)),
-            "charlist" => ::treesitter_types::maybe_grow_stack(|| {
+            "charlist" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Charlist as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Charlist)
             .unwrap_or(Self::Unknown(node)),
-            "do_block" => ::treesitter_types::maybe_grow_stack(|| {
+            "do_block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DoBlock as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::DoBlock)
             .unwrap_or(Self::Unknown(node)),
-            "dot" => ::treesitter_types::maybe_grow_stack(|| {
+            "dot" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Dot as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Dot)
             .unwrap_or(Self::Unknown(node)),
-            "else_block" => ::treesitter_types::maybe_grow_stack(|| {
+            "else_block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ElseBlock as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ElseBlock)
             .unwrap_or(Self::Unknown(node)),
-            "identifier" => ::treesitter_types::maybe_grow_stack(|| {
+            "identifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Identifier as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Identifier)
             .unwrap_or(Self::Unknown(node)),
-            "interpolation" => ::treesitter_types::maybe_grow_stack(|| {
+            "interpolation" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Interpolation as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Interpolation)
             .unwrap_or(Self::Unknown(node)),
-            "keywords" => ::treesitter_types::maybe_grow_stack(|| {
+            "keywords" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Keywords as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Keywords)
             .unwrap_or(Self::Unknown(node)),
-            "list" => ::treesitter_types::maybe_grow_stack(|| {
+            "list" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <List as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::List)
             .unwrap_or(Self::Unknown(node)),
-            "map" => ::treesitter_types::maybe_grow_stack(|| {
+            "map" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Map as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Map)
             .unwrap_or(Self::Unknown(node)),
-            "map_content" => ::treesitter_types::maybe_grow_stack(|| {
+            "map_content" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <MapContent as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::MapContent)
             .unwrap_or(Self::Unknown(node)),
-            "nil" => ::treesitter_types::maybe_grow_stack(|| {
+            "nil" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Nil as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Nil)
             .unwrap_or(Self::Unknown(node)),
-            "operator_identifier" => ::treesitter_types::maybe_grow_stack(|| {
+            "operator_identifier" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <OperatorIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::OperatorIdentifier)
             .unwrap_or(Self::Unknown(node)),
-            "pair" => ::treesitter_types::maybe_grow_stack(|| {
+            "pair" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Pair as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Pair)
             .unwrap_or(Self::Unknown(node)),
-            "quoted_atom" => ::treesitter_types::maybe_grow_stack(|| {
+            "quoted_atom" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <QuotedAtom as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::QuotedAtom)
             .unwrap_or(Self::Unknown(node)),
-            "quoted_keyword" => ::treesitter_types::maybe_grow_stack(|| {
+            "quoted_keyword" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <QuotedKeyword as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::QuotedKeyword)
             .unwrap_or(Self::Unknown(node)),
-            "rescue_block" => ::treesitter_types::maybe_grow_stack(|| {
+            "rescue_block" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <RescueBlock as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::RescueBlock)
             .unwrap_or(Self::Unknown(node)),
-            "sigil" => ::treesitter_types::maybe_grow_stack(|| {
+            "sigil" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Sigil as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Sigil)
             .unwrap_or(Self::Unknown(node)),
-            "source" => ::treesitter_types::maybe_grow_stack(|| {
+            "source" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Source as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Source)
             .unwrap_or(Self::Unknown(node)),
-            "stab_clause" => ::treesitter_types::maybe_grow_stack(|| {
+            "stab_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <StabClause as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::StabClause)
             .unwrap_or(Self::Unknown(node)),
-            "string" => ::treesitter_types::maybe_grow_stack(|| {
+            "string" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <String as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::String)
             .unwrap_or(Self::Unknown(node)),
-            "struct" => ::treesitter_types::maybe_grow_stack(|| {
+            "struct" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Struct as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Struct)
             .unwrap_or(Self::Unknown(node)),
-            "tuple" => ::treesitter_types::maybe_grow_stack(|| {
+            "tuple" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Tuple as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Tuple)
             .unwrap_or(Self::Unknown(node)),
-            "unary_operator" => ::treesitter_types::maybe_grow_stack(|| {
+            "unary_operator" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <UnaryOperator as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::UnaryOperator)
             .unwrap_or(Self::Unknown(node)),
-            "alias" => ::treesitter_types::maybe_grow_stack(|| {
+            "alias" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Alias as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Alias)
             .unwrap_or(Self::Unknown(node)),
-            "atom" => ::treesitter_types::maybe_grow_stack(|| {
+            "atom" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Atom as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Atom)
             .unwrap_or(Self::Unknown(node)),
-            "char" => ::treesitter_types::maybe_grow_stack(|| {
+            "char" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Char as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Char)
             .unwrap_or(Self::Unknown(node)),
-            "comment" => ::treesitter_types::maybe_grow_stack(|| {
+            "comment" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Comment as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Comment)
             .unwrap_or(Self::Unknown(node)),
-            "escape_sequence" => ::treesitter_types::maybe_grow_stack(|| {
+            "escape_sequence" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::EscapeSequence)
             .unwrap_or(Self::Unknown(node)),
-            "float" => ::treesitter_types::maybe_grow_stack(|| {
+            "float" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Float as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Float)
             .unwrap_or(Self::Unknown(node)),
-            "integer" => ::treesitter_types::maybe_grow_stack(|| {
+            "integer" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Integer as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Integer)
             .unwrap_or(Self::Unknown(node)),
-            "keyword" => ::treesitter_types::maybe_grow_stack(|| {
+            "keyword" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Keyword as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Keyword)
             .unwrap_or(Self::Unknown(node)),
-            "quoted_content" => ::treesitter_types::maybe_grow_stack(|| {
+            "quoted_content" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <QuotedContent as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::QuotedContent)
             .unwrap_or(Self::Unknown(node)),
-            "sigil_modifiers" => ::treesitter_types::maybe_grow_stack(|| {
+            "sigil_modifiers" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <SigilModifiers as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::SigilModifiers)
             .unwrap_or(Self::Unknown(node)),
-            "sigil_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "sigil_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <SigilName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::SigilName)

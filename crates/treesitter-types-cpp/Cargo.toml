@@ -14,6 +14,5 @@ readme = "../../README.md"
 [dependencies]
 treesitter-types = { version = "0.1.2", path = "../treesitter-types" }
 tree-sitter = "0.26"
-
-[dev-dependencies]
 tree-sitter-cpp = "0.23"
+

@@ -50,7 +50,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Alias<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <AliasName as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <AliasName as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -80,7 +80,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Alias<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <AliasName as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <AliasName as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -102,7 +102,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Alias<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AliasName as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -166,7 +166,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Anchor<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <AnchorName as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <AnchorName as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -196,7 +196,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Anchor<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <AnchorName as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <AnchorName as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -218,7 +218,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Anchor<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AnchorName as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -266,7 +266,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMapping<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BlockMappingPair as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -296,13 +296,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPair<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             key: match node.child_by_field_name("key") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockMappingPairKey as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
             },
             value: match node.child_by_field_name("value") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockMappingPairValue as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
@@ -351,7 +351,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockNode<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BlockNodeChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -428,7 +428,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequence<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BlockSequenceItem as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -477,7 +477,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequenceItem<'tree> {
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <BlockSequenceItemChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -529,7 +529,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <DocumentChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -579,7 +579,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoubleQuoteScalar<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <EscapeSequence as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -629,7 +629,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowMapping<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <FlowMappingChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -679,7 +679,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowNode<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <FlowNodeChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -709,13 +709,13 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowPair<'tree> {
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             key: match node.child_by_field_name("key") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
             },
             value: match node.child_by_field_name("value") {
-                Some(child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
@@ -764,7 +764,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowSequence<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <FlowSequenceChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -832,7 +832,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalar<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <PlainScalarChildren as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <PlainScalarChildren as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -862,7 +862,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalar<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <PlainScalarChildren as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <PlainScalarChildren as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -884,7 +884,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalar<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <PlainScalarChildren as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -932,7 +932,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ReservedDirective<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ReservedDirectiveChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -984,7 +984,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SingleQuoteScalar<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <EscapeSequence as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1034,7 +1034,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Stream<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <Document as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -1084,7 +1084,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TagDirective<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <TagDirectiveChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -1152,7 +1152,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for YamlDirective<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <YamlVersion as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <YamlVersion as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -1182,7 +1182,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for YamlDirective<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <YamlVersion as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <YamlVersion as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -1204,7 +1204,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for YamlDirective<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <YamlVersion as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -1661,12 +1661,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPairKey<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "block_node" => Ok(Self::BlockNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1695,12 +1695,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockMappingPairValue<'tree>
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "block_node" => Ok(Self::BlockNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1732,27 +1732,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockNodeChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "anchor" => Ok(Self::Anchor(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Anchor as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block_mapping" => Ok(Self::BlockMapping(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockMapping as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block_scalar" => Ok(Self::BlockScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "block_sequence" => Ok(Self::BlockSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag" => Ok(Self::Tag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1784,12 +1784,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BlockSequenceItemChildren<'t
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "block_node" => Ok(Self::BlockNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1821,27 +1821,27 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DocumentChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "block_node" => Ok(Self::BlockNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BlockNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "reserved_directive" => Ok(Self::ReservedDirective(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ReservedDirective as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag_directive" => Ok(Self::TagDirective(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagDirective as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "yaml_directive" => Ok(Self::YamlDirective(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <YamlDirective as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1873,12 +1873,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowMappingChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_pair" => Ok(Self::FlowPair(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowPair as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1913,42 +1913,42 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowNodeChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "alias" => Ok(Self::Alias(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Alias as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "anchor" => Ok(Self::Anchor(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Anchor as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "double_quote_scalar" => Ok(Self::DoubleQuoteScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DoubleQuoteScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_mapping" => Ok(Self::FlowMapping(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowMapping as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_sequence" => Ok(Self::FlowSequence(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowSequence as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "plain_scalar" => Ok(Self::PlainScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <PlainScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "single_quote_scalar" => Ok(Self::SingleQuoteScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SingleQuoteScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag" => Ok(Self::Tag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Tag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1983,12 +1983,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FlowSequenceChildren<'tree> 
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "flow_node" => Ok(Self::FlowNode(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "flow_pair" => Ok(Self::FlowPair(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FlowPair as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2021,32 +2021,32 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlainScalarChildren<'tree> {
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "boolean_scalar" => Ok(Self::BooleanScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <BooleanScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "float_scalar" => Ok(Self::FloatScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <FloatScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "integer_scalar" => Ok(Self::IntegerScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <IntegerScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "null_scalar" => Ok(Self::NullScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NullScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "string_scalar" => Ok(Self::StringScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StringScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "timestamp_scalar" => Ok(Self::TimestampScalar(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TimestampScalar as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2079,12 +2079,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ReservedDirectiveChildren<'t
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "directive_name" => Ok(Self::DirectiveName(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DirectiveName as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "directive_parameter" => Ok(Self::DirectiveParameter(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DirectiveParameter as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2113,12 +2113,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TagDirectiveChildren<'tree> 
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "tag_handle" => Ok(Self::TagHandle(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagHandle as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag_prefix" => Ok(Self::TagPrefix(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagPrefix as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -2177,182 +2177,182 @@ pub enum AnyNode<'tree> {
 impl<'tree> AnyNode<'tree> {
     pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "alias" => ::treesitter_types::maybe_grow_stack(|| {
+            "alias" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Alias as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Alias)
             .unwrap_or(Self::Unknown(node)),
-            "anchor" => ::treesitter_types::maybe_grow_stack(|| {
+            "anchor" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Anchor as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Anchor)
             .unwrap_or(Self::Unknown(node)),
-            "block_mapping" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_mapping" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockMapping as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockMapping)
             .unwrap_or(Self::Unknown(node)),
-            "block_mapping_pair" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_mapping_pair" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockMappingPair as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockMappingPair)
             .unwrap_or(Self::Unknown(node)),
-            "block_node" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_node" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockNode as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockNode)
             .unwrap_or(Self::Unknown(node)),
-            "block_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockScalar)
             .unwrap_or(Self::Unknown(node)),
-            "block_sequence" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_sequence" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockSequence as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockSequence)
             .unwrap_or(Self::Unknown(node)),
-            "block_sequence_item" => ::treesitter_types::maybe_grow_stack(|| {
+            "block_sequence_item" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BlockSequenceItem as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BlockSequenceItem)
             .unwrap_or(Self::Unknown(node)),
-            "document" => ::treesitter_types::maybe_grow_stack(|| {
+            "document" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Document as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Document)
             .unwrap_or(Self::Unknown(node)),
-            "double_quote_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "double_quote_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DoubleQuoteScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::DoubleQuoteScalar)
             .unwrap_or(Self::Unknown(node)),
-            "flow_mapping" => ::treesitter_types::maybe_grow_stack(|| {
+            "flow_mapping" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FlowMapping as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::FlowMapping)
             .unwrap_or(Self::Unknown(node)),
-            "flow_node" => ::treesitter_types::maybe_grow_stack(|| {
+            "flow_node" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FlowNode as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::FlowNode)
             .unwrap_or(Self::Unknown(node)),
-            "flow_pair" => ::treesitter_types::maybe_grow_stack(|| {
+            "flow_pair" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FlowPair as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::FlowPair)
             .unwrap_or(Self::Unknown(node)),
-            "flow_sequence" => ::treesitter_types::maybe_grow_stack(|| {
+            "flow_sequence" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FlowSequence as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::FlowSequence)
             .unwrap_or(Self::Unknown(node)),
-            "plain_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "plain_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <PlainScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::PlainScalar)
             .unwrap_or(Self::Unknown(node)),
-            "reserved_directive" => ::treesitter_types::maybe_grow_stack(|| {
+            "reserved_directive" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ReservedDirective as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ReservedDirective)
             .unwrap_or(Self::Unknown(node)),
-            "single_quote_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "single_quote_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <SingleQuoteScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::SingleQuoteScalar)
             .unwrap_or(Self::Unknown(node)),
-            "stream" => ::treesitter_types::maybe_grow_stack(|| {
+            "stream" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Stream as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Stream)
             .unwrap_or(Self::Unknown(node)),
-            "tag_directive" => ::treesitter_types::maybe_grow_stack(|| {
+            "tag_directive" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TagDirective as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::TagDirective)
             .unwrap_or(Self::Unknown(node)),
-            "yaml_directive" => ::treesitter_types::maybe_grow_stack(|| {
+            "yaml_directive" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <YamlDirective as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::YamlDirective)
             .unwrap_or(Self::Unknown(node)),
-            "alias_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "alias_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AliasName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AliasName)
             .unwrap_or(Self::Unknown(node)),
-            "anchor_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "anchor_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AnchorName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AnchorName)
             .unwrap_or(Self::Unknown(node)),
-            "boolean_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "boolean_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <BooleanScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::BooleanScalar)
             .unwrap_or(Self::Unknown(node)),
-            "comment" => ::treesitter_types::maybe_grow_stack(|| {
+            "comment" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Comment as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Comment)
             .unwrap_or(Self::Unknown(node)),
-            "directive_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "directive_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DirectiveName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::DirectiveName)
             .unwrap_or(Self::Unknown(node)),
-            "directive_parameter" => ::treesitter_types::maybe_grow_stack(|| {
+            "directive_parameter" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DirectiveParameter as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::DirectiveParameter)
             .unwrap_or(Self::Unknown(node)),
-            "escape_sequence" => ::treesitter_types::maybe_grow_stack(|| {
+            "escape_sequence" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <EscapeSequence as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::EscapeSequence)
             .unwrap_or(Self::Unknown(node)),
-            "float_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "float_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <FloatScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::FloatScalar)
             .unwrap_or(Self::Unknown(node)),
-            "integer_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "integer_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <IntegerScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::IntegerScalar)
             .unwrap_or(Self::Unknown(node)),
-            "null_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "null_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <NullScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::NullScalar)
             .unwrap_or(Self::Unknown(node)),
-            "string_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "string_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <StringScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::StringScalar)
             .unwrap_or(Self::Unknown(node)),
-            "tag" => ::treesitter_types::maybe_grow_stack(|| {
+            "tag" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Tag as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Tag)
             .unwrap_or(Self::Unknown(node)),
-            "tag_handle" => ::treesitter_types::maybe_grow_stack(|| {
+            "tag_handle" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TagHandle as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::TagHandle)
             .unwrap_or(Self::Unknown(node)),
-            "tag_prefix" => ::treesitter_types::maybe_grow_stack(|| {
+            "tag_prefix" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TagPrefix as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::TagPrefix)
             .unwrap_or(Self::Unknown(node)),
-            "timestamp_scalar" => ::treesitter_types::maybe_grow_stack(|| {
+            "timestamp_scalar" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TimestampScalar as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::TimestampScalar)
             .unwrap_or(Self::Unknown(node)),
-            "yaml_version" => ::treesitter_types::maybe_grow_stack(|| {
+            "yaml_version" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <YamlVersion as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::YamlVersion)
