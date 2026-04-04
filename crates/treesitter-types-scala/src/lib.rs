@@ -49,6 +49,8 @@
 //! assert_eq!(obj.body.len(), 1);
 //! ```
 
+pub use tree_sitter_scala;
+pub use treesitter_types::tree_sitter;
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;

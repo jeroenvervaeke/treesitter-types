@@ -34,6 +34,8 @@
 //! assert!(source_file.span.end.row >= 4);
 //! ```
 
+pub use tree_sitter_swift;
+pub use treesitter_types::tree_sitter;
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;

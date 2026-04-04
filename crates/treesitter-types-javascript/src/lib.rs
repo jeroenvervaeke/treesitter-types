@@ -56,6 +56,8 @@
 //! assert_eq!(expr.span.start.row, 4);
 //! ```
 
+pub use tree_sitter_javascript;
+pub use treesitter_types::tree_sitter;
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;

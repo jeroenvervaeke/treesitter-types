@@ -6,7 +6,7 @@ pub struct Attribute<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Attribute<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "attribute");
@@ -34,7 +34,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Attribute<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <AttributeChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -55,7 +55,7 @@ pub struct Doctype<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Doctype<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "doctype");
@@ -83,7 +83,7 @@ pub struct Document<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "document");
@@ -111,7 +111,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Document<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <DocumentChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -133,7 +133,7 @@ pub struct Element<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for Element<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "element");
@@ -161,7 +161,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Element<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ElementChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -183,7 +183,7 @@ pub struct EndTag<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for EndTag<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "end_tag");
@@ -227,7 +227,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EndTag<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <TagName as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <TagName as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -257,7 +257,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EndTag<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <TagName as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <TagName as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -279,7 +279,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EndTag<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagName as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -299,7 +299,7 @@ pub struct ErroneousEndTag<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ErroneousEndTag<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "erroneous_end_tag");
@@ -343,7 +343,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ErroneousEndTag<'tree> {
                                 > {
                                     let child = candidate;
                                     Ok(
-                                        ::treesitter_types::maybe_grow_stack(|| <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(
                                             child,
                                             src,
                                         ))?,
@@ -373,7 +373,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ErroneousEndTag<'tree> {
                                     > {
                                         let child = candidate;
                                         Ok(
-                                            ::treesitter_types::maybe_grow_stack(|| <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(
                                                 child,
                                                 src,
                                             ))?,
@@ -395,7 +395,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ErroneousEndTag<'tree> {
                         ::treesitter_types::ParseError::missing_field("children", node)
                     })?
                 };
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
@@ -415,7 +415,7 @@ pub struct QuotedAttributeValue<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAttributeValue<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "quoted_attribute_value");
@@ -442,7 +442,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for QuotedAttributeValue<'tree> 
                     result
                 };
                 match non_field_children.first() {
-                    Some(&child) => Some(::treesitter_types::maybe_grow_stack(|| {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <AttributeValue as ::treesitter_types::FromNode>::from_node(child, src)
                     })?),
                     None => None,
@@ -464,7 +464,7 @@ pub struct ScriptElement<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ScriptElement<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "script_element");
@@ -492,7 +492,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ScriptElement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <ScriptElementChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -516,7 +516,7 @@ pub struct SelfClosingTag<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for SelfClosingTag<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "self_closing_tag");
@@ -544,7 +544,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SelfClosingTag<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <SelfClosingTagChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -568,7 +568,7 @@ pub struct StartTag<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for StartTag<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "start_tag");
@@ -596,7 +596,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StartTag<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <StartTagChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?);
                 }
@@ -618,7 +618,7 @@ pub struct StyleElement<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for StyleElement<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "style_element");
@@ -646,7 +646,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StyleElement<'tree> {
                 };
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
-                    items.push(::treesitter_types::maybe_grow_stack(|| {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
                         <StyleElementChildren as ::treesitter_types::FromNode>::from_node(
                             child, src,
                         )
@@ -669,7 +669,7 @@ pub struct AttributeName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "attribute_name");
@@ -696,7 +696,7 @@ pub struct AttributeValue<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeValue<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "attribute_value");
@@ -723,7 +723,7 @@ pub struct Comment<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Comment<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "comment");
@@ -750,7 +750,7 @@ pub struct Entity<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Entity<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "entity");
@@ -777,7 +777,7 @@ pub struct ErroneousEndTagName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for ErroneousEndTagName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "erroneous_end_tag_name");
@@ -804,7 +804,7 @@ pub struct RawText<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for RawText<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "raw_text");
@@ -831,7 +831,7 @@ pub struct TagName<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TagName<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "tag_name");
@@ -858,7 +858,7 @@ pub struct Text<'tree> {
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Text<'tree> {
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         debug_assert_eq!(node.kind(), "text");
@@ -887,22 +887,22 @@ pub enum AttributeChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "attribute_name" => Ok(Self::AttributeName(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AttributeName as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "attribute_value" => Ok(Self::AttributeValue(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <AttributeValue as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "quoted_attribute_value" => Ok(Self::QuotedAttributeValue(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <QuotedAttributeValue as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -932,42 +932,42 @@ pub enum DocumentChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for DocumentChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "doctype" => Ok(Self::Doctype(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Doctype as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "element" => Ok(Self::Element(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Element as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "entity" => Ok(Self::Entity(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Entity as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "erroneous_end_tag" => Ok(Self::ErroneousEndTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ErroneousEndTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "script_element" => Ok(Self::ScriptElement(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ScriptElement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "style_element" => Ok(Self::StyleElement(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StyleElement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "text" => Ok(Self::Text(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Text as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1004,57 +1004,57 @@ pub enum ElementChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ElementChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "doctype" => Ok(Self::Doctype(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Doctype as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "element" => Ok(Self::Element(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Element as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "end_tag" => Ok(Self::EndTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EndTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "entity" => Ok(Self::Entity(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Entity as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "erroneous_end_tag" => Ok(Self::ErroneousEndTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ErroneousEndTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "script_element" => Ok(Self::ScriptElement(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ScriptElement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "self_closing_tag" => Ok(Self::SelfClosingTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <SelfClosingTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "start_tag" => Ok(Self::StartTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StartTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "style_element" => Ok(Self::StyleElement(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StyleElement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "text" => Ok(Self::Text(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Text as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1087,22 +1087,22 @@ pub enum ScriptElementChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for ScriptElementChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "end_tag" => Ok(Self::EndTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EndTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "raw_text" => Ok(Self::RawText(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <RawText as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "start_tag" => Ok(Self::StartTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StartTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1127,17 +1127,17 @@ pub enum SelfClosingTagChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for SelfClosingTagChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "attribute" => Ok(Self::Attribute(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Attribute as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag_name" => Ok(Self::TagName(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagName as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1161,17 +1161,17 @@ pub enum StartTagChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for StartTagChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "attribute" => Ok(Self::Attribute(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Attribute as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "tag_name" => Ok(Self::TagName(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TagName as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1196,22 +1196,22 @@ pub enum StyleElementChildren<'tree> {
 impl<'tree> ::treesitter_types::FromNode<'tree> for StyleElementChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
-        node: ::tree_sitter::Node<'tree>,
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
             "end_tag" => Ok(Self::EndTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <EndTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "raw_text" => Ok(Self::RawText(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <RawText as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "start_tag" => Ok(Self::StartTag(::std::boxed::Box::new(
-                ::treesitter_types::maybe_grow_stack(|| {
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <StartTag as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
@@ -1249,102 +1249,102 @@ pub enum AnyNode<'tree> {
     RawText(RawText<'tree>),
     TagName(TagName<'tree>),
     Text(Text<'tree>),
-    Unknown(::tree_sitter::Node<'tree>),
+    Unknown(::treesitter_types::tree_sitter::Node<'tree>),
 }
 impl<'tree> AnyNode<'tree> {
-    pub fn from_node(node: ::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
+    pub fn from_node(node: ::treesitter_types::tree_sitter::Node<'tree>, src: &'tree [u8]) -> Self {
         match node.kind() {
-            "attribute" => ::treesitter_types::maybe_grow_stack(|| {
+            "attribute" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Attribute as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Attribute)
             .unwrap_or(Self::Unknown(node)),
-            "doctype" => ::treesitter_types::maybe_grow_stack(|| {
+            "doctype" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Doctype as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Doctype)
             .unwrap_or(Self::Unknown(node)),
-            "document" => ::treesitter_types::maybe_grow_stack(|| {
+            "document" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Document as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Document)
             .unwrap_or(Self::Unknown(node)),
-            "element" => ::treesitter_types::maybe_grow_stack(|| {
+            "element" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Element as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Element)
             .unwrap_or(Self::Unknown(node)),
-            "end_tag" => ::treesitter_types::maybe_grow_stack(|| {
+            "end_tag" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <EndTag as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::EndTag)
             .unwrap_or(Self::Unknown(node)),
-            "erroneous_end_tag" => ::treesitter_types::maybe_grow_stack(|| {
+            "erroneous_end_tag" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ErroneousEndTag as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ErroneousEndTag)
             .unwrap_or(Self::Unknown(node)),
-            "quoted_attribute_value" => ::treesitter_types::maybe_grow_stack(|| {
+            "quoted_attribute_value" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <QuotedAttributeValue as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::QuotedAttributeValue)
             .unwrap_or(Self::Unknown(node)),
-            "script_element" => ::treesitter_types::maybe_grow_stack(|| {
+            "script_element" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ScriptElement as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ScriptElement)
             .unwrap_or(Self::Unknown(node)),
-            "self_closing_tag" => ::treesitter_types::maybe_grow_stack(|| {
+            "self_closing_tag" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <SelfClosingTag as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::SelfClosingTag)
             .unwrap_or(Self::Unknown(node)),
-            "start_tag" => ::treesitter_types::maybe_grow_stack(|| {
+            "start_tag" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <StartTag as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::StartTag)
             .unwrap_or(Self::Unknown(node)),
-            "style_element" => ::treesitter_types::maybe_grow_stack(|| {
+            "style_element" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <StyleElement as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::StyleElement)
             .unwrap_or(Self::Unknown(node)),
-            "attribute_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "attribute_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AttributeName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AttributeName)
             .unwrap_or(Self::Unknown(node)),
-            "attribute_value" => ::treesitter_types::maybe_grow_stack(|| {
+            "attribute_value" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <AttributeValue as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::AttributeValue)
             .unwrap_or(Self::Unknown(node)),
-            "comment" => ::treesitter_types::maybe_grow_stack(|| {
+            "comment" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Comment as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Comment)
             .unwrap_or(Self::Unknown(node)),
-            "entity" => ::treesitter_types::maybe_grow_stack(|| {
+            "entity" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Entity as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Entity)
             .unwrap_or(Self::Unknown(node)),
-            "erroneous_end_tag_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "erroneous_end_tag_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ErroneousEndTagName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::ErroneousEndTagName)
             .unwrap_or(Self::Unknown(node)),
-            "raw_text" => ::treesitter_types::maybe_grow_stack(|| {
+            "raw_text" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <RawText as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::RawText)
             .unwrap_or(Self::Unknown(node)),
-            "tag_name" => ::treesitter_types::maybe_grow_stack(|| {
+            "tag_name" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TagName as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::TagName)
             .unwrap_or(Self::Unknown(node)),
-            "text" => ::treesitter_types::maybe_grow_stack(|| {
+            "text" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Text as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Text)

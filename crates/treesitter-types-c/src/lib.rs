@@ -56,6 +56,8 @@
 //! assert!(decl.parameters.children.is_empty()); // no parameters
 //! ```
 
+pub use tree_sitter_c;
+pub use treesitter_types::tree_sitter;
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;

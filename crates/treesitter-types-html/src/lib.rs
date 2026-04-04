@@ -48,6 +48,8 @@
 //! assert!(!html_elem.children.is_empty());
 //! ```
 
+pub use tree_sitter_html;
+pub use treesitter_types::tree_sitter;
 pub use treesitter_types::{FromNode, LeafNode, ParseError, Span, Spanned};
 
 mod generated;
