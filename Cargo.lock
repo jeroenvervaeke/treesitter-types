@@ -240,7 +240,7 @@ dependencies = [
 
 [[package]]
 name = "test-roundtrip"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter",
  "tree-sitter-c",
@@ -558,7 +558,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "prettyplease",
  "proc-macro2",
@@ -573,7 +573,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-c"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-c",
  "treesitter-types",
@@ -581,7 +581,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-c-sharp"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-c-sharp",
  "treesitter-types",
@@ -589,14 +589,14 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-cli"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "treesitter-types",
 ]
 
 [[package]]
 name = "treesitter-types-codegen-runner"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-c",
  "tree-sitter-c-sharp",
@@ -626,7 +626,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-cpp"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-cpp",
  "treesitter-types",
@@ -634,7 +634,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-css"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-css",
  "treesitter-types",
@@ -642,7 +642,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-elixir"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-elixir",
  "treesitter-types",
@@ -650,7 +650,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-go"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-go",
  "treesitter-types",
@@ -658,7 +658,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-haskell"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-haskell",
  "treesitter-types",
@@ -666,7 +666,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-html"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-html",
  "treesitter-types",
@@ -674,7 +674,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-java"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-java",
  "treesitter-types",
@@ -682,7 +682,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-javascript"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-javascript",
  "treesitter-types",
@@ -690,7 +690,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-json"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-json",
  "treesitter-types",
@@ -698,7 +698,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-lua"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-lua",
  "treesitter-types",
@@ -706,7 +706,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-macros"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "proc-macro2",
  "syn",
@@ -715,7 +715,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-markdown"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-md",
  "treesitter-types",
@@ -723,7 +723,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-php"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-php",
  "treesitter-types",
@@ -731,7 +731,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-python"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-python",
  "treesitter-types",
@@ -739,7 +739,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-regex"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-regex",
  "treesitter-types",
@@ -747,7 +747,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-ruby"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-ruby",
  "treesitter-types",
@@ -755,7 +755,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-rust"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-rust",
  "treesitter-types",
@@ -763,7 +763,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-scala"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-scala",
  "treesitter-types",
@@ -771,7 +771,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-swift"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-swift",
  "treesitter-types",
@@ -779,7 +779,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-toml"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-toml-ng",
  "treesitter-types",
@@ -787,7 +787,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-typescript"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-typescript",
  "treesitter-types",
@@ -795,7 +795,7 @@ dependencies = [
 
 [[package]]
 name = "treesitter-types-yaml"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "tree-sitter-yaml",
  "treesitter-types",

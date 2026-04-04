@@ -1,6 +1,6 @@
 [package]
 name = "treesitter-types-macros"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Jeroen Vervaeke <treesitter-types.uvyaj@simplelogin.com>"]
 edition = "2021"
 rust-version = "1.77"
@@ -15,6 +15,6 @@ readme = "../../README.md"
 proc-macro = true
 
 [dependencies]
-treesitter-types = { version = "0.1.2", path = "../treesitter-types" }
+treesitter-types = { version = "0.2.0", path = "../treesitter-types" }
 proc-macro2 = "1"
 syn = { version = "2", features = ["full", "extra-traits"] }
