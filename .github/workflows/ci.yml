@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
       - run: just generate
       - run: git diff --exit-code -- '*.rs' '*.json'
 
@@ -95,7 +95,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: integration
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
       - run: just integration-test-${{ matrix.lang }}
 
   ci:
