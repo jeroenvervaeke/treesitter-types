@@ -3173,7 +3173,7 @@ pub struct FunctionType<'tree> {
     pub name: FunctionTypeName<'tree>,
     pub params: FunctionTypeParams<'tree>,
     pub return_type: ::std::vec::Vec<FunctionTypeReturnType<'tree>>,
-    pub children: ::core::option::Option<Throws<'tree>>,
+    pub children: ::core::option::Option<FunctionTypeChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionType<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -3234,7 +3234,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionType<'tree> {
                 };
                 match non_field_children.first() {
                     Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
-                        <Throws as ::treesitter_types::FromNode>::from_node(child, src)
+                        <FunctionTypeChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
                     })?),
                     None => None,
                 }
@@ -7605,6 +7607,36 @@ impl<'tree> ::treesitter_types::LeafNode<'tree> for Throws<'tree> {
     }
 }
 impl ::treesitter_types::Spanned for Throws<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ThrowsClause<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub r#type: ThrowsClauseType<'tree>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ThrowsClause<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "throws_clause");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            r#type: {
+                let child = node
+                    .child_by_field_name("type")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClauseType as ::treesitter_types::FromNode>::from_node(child, src)
+                })?
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for ThrowsClause<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -27978,6 +28010,7 @@ pub enum FunctionDeclarationChildren<'tree> {
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     PropertyBehaviorModifier(::std::boxed::Box<PropertyBehaviorModifier<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -28023,6 +28056,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationChildren<
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28047,6 +28085,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationChildren<'_> {
             Self::Parameter(inner) => inner.span(),
             Self::PropertyBehaviorModifier(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -28393,9 +28432,44 @@ impl ::treesitter_types::Spanned for FunctionTypeReturnType<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum FunctionTypeChildren<'tree> {
+    Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionTypeChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "throws" => Ok(Self::Throws(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Throws as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for FunctionTypeChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GetterSpecifierChildren<'tree> {
     MutationModifier(::std::boxed::Box<MutationModifier<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for GetterSpecifierChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -28414,6 +28488,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GetterSpecifierChildren<'tre
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -28423,6 +28502,7 @@ impl ::treesitter_types::Spanned for GetterSpecifierChildren<'_> {
         match self {
             Self::MutationModifier(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
         }
     }
 }
@@ -31982,6 +32062,7 @@ pub enum InitDeclarationChildren<'tree> {
     Modifiers(::std::boxed::Box<Modifiers<'tree>>),
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -32017,6 +32098,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationChildren<'tre
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32039,6 +32125,7 @@ impl ::treesitter_types::Spanned for InitDeclarationChildren<'_> {
             Self::Modifiers(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -33246,6 +33333,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeReturnType<'_> {
 pub enum LambdaFunctionTypeChildren<'tree> {
     LambdaFunctionTypeParameters(::std::boxed::Box<LambdaFunctionTypeParameters<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -33266,6 +33354,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeChildren<'
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -33275,6 +33368,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeChildren<'_> {
         match self {
             Self::LambdaFunctionTypeParameters(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
         }
     }
 }
@@ -42856,6 +42950,7 @@ pub enum ProtocolFunctionDeclarationChildren<'tree> {
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     Statements(::std::boxed::Box<Statements<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -42891,6 +42986,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationC
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42913,6 +43013,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationChildren<'_> {
             Self::Parameter(inner) => inner.span(),
             Self::Statements(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -49440,6 +49541,117 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfTrue<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ThrowsClauseType<'tree> {
+    ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
+    ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
+    FunctionType(::std::boxed::Box<FunctionType<'tree>>),
+    Metatype(::std::boxed::Box<Metatype<'tree>>),
+    OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
+    OptionalType(::std::boxed::Box<OptionalType<'tree>>),
+    ProtocolCompositionType(::std::boxed::Box<ProtocolCompositionType<'tree>>),
+    SuppressedConstraint(::std::boxed::Box<SuppressedConstraint<'tree>>),
+    TupleType(::std::boxed::Box<TupleType<'tree>>),
+    TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
+    TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UserType(::std::boxed::Box<UserType<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ThrowsClauseType<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "existential_type" => Ok(Self::ExistentialType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ExistentialType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "function_type" => Ok(Self::FunctionType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FunctionType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "metatype" => Ok(Self::Metatype(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Metatype as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "opaque_type" => Ok(Self::OpaqueType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpaqueType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "optional_type" => Ok(Self::OptionalType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OptionalType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "protocol_composition_type" => Ok(Self::ProtocolCompositionType(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ProtocolCompositionType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "suppressed_constraint" => Ok(Self::SuppressedConstraint(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SuppressedConstraint as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "tuple_type" => Ok(Self::TupleType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TupleType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_pack_expansion" => Ok(Self::TypePackExpansion(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_parameter_pack" => Ok(Self::TypeParameterPack(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UserType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for ThrowsClauseType<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::ArrayType(inner) => inner.span(),
+            Self::DictionaryType(inner) => inner.span(),
+            Self::ExistentialType(inner) => inner.span(),
+            Self::FunctionType(inner) => inner.span(),
+            Self::Metatype(inner) => inner.span(),
+            Self::OpaqueType(inner) => inner.span(),
+            Self::OptionalType(inner) => inner.span(),
+            Self::ProtocolCompositionType(inner) => inner.span(),
+            Self::SuppressedConstraint(inner) => inner.span(),
+            Self::TupleType(inner) => inner.span(),
+            Self::TypePackExpansion(inner) => inner.span(),
+            Self::TypeParameterPack(inner) => inner.span(),
+            Self::UserType(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TryExpressionExpr<'tree> {
     NotEq(::treesitter_types::Span),
     BangEqEq(::treesitter_types::Span),
@@ -54613,6 +54825,7 @@ pub enum AnyNode<'tree> {
     SwitchStatement(SwitchStatement<'tree>),
     TernaryExpression(TernaryExpression<'tree>),
     Throws(Throws<'tree>),
+    ThrowsClause(ThrowsClause<'tree>),
     TryExpression(TryExpression<'tree>),
     TryOperator(TryOperator<'tree>),
     TupleExpression(TupleExpression<'tree>),
@@ -55360,6 +55573,11 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::Throws)
             .unwrap_or(Self::Unknown(node)),
+            "throws_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::ThrowsClause)
+            .unwrap_or(Self::Unknown(node)),
             "try_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TryExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -55741,6 +55959,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::SwitchStatement(inner) => inner.span(),
             Self::TernaryExpression(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TryOperator(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
