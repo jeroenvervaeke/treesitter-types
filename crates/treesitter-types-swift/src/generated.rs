@@ -721,6 +721,58 @@ impl ::treesitter_types::Spanned for BooleanLiteral<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BracketQualifiedType<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub children: ::std::vec::Vec<BracketQualifiedTypeChildren<'tree>>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for BracketQualifiedType<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "bracket_qualified_type");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            children: {
+                #[allow(clippy::suspicious_else_formatting)]
+                let non_field_children = {
+                    let mut cursor = node.walk();
+                    let mut result = ::std::vec::Vec::new();
+                    if cursor.goto_first_child() {
+                        loop {
+                            if cursor.field_name().is_none()
+                                && cursor.node().is_named()
+                                && !cursor.node().is_extra()
+                            {
+                                result.push(cursor.node());
+                            }
+                            if !cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    result
+                };
+                let mut items = ::std::vec::Vec::new();
+                for child in non_field_children {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <BracketQualifiedTypeChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
+                    })?);
+                }
+                items
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for BracketQualifiedType<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CallExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub children: ::std::vec::Vec<CallExpressionChildren<'tree>>,
@@ -1721,6 +1773,40 @@ impl ::treesitter_types::Spanned for ConstructorSuffix<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ConsumeExpression<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub expr: ::std::vec::Vec<ConsumeExpressionExpr<'tree>>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ConsumeExpression<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "consume_expression");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            expr: {
+                let mut cursor = node.walk();
+                let mut items = ::std::vec::Vec::new();
+                for child in node.children_by_field_name("expr", &mut cursor) {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <ConsumeExpressionExpr as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
+                    })?);
+                }
+                items
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for ConsumeExpression<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ControlTransferStatement<'tree> {
     pub span: ::treesitter_types::Span,
     pub result: ::std::vec::Vec<ControlTransferStatementResult<'tree>>,
@@ -2204,6 +2290,122 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DirectlyAssignableExpression
     }
 }
 impl ::treesitter_types::Spanned for DirectlyAssignableExpression<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DiscardStatement<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub children: SelfExpression<'tree>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for DiscardStatement<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "discard_statement");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            children: {
+                #[allow(clippy::suspicious_else_formatting)]
+                let non_field_children = {
+                    let mut cursor = node.walk();
+                    let mut result = ::std::vec::Vec::new();
+                    if cursor.goto_first_child() {
+                        loop {
+                            if cursor.field_name().is_none()
+                                && cursor.node().is_named()
+                                && !cursor.node().is_extra()
+                            {
+                                result.push(cursor.node());
+                            }
+                            if !cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    result
+                };
+                let child = if let Some(&c) = non_field_children.first() {
+                    c
+                } else {
+                    let mut fallback_cursor = node.walk();
+                    let mut fallback_child = None;
+                    if fallback_cursor.goto_first_child() {
+                        loop {
+                            if fallback_cursor.field_name().is_none()
+                                && !fallback_cursor.node().is_extra()
+                            {
+                                let candidate = fallback_cursor.node();
+                                #[allow(clippy::needless_question_mark)]
+                                if (|| -> ::core::result::Result<
+                                    _,
+                                    ::treesitter_types::ParseError,
+                                > {
+                                    let child = candidate;
+                                    Ok(
+                                        ::treesitter_types::runtime::maybe_grow_stack(|| <SelfExpression as ::treesitter_types::FromNode>::from_node(
+                                            child,
+                                            src,
+                                        ))?,
+                                    )
+                                })()
+                                    .is_ok()
+                                {
+                                    fallback_child = Some(candidate);
+                                    break;
+                                }
+                            }
+                            if !fallback_cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    if fallback_child.is_none() {
+                        let mut cursor2 = node.walk();
+                        if cursor2.goto_first_child() {
+                            loop {
+                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
+                                    let candidate = cursor2.node();
+                                    #[allow(clippy::needless_question_mark)]
+                                    if (|| -> ::core::result::Result<
+                                        _,
+                                        ::treesitter_types::ParseError,
+                                    > {
+                                        let child = candidate;
+                                        Ok(
+                                            ::treesitter_types::runtime::maybe_grow_stack(|| <SelfExpression as ::treesitter_types::FromNode>::from_node(
+                                                child,
+                                                src,
+                                            ))?,
+                                        )
+                                    })()
+                                        .is_ok()
+                                    {
+                                        fallback_child = Some(candidate);
+                                        break;
+                                    }
+                                }
+                                if !cursor2.goto_next_sibling() {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    fallback_child.ok_or_else(|| {
+                        ::treesitter_types::ParseError::missing_field("children", node)
+                    })?
+                };
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelfExpression as ::treesitter_types::FromNode>::from_node(child, src)
+                })?
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for DiscardStatement<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -3173,7 +3375,7 @@ pub struct FunctionType<'tree> {
     pub name: FunctionTypeName<'tree>,
     pub params: FunctionTypeParams<'tree>,
     pub return_type: ::std::vec::Vec<FunctionTypeReturnType<'tree>>,
-    pub children: ::core::option::Option<Throws<'tree>>,
+    pub children: ::core::option::Option<FunctionTypeChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionType<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -3234,7 +3436,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionType<'tree> {
                 };
                 match non_field_children.first() {
                     Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
-                        <Throws as ::treesitter_types::FromNode>::from_node(child, src)
+                        <FunctionTypeChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
                     })?),
                     None => None,
                 }
@@ -7610,6 +7814,36 @@ impl ::treesitter_types::Spanned for Throws<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ThrowsClause<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub r#type: ThrowsClauseType<'tree>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ThrowsClause<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "throws_clause");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            r#type: {
+                let child = node
+                    .child_by_field_name("type")
+                    .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClauseType as ::treesitter_types::FromNode>::from_node(child, src)
+                })?
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for ThrowsClause<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct TryExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub expr: ::std::vec::Vec<TryExpressionExpr<'tree>>,
@@ -10019,10 +10253,12 @@ pub enum AdditiveExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -10167,6 +10403,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionLhs<'tree>
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10185,6 +10426,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionLhs<'tree>
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -10422,10 +10668,12 @@ impl ::treesitter_types::Spanned for AdditiveExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -10537,10 +10785,12 @@ pub enum AdditiveExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -10685,6 +10935,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionRhs<'tree>
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10703,6 +10958,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionRhs<'tree>
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -10940,10 +11200,12 @@ impl ::treesitter_types::Spanned for AdditiveExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -11029,10 +11291,12 @@ pub enum ArrayLiteralElement<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -11177,6 +11441,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayLiteralElement<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11195,6 +11464,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayLiteralElement<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -11432,10 +11706,12 @@ impl ::treesitter_types::Spanned for ArrayLiteralElement<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -11482,6 +11758,7 @@ impl ::treesitter_types::Spanned for ArrayLiteralElement<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArrayTypeElement<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -11506,6 +11783,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayTypeElement<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -11581,6 +11863,7 @@ impl ::treesitter_types::Spanned for ArrayTypeElement<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -11600,6 +11883,7 @@ impl ::treesitter_types::Spanned for ArrayTypeElement<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArrayTypeName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -11623,6 +11907,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayTypeName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -11693,6 +11982,7 @@ impl ::treesitter_types::Spanned for ArrayTypeName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -11750,10 +12040,12 @@ pub enum AsExpressionExpr<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -11898,6 +12190,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionExpr<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11916,6 +12213,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionExpr<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -12153,10 +12455,12 @@ impl ::treesitter_types::Spanned for AsExpressionExpr<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -12203,6 +12507,7 @@ impl ::treesitter_types::Spanned for AsExpressionExpr<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AsExpressionName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -12226,6 +12531,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -12296,6 +12606,7 @@ impl ::treesitter_types::Spanned for AsExpressionName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -12314,6 +12625,7 @@ impl ::treesitter_types::Spanned for AsExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AsExpressionType<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -12338,6 +12650,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -12413,6 +12730,7 @@ impl ::treesitter_types::Spanned for AsExpressionType<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -12509,10 +12827,12 @@ pub enum AssignmentResult<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -12657,6 +12977,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentResult<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -12675,6 +13000,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentResult<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -12912,10 +13242,12 @@ impl ::treesitter_types::Spanned for AssignmentResult<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -12962,6 +13294,7 @@ impl ::treesitter_types::Spanned for AssignmentResult<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssociatedtypeDeclarationDefaultValue<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -12986,6 +13319,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssociatedtypeDeclarationDef
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -13061,6 +13399,7 @@ impl ::treesitter_types::Spanned for AssociatedtypeDeclarationDefaultValue<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -13080,6 +13419,7 @@ impl ::treesitter_types::Spanned for AssociatedtypeDeclarationDefaultValue<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssociatedtypeDeclarationMustInherit<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -13104,6 +13444,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssociatedtypeDeclarationMus
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -13179,6 +13524,7 @@ impl ::treesitter_types::Spanned for AssociatedtypeDeclarationMustInherit<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -13198,6 +13544,7 @@ impl ::treesitter_types::Spanned for AssociatedtypeDeclarationMustInherit<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssociatedtypeDeclarationName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -13222,6 +13569,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssociatedtypeDeclarationNam
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -13297,6 +13649,7 @@ impl ::treesitter_types::Spanned for AssociatedtypeDeclarationName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -13363,10 +13716,12 @@ pub enum AttributeChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -13483,6 +13838,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -13501,6 +13861,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -13714,10 +14079,12 @@ impl ::treesitter_types::Spanned for AttributeChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -13835,10 +14202,12 @@ pub enum AwaitExpressionExpr<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -13983,6 +14352,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionExpr<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14001,6 +14375,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionExpr<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -14238,10 +14617,12 @@ impl ::treesitter_types::Spanned for AwaitExpressionExpr<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -14301,10 +14682,12 @@ pub enum AwaitExpressionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -14420,6 +14803,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionChildren<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14438,6 +14826,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionChildren<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -14646,10 +15039,12 @@ impl ::treesitter_types::Spanned for AwaitExpressionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -14732,10 +15127,12 @@ pub enum BitwiseOperationLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -14880,6 +15277,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationLhs<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14898,6 +15300,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationLhs<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -15135,10 +15542,12 @@ impl ::treesitter_types::Spanned for BitwiseOperationLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -15259,10 +15668,12 @@ pub enum BitwiseOperationRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -15407,6 +15818,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationRhs<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15425,6 +15841,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationRhs<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -15662,10 +16083,12 @@ impl ::treesitter_types::Spanned for BitwiseOperationRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -15710,6 +16133,47 @@ impl ::treesitter_types::Spanned for BitwiseOperationRhs<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum BracketQualifiedTypeChildren<'tree> {
+    ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
+    TypeIdentifier(::std::boxed::Box<TypeIdentifier<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for BracketQualifiedTypeChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_identifier" => Ok(Self::TypeIdentifier(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for BracketQualifiedTypeChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::ArrayType(inner) => inner.span(),
+            Self::DictionaryType(inner) => inner.span(),
+            Self::TypeIdentifier(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CallExpressionChildren<'tree> {
     AdditiveExpression(::std::boxed::Box<AdditiveExpression<'tree>>),
     ArrayLiteral(::std::boxed::Box<ArrayLiteral<'tree>>),
@@ -15726,10 +16190,12 @@ pub enum CallExpressionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -15850,6 +16316,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallExpressionChildren<'tree
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15868,6 +16339,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallExpressionChildren<'tree
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -16077,10 +16553,12 @@ impl ::treesitter_types::Spanned for CallExpressionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -16231,10 +16709,12 @@ pub enum CaptureListItemValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -16379,6 +16859,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaptureListItemValue<'tree> 
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16397,6 +16882,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaptureListItemValue<'tree> 
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -16634,10 +17124,12 @@ impl ::treesitter_types::Spanned for CaptureListItemValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -16725,6 +17217,7 @@ impl ::treesitter_types::Spanned for CatchBlockChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CheckExpressionName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -16748,6 +17241,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -16818,6 +17316,7 @@ impl ::treesitter_types::Spanned for CheckExpressionName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -16898,10 +17397,12 @@ pub enum CheckExpressionTarget<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -17046,6 +17547,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionTarget<'tree>
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17064,6 +17570,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionTarget<'tree>
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -17301,10 +17812,12 @@ impl ::treesitter_types::Spanned for CheckExpressionTarget<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -17351,6 +17864,7 @@ impl ::treesitter_types::Spanned for CheckExpressionTarget<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CheckExpressionType<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -17375,6 +17889,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -17450,6 +17969,7 @@ impl ::treesitter_types::Spanned for CheckExpressionType<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -17471,6 +17991,7 @@ pub enum ClassBodyChildren<'tree> {
     AssociatedtypeDeclaration(::std::boxed::Box<AssociatedtypeDeclaration<'tree>>),
     ClassDeclaration(::std::boxed::Box<ClassDeclaration<'tree>>),
     DeinitDeclaration(::std::boxed::Box<DeinitDeclaration<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
     FunctionDeclaration(::std::boxed::Box<FunctionDeclaration<'tree>>),
     ImportDeclaration(::std::boxed::Box<ImportDeclaration<'tree>>),
     InitDeclaration(::std::boxed::Box<InitDeclaration<'tree>>),
@@ -17504,6 +18025,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassBodyChildren<'tree> {
             "deinit_declaration" => Ok(Self::DeinitDeclaration(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DeinitDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "function_declaration" => Ok(Self::FunctionDeclaration(::std::boxed::Box::new(
@@ -17568,6 +18094,7 @@ impl ::treesitter_types::Spanned for ClassBodyChildren<'_> {
             Self::AssociatedtypeDeclaration(inner) => inner.span(),
             Self::ClassDeclaration(inner) => inner.span(),
             Self::DeinitDeclaration(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
             Self::FunctionDeclaration(inner) => inner.span(),
             Self::ImportDeclaration(inner) => inner.span(),
             Self::InitDeclaration(inner) => inner.span(),
@@ -17653,6 +18180,7 @@ impl ::treesitter_types::Spanned for ClassDeclarationDeclarationKind {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClassDeclarationName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -17677,6 +18205,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassDeclarationName<'tree> 
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -17752,6 +18285,7 @@ impl ::treesitter_types::Spanned for ClassDeclarationName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -17886,10 +18420,12 @@ pub enum ComparisonExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -18034,6 +18570,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionLhs<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -18052,6 +18593,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionLhs<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -18289,10 +18835,12 @@ impl ::treesitter_types::Spanned for ComparisonExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -18410,10 +18958,12 @@ pub enum ComparisonExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -18558,6 +19108,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionRhs<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -18576,6 +19131,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionRhs<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -18813,10 +19373,12 @@ impl ::treesitter_types::Spanned for ComparisonExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -19080,10 +19642,12 @@ pub enum ConjunctionExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -19228,6 +19792,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionLhs<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -19246,6 +19815,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionLhs<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -19483,10 +20057,12 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -19595,10 +20171,12 @@ pub enum ConjunctionExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -19743,6 +20321,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionRhs<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -19761,6 +20344,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionRhs<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -19998,10 +20586,12 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -20121,6 +20711,512 @@ impl ::treesitter_types::Spanned for ConstructorSuffixChildren<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ConsumeExpressionExpr<'tree> {
+    NotEq(::treesitter_types::Span),
+    BangEqEq(::treesitter_types::Span),
+    Percent(::treesitter_types::Span),
+    PercentEq(::treesitter_types::Span),
+    Amp(::treesitter_types::Span),
+    Star(::treesitter_types::Span),
+    StarEq(::treesitter_types::Span),
+    Plus(::treesitter_types::Span),
+    PlusPlus(::treesitter_types::Span),
+    PlusEq(::treesitter_types::Span),
+    Minus(::treesitter_types::Span),
+    MinusMinus(::treesitter_types::Span),
+    MinusEq(::treesitter_types::Span),
+    Slash(::treesitter_types::Span),
+    SlashEq(::treesitter_types::Span),
+    Lt(::treesitter_types::Span),
+    Shl(::treesitter_types::Span),
+    LtEq(::treesitter_types::Span),
+    Eq(::treesitter_types::Span),
+    EqEq(::treesitter_types::Span),
+    EqEqEq(::treesitter_types::Span),
+    Gt(::treesitter_types::Span),
+    GtEq(::treesitter_types::Span),
+    Shr(::treesitter_types::Span),
+    Question(::treesitter_types::Span),
+    Caret(::treesitter_types::Span),
+    AdditiveExpression(::std::boxed::Box<AdditiveExpression<'tree>>),
+    ArrayLiteral(::std::boxed::Box<ArrayLiteral<'tree>>),
+    AsExpression(::std::boxed::Box<AsExpression<'tree>>),
+    Assignment(::std::boxed::Box<Assignment<'tree>>),
+    AwaitExpression(::std::boxed::Box<AwaitExpression<'tree>>),
+    Bang(::std::boxed::Box<Bang<'tree>>),
+    BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
+    BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
+    BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    CallExpression(::std::boxed::Box<CallExpression<'tree>>),
+    CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
+    ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
+    ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
+    ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
+    CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
+    Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
+    DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
+    DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
+    EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
+    FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
+    HexLiteral(::std::boxed::Box<HexLiteral<'tree>>),
+    IfStatement(::std::boxed::Box<IfStatement<'tree>>),
+    InfixExpression(::std::boxed::Box<InfixExpression<'tree>>),
+    IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
+    KeyPathExpression(::std::boxed::Box<KeyPathExpression<'tree>>),
+    KeyPathStringExpression(::std::boxed::Box<KeyPathStringExpression<'tree>>),
+    LambdaLiteral(::std::boxed::Box<LambdaLiteral<'tree>>),
+    LineStringLiteral(::std::boxed::Box<LineStringLiteral<'tree>>),
+    MacroInvocation(::std::boxed::Box<MacroInvocation<'tree>>),
+    MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
+    MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
+    NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
+    Nil(::treesitter_types::Span),
+    NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
+    OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
+    OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
+    PlaygroundLiteral(::std::boxed::Box<PlaygroundLiteral<'tree>>),
+    PostfixExpression(::std::boxed::Box<PostfixExpression<'tree>>),
+    PrefixExpression(::std::boxed::Box<PrefixExpression<'tree>>),
+    RangeExpression(::std::boxed::Box<RangeExpression<'tree>>),
+    RawStringLiteral(::std::boxed::Box<RawStringLiteral<'tree>>),
+    RealLiteral(::std::boxed::Box<RealLiteral<'tree>>),
+    RegexLiteral(::std::boxed::Box<RegexLiteral<'tree>>),
+    SelectorExpression(::std::boxed::Box<SelectorExpression<'tree>>),
+    SelfExpression(::std::boxed::Box<SelfExpression<'tree>>),
+    SimpleIdentifier(::std::boxed::Box<SimpleIdentifier<'tree>>),
+    SpecialLiteral(::std::boxed::Box<SpecialLiteral<'tree>>),
+    SuperExpression(::std::boxed::Box<SuperExpression<'tree>>),
+    SwitchStatement(::std::boxed::Box<SwitchStatement<'tree>>),
+    TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
+    TryExpression(::std::boxed::Box<TryExpression<'tree>>),
+    TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
+    ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
+    Pipe(::treesitter_types::Span),
+    Tilde(::treesitter_types::Span),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ConsumeExpressionExpr<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "!=" => Ok(Self::NotEq(::treesitter_types::Span::from(node))),
+            "!==" => Ok(Self::BangEqEq(::treesitter_types::Span::from(node))),
+            "%" => Ok(Self::Percent(::treesitter_types::Span::from(node))),
+            "%=" => Ok(Self::PercentEq(::treesitter_types::Span::from(node))),
+            "&" => Ok(Self::Amp(::treesitter_types::Span::from(node))),
+            "*" => Ok(Self::Star(::treesitter_types::Span::from(node))),
+            "*=" => Ok(Self::StarEq(::treesitter_types::Span::from(node))),
+            "+" => Ok(Self::Plus(::treesitter_types::Span::from(node))),
+            "++" => Ok(Self::PlusPlus(::treesitter_types::Span::from(node))),
+            "+=" => Ok(Self::PlusEq(::treesitter_types::Span::from(node))),
+            "-" => Ok(Self::Minus(::treesitter_types::Span::from(node))),
+            "--" => Ok(Self::MinusMinus(::treesitter_types::Span::from(node))),
+            "-=" => Ok(Self::MinusEq(::treesitter_types::Span::from(node))),
+            "/" => Ok(Self::Slash(::treesitter_types::Span::from(node))),
+            "/=" => Ok(Self::SlashEq(::treesitter_types::Span::from(node))),
+            "<" => Ok(Self::Lt(::treesitter_types::Span::from(node))),
+            "<<" => Ok(Self::Shl(::treesitter_types::Span::from(node))),
+            "<=" => Ok(Self::LtEq(::treesitter_types::Span::from(node))),
+            "=" => Ok(Self::Eq(::treesitter_types::Span::from(node))),
+            "==" => Ok(Self::EqEq(::treesitter_types::Span::from(node))),
+            "===" => Ok(Self::EqEqEq(::treesitter_types::Span::from(node))),
+            ">" => Ok(Self::Gt(::treesitter_types::Span::from(node))),
+            ">=" => Ok(Self::GtEq(::treesitter_types::Span::from(node))),
+            ">>" => Ok(Self::Shr(::treesitter_types::Span::from(node))),
+            "?" => Ok(Self::Question(::treesitter_types::Span::from(node))),
+            "^" => Ok(Self::Caret(::treesitter_types::Span::from(node))),
+            "additive_expression" => Ok(Self::AdditiveExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AdditiveExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "array_literal" => Ok(Self::ArrayLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "as_expression" => Ok(Self::AsExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AsExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "assignment" => Ok(Self::Assignment(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Assignment as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "await_expression" => Ok(Self::AwaitExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AwaitExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bang" => Ok(Self::Bang(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Bang as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bin_literal" => Ok(Self::BinLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BinLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bitwise_operation" => Ok(Self::BitwiseOperation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BitwiseOperation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "boolean_literal" => Ok(Self::BooleanLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "check_expression" => Ok(Self::CheckExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CheckExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "comparison_expression" => Ok(Self::ComparisonExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ComparisonExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "conjunction_expression" => Ok(Self::ConjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "constructor_expression" => Ok(Self::ConstructorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "diagnostic" => Ok(Self::Diagnostic(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Diagnostic as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_literal" => Ok(Self::DictionaryLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DisjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "equality_expression" => Ok(Self::EqualityExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <EqualityExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "fully_open_range" => Ok(Self::FullyOpenRange(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FullyOpenRange as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "hex_literal" => Ok(Self::HexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <HexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "if_statement" => Ok(Self::IfStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "infix_expression" => Ok(Self::InfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "integer_literal" => Ok(Self::IntegerLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_expression" => Ok(Self::KeyPathExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_string_expression" => Ok(Self::KeyPathStringExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathStringExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "lambda_literal" => Ok(Self::LambdaLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LambdaLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "line_string_literal" => Ok(Self::LineStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "macro_invocation" => Ok(Self::MacroInvocation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MacroInvocation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "multi_line_string_literal" => Ok(Self::MultiLineStringLiteral(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiLineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "multiplicative_expression" => Ok(Self::MultiplicativeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiplicativeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "navigation_expression" => Ok(Self::NavigationExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
+            "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "open_end_range_expression" => Ok(Self::OpenEndRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenEndRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "open_start_range_expression" => Ok(Self::OpenStartRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenStartRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "playground_literal" => Ok(Self::PlaygroundLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PlaygroundLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "prefix_expression" => Ok(Self::PrefixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PrefixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "range_expression" => Ok(Self::RangeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "raw_string_literal" => Ok(Self::RawStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RawStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "real_literal" => Ok(Self::RealLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RealLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "regex_literal" => Ok(Self::RegexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RegexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "selector_expression" => Ok(Self::SelectorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelectorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "self_expression" => Ok(Self::SelfExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelfExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "simple_identifier" => Ok(Self::SimpleIdentifier(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SimpleIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "special_literal" => Ok(Self::SpecialLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SpecialLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "super_expression" => Ok(Self::SuperExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SuperExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "switch_statement" => Ok(Self::SwitchStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SwitchStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "try_expression" => Ok(Self::TryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "tuple_expression" => Ok(Self::TupleExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_parameter_pack" => Ok(Self::ValueParameterPack(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValueParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "|" => Ok(Self::Pipe(::treesitter_types::Span::from(node))),
+            "~" => Ok(Self::Tilde(::treesitter_types::Span::from(node))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for ConsumeExpressionExpr<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::NotEq(span) => *span,
+            Self::BangEqEq(span) => *span,
+            Self::Percent(span) => *span,
+            Self::PercentEq(span) => *span,
+            Self::Amp(span) => *span,
+            Self::Star(span) => *span,
+            Self::StarEq(span) => *span,
+            Self::Plus(span) => *span,
+            Self::PlusPlus(span) => *span,
+            Self::PlusEq(span) => *span,
+            Self::Minus(span) => *span,
+            Self::MinusMinus(span) => *span,
+            Self::MinusEq(span) => *span,
+            Self::Slash(span) => *span,
+            Self::SlashEq(span) => *span,
+            Self::Lt(span) => *span,
+            Self::Shl(span) => *span,
+            Self::LtEq(span) => *span,
+            Self::Eq(span) => *span,
+            Self::EqEq(span) => *span,
+            Self::EqEqEq(span) => *span,
+            Self::Gt(span) => *span,
+            Self::GtEq(span) => *span,
+            Self::Shr(span) => *span,
+            Self::Question(span) => *span,
+            Self::Caret(span) => *span,
+            Self::AdditiveExpression(inner) => inner.span(),
+            Self::ArrayLiteral(inner) => inner.span(),
+            Self::AsExpression(inner) => inner.span(),
+            Self::Assignment(inner) => inner.span(),
+            Self::AwaitExpression(inner) => inner.span(),
+            Self::Bang(inner) => inner.span(),
+            Self::BinLiteral(inner) => inner.span(),
+            Self::BitwiseOperation(inner) => inner.span(),
+            Self::BooleanLiteral(inner) => inner.span(),
+            Self::CallExpression(inner) => inner.span(),
+            Self::CheckExpression(inner) => inner.span(),
+            Self::ComparisonExpression(inner) => inner.span(),
+            Self::ConjunctionExpression(inner) => inner.span(),
+            Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
+            Self::CustomOperator(inner) => inner.span(),
+            Self::Diagnostic(inner) => inner.span(),
+            Self::DictionaryLiteral(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
+            Self::DisjunctionExpression(inner) => inner.span(),
+            Self::EqualityExpression(inner) => inner.span(),
+            Self::FullyOpenRange(inner) => inner.span(),
+            Self::HexLiteral(inner) => inner.span(),
+            Self::IfStatement(inner) => inner.span(),
+            Self::InfixExpression(inner) => inner.span(),
+            Self::IntegerLiteral(inner) => inner.span(),
+            Self::KeyPathExpression(inner) => inner.span(),
+            Self::KeyPathStringExpression(inner) => inner.span(),
+            Self::LambdaLiteral(inner) => inner.span(),
+            Self::LineStringLiteral(inner) => inner.span(),
+            Self::MacroInvocation(inner) => inner.span(),
+            Self::MultiLineStringLiteral(inner) => inner.span(),
+            Self::MultiplicativeExpression(inner) => inner.span(),
+            Self::NavigationExpression(inner) => inner.span(),
+            Self::Nil(span) => *span,
+            Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::OctLiteral(inner) => inner.span(),
+            Self::OpenEndRangeExpression(inner) => inner.span(),
+            Self::OpenStartRangeExpression(inner) => inner.span(),
+            Self::PlaygroundLiteral(inner) => inner.span(),
+            Self::PostfixExpression(inner) => inner.span(),
+            Self::PrefixExpression(inner) => inner.span(),
+            Self::RangeExpression(inner) => inner.span(),
+            Self::RawStringLiteral(inner) => inner.span(),
+            Self::RealLiteral(inner) => inner.span(),
+            Self::RegexLiteral(inner) => inner.span(),
+            Self::SelectorExpression(inner) => inner.span(),
+            Self::SelfExpression(inner) => inner.span(),
+            Self::SimpleIdentifier(inner) => inner.span(),
+            Self::SpecialLiteral(inner) => inner.span(),
+            Self::SuperExpression(inner) => inner.span(),
+            Self::SwitchStatement(inner) => inner.span(),
+            Self::TernaryExpression(inner) => inner.span(),
+            Self::TryExpression(inner) => inner.span(),
+            Self::TupleExpression(inner) => inner.span(),
+            Self::ValuePackExpansion(inner) => inner.span(),
+            Self::ValueParameterPack(inner) => inner.span(),
+            Self::Pipe(span) => *span,
+            Self::Tilde(span) => *span,
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ControlTransferStatementResult<'tree> {
     NotEq(::treesitter_types::Span),
     BangEqEq(::treesitter_types::Span),
@@ -20162,10 +21258,12 @@ pub enum ControlTransferStatementResult<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -20310,6 +21408,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementResu
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -20328,6 +21431,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementResu
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -20565,10 +21673,12 @@ impl ::treesitter_types::Spanned for ControlTransferStatementResult<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -20628,10 +21738,12 @@ pub enum ControlTransferStatementChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -20748,6 +21860,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementChil
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -20766,6 +21883,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementChil
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -20979,10 +22101,12 @@ impl ::treesitter_types::Spanned for ControlTransferStatementChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -21165,10 +22289,12 @@ pub enum DictionaryLiteralKey<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -21313,6 +22439,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralKey<'tree> 
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21331,6 +22462,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralKey<'tree> 
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -21568,10 +22704,12 @@ impl ::treesitter_types::Spanned for DictionaryLiteralKey<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -21657,10 +22795,12 @@ pub enum DictionaryLiteralValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -21805,6 +22945,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralValue<'tree
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21823,6 +22968,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralValue<'tree
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -22060,10 +23210,12 @@ impl ::treesitter_types::Spanned for DictionaryLiteralValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -22110,6 +23262,7 @@ impl ::treesitter_types::Spanned for DictionaryLiteralValue<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionaryTypeKey<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -22134,6 +23287,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryTypeKey<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -22209,6 +23367,7 @@ impl ::treesitter_types::Spanned for DictionaryTypeKey<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -22228,6 +23387,7 @@ impl ::treesitter_types::Spanned for DictionaryTypeKey<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionaryTypeName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -22251,6 +23411,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryTypeName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -22321,6 +23486,7 @@ impl ::treesitter_types::Spanned for DictionaryTypeName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -22339,6 +23505,7 @@ impl ::treesitter_types::Spanned for DictionaryTypeName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DictionaryTypeValue<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -22363,6 +23530,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryTypeValue<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -22438,6 +23610,7 @@ impl ::treesitter_types::Spanned for DictionaryTypeValue<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -22552,10 +23725,12 @@ pub enum DirectlyAssignableExpressionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -22671,6 +23846,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DirectlyAssignableExpression
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22689,6 +23869,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DirectlyAssignableExpression
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -22897,10 +24082,12 @@ impl ::treesitter_types::Spanned for DirectlyAssignableExpressionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -22983,10 +24170,12 @@ pub enum DisjunctionExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -23131,6 +24320,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionLhs<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -23149,6 +24343,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionLhs<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -23386,10 +24585,12 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -23498,10 +24699,12 @@ pub enum DisjunctionExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -23646,6 +24849,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionRhs<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -23664,6 +24872,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionRhs<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -23901,10 +25114,12 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -23952,6 +25167,8 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionRhs<'_> {
 pub enum DoStatementChildren<'tree> {
     CatchBlock(::std::boxed::Box<CatchBlock<'tree>>),
     Statements(::std::boxed::Box<Statements<'tree>>),
+    Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for DoStatementChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -23970,6 +25187,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DoStatementChildren<'tree> {
                     <Statements as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws" => Ok(Self::Throws(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Throws as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -23979,6 +25206,8 @@ impl ::treesitter_types::Spanned for DoStatementChildren<'_> {
         match self {
             Self::CatchBlock(inner) => inner.span(),
             Self::Statements(inner) => inner.span(),
+            Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
         }
     }
 }
@@ -23987,6 +25216,7 @@ pub enum EnumClassBodyChildren<'tree> {
     AssociatedtypeDeclaration(::std::boxed::Box<AssociatedtypeDeclaration<'tree>>),
     ClassDeclaration(::std::boxed::Box<ClassDeclaration<'tree>>),
     DeinitDeclaration(::std::boxed::Box<DeinitDeclaration<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
     EnumEntry(::std::boxed::Box<EnumEntry<'tree>>),
     FunctionDeclaration(::std::boxed::Box<FunctionDeclaration<'tree>>),
     ImportDeclaration(::std::boxed::Box<ImportDeclaration<'tree>>),
@@ -24020,6 +25250,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumClassBodyChildren<'tree>
             "deinit_declaration" => Ok(Self::DeinitDeclaration(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DeinitDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "enum_entry" => Ok(Self::EnumEntry(::std::boxed::Box::new(
@@ -24084,6 +25319,7 @@ impl ::treesitter_types::Spanned for EnumClassBodyChildren<'_> {
             Self::AssociatedtypeDeclaration(inner) => inner.span(),
             Self::ClassDeclaration(inner) => inner.span(),
             Self::DeinitDeclaration(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
             Self::EnumEntry(inner) => inner.span(),
             Self::FunctionDeclaration(inner) => inner.span(),
             Self::ImportDeclaration(inner) => inner.span(),
@@ -24139,10 +25375,12 @@ pub enum EnumEntryRawValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -24287,6 +25525,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumEntryRawValue<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24305,6 +25548,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumEntryRawValue<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -24542,10 +25790,12 @@ impl ::treesitter_types::Spanned for EnumEntryRawValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -24592,6 +25842,7 @@ impl ::treesitter_types::Spanned for EnumEntryRawValue<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EnumTypeParametersName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -24615,6 +25866,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumTypeParametersName<'tree
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -24685,6 +25941,7 @@ impl ::treesitter_types::Spanned for EnumTypeParametersName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -24716,10 +25973,12 @@ pub enum EnumTypeParametersChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -24837,6 +26096,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumTypeParametersChildren<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24855,6 +26119,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumTypeParametersChildren<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -25073,10 +26342,12 @@ impl ::treesitter_types::Spanned for EnumTypeParametersChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -25123,6 +26394,7 @@ impl ::treesitter_types::Spanned for EnumTypeParametersChildren<'_> {
 pub enum EqualityConstraintConstrainedType<'tree> {
     Dot(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -25149,6 +26421,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityConstraintConstraine
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -25230,6 +26507,7 @@ impl ::treesitter_types::Spanned for EqualityConstraintConstrainedType<'_> {
         match self {
             Self::Dot(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -25250,6 +26528,7 @@ impl ::treesitter_types::Spanned for EqualityConstraintConstrainedType<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EqualityConstraintMustEqual<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -25274,6 +26553,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityConstraintMustEqual<
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -25349,6 +26633,7 @@ impl ::treesitter_types::Spanned for EqualityConstraintMustEqual<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -25368,6 +26653,7 @@ impl ::treesitter_types::Spanned for EqualityConstraintMustEqual<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EqualityConstraintName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -25391,6 +26677,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityConstraintName<'tree
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -25461,6 +26752,7 @@ impl ::treesitter_types::Spanned for EqualityConstraintName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -25518,10 +26810,12 @@ pub enum EqualityExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -25666,6 +26960,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionLhs<'tree>
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -25684,6 +26983,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionLhs<'tree>
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -25921,10 +27225,12 @@ impl ::treesitter_types::Spanned for EqualityExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -26042,10 +27348,12 @@ pub enum EqualityExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -26190,6 +27498,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionRhs<'tree>
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -26208,6 +27521,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionRhs<'tree>
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -26445,10 +27763,12 @@ impl ::treesitter_types::Spanned for EqualityExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -26495,6 +27815,7 @@ impl ::treesitter_types::Spanned for EqualityExpressionRhs<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ExistentialTypeChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -26518,6 +27839,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ExistentialTypeChildren<'tre
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -26588,6 +27914,7 @@ impl ::treesitter_types::Spanned for ExistentialTypeChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -26645,10 +27972,12 @@ pub enum ForStatementCollection<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -26793,6 +28122,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatementCollection<'tree
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -26811,6 +28145,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatementCollection<'tree
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -27048,10 +28387,12 @@ impl ::treesitter_types::Spanned for ForStatementCollection<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -27185,10 +28526,12 @@ pub enum FunctionDeclarationDefaultValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -27333,6 +28676,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationDefaultVa
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -27351,6 +28699,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationDefaultVa
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -27588,10 +28941,12 @@ impl ::treesitter_types::Spanned for FunctionDeclarationDefaultValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -27664,6 +29019,7 @@ pub enum FunctionDeclarationName<'tree> {
     Caret(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
     Bang(::std::boxed::Box<Bang<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -27721,6 +29077,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationName<'tre
             "bang" => Ok(Self::Bang(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bang as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
@@ -27829,6 +29190,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationName<'_> {
             Self::Caret(span) => *span,
             Self::ArrayType(inner) => inner.span(),
             Self::Bang(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -27852,6 +29214,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationName<'_> {
 pub enum FunctionDeclarationReturnType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -27877,6 +29240,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationReturnTyp
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -27953,6 +29321,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationReturnType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -27978,6 +29347,7 @@ pub enum FunctionDeclarationChildren<'tree> {
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     PropertyBehaviorModifier(::std::boxed::Box<PropertyBehaviorModifier<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -28023,6 +29393,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationChildren<
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28047,6 +29422,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationChildren<'_> {
             Self::Parameter(inner) => inner.span(),
             Self::PropertyBehaviorModifier(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -28055,6 +29431,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FunctionTypeName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -28078,6 +29455,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionTypeName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -28148,6 +29530,7 @@ impl ::treesitter_types::Spanned for FunctionTypeName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -28166,6 +29549,7 @@ impl ::treesitter_types::Spanned for FunctionTypeName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FunctionTypeParams<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -28189,6 +29573,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionTypeParams<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -28259,6 +29648,7 @@ impl ::treesitter_types::Spanned for FunctionTypeParams<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -28277,6 +29667,7 @@ impl ::treesitter_types::Spanned for FunctionTypeParams<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FunctionTypeReturnType<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -28301,6 +29692,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionTypeReturnType<'tree
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -28376,6 +29772,7 @@ impl ::treesitter_types::Spanned for FunctionTypeReturnType<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -28393,9 +29790,44 @@ impl ::treesitter_types::Spanned for FunctionTypeReturnType<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum FunctionTypeChildren<'tree> {
+    Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionTypeChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "throws" => Ok(Self::Throws(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Throws as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for FunctionTypeChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GetterSpecifierChildren<'tree> {
     MutationModifier(::std::boxed::Box<MutationModifier<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for GetterSpecifierChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -28414,6 +29846,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GetterSpecifierChildren<'tre
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -28423,6 +29860,7 @@ impl ::treesitter_types::Spanned for GetterSpecifierChildren<'_> {
         match self {
             Self::MutationModifier(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
         }
     }
 }
@@ -28472,17 +29910,20 @@ pub enum GuardStatementCondition<'tree> {
     BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
     BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
     BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CallExpression(::std::boxed::Box<CallExpression<'tree>>),
     Case(::treesitter_types::Span),
     CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -28637,6 +30078,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementCondition<'tre
                     <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28663,6 +30109,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementCondition<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28686,6 +30137,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementCondition<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -29013,17 +30469,20 @@ impl ::treesitter_types::Spanned for GuardStatementCondition<'_> {
             Self::BinLiteral(inner) => inner.span(),
             Self::BitwiseOperation(inner) => inner.span(),
             Self::BooleanLiteral(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CallExpression(inner) => inner.span(),
             Self::Case(span) => *span,
             Self::CheckExpression(inner) => inner.span(),
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -29088,6 +30547,7 @@ impl ::treesitter_types::Spanned for GuardStatementCondition<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GuardStatementName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -29111,6 +30571,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -29181,6 +30646,7 @@ impl ::treesitter_types::Spanned for GuardStatementName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -29276,17 +30742,20 @@ pub enum IfStatementCondition<'tree> {
     BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
     BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
     BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CallExpression(::std::boxed::Box<CallExpression<'tree>>),
     Case(::treesitter_types::Span),
     CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -29441,6 +30910,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
                     <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
@@ -29467,6 +30941,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -29490,6 +30969,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -29817,17 +31301,20 @@ impl ::treesitter_types::Spanned for IfStatementCondition<'_> {
             Self::BinLiteral(inner) => inner.span(),
             Self::BitwiseOperation(inner) => inner.span(),
             Self::BooleanLiteral(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CallExpression(inner) => inner.span(),
             Self::Case(span) => *span,
             Self::CheckExpression(inner) => inner.span(),
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -29892,6 +31379,7 @@ impl ::treesitter_types::Spanned for IfStatementCondition<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum IfStatementName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -29915,6 +31403,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -29985,6 +31478,7 @@ impl ::treesitter_types::Spanned for IfStatementName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -30117,10 +31611,12 @@ pub enum InfixExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -30265,6 +31761,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionLhs<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -30283,6 +31784,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionLhs<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -30520,10 +32026,12 @@ impl ::treesitter_types::Spanned for InfixExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -30609,10 +32117,12 @@ pub enum InfixExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -30757,6 +32267,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionRhs<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -30775,6 +32290,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionRhs<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -31012,10 +32532,12 @@ impl ::treesitter_types::Spanned for InfixExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -31063,6 +32585,7 @@ impl ::treesitter_types::Spanned for InfixExpressionRhs<'_> {
 pub enum InheritanceConstraintConstrainedType<'tree> {
     Dot(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -31089,6 +32612,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InheritanceConstraintConstra
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -31170,6 +32698,7 @@ impl ::treesitter_types::Spanned for InheritanceConstraintConstrainedType<'_> {
         match self {
             Self::Dot(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -31191,6 +32720,7 @@ impl ::treesitter_types::Spanned for InheritanceConstraintConstrainedType<'_> {
 pub enum InheritanceConstraintInheritsFrom<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -31216,6 +32746,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InheritanceConstraintInherit
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -31292,6 +32827,7 @@ impl ::treesitter_types::Spanned for InheritanceConstraintInheritsFrom<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -31311,6 +32847,7 @@ impl ::treesitter_types::Spanned for InheritanceConstraintInheritsFrom<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum InheritanceConstraintName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -31334,6 +32871,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InheritanceConstraintName<'t
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -31404,6 +32946,7 @@ impl ::treesitter_types::Spanned for InheritanceConstraintName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -31502,10 +33045,12 @@ pub enum InitDeclarationDefaultValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -31650,6 +33195,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationDefaultValue<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -31668,6 +33218,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationDefaultValue<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -31905,10 +33460,12 @@ impl ::treesitter_types::Spanned for InitDeclarationDefaultValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -31982,6 +33539,7 @@ pub enum InitDeclarationChildren<'tree> {
     Modifiers(::std::boxed::Box<Modifiers<'tree>>),
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -32017,6 +33575,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationChildren<'tre
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32039,6 +33602,7 @@ impl ::treesitter_types::Spanned for InitDeclarationChildren<'_> {
             Self::Modifiers(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -32086,10 +33650,12 @@ pub enum InterpolatedExpressionValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -32234,6 +33800,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolatedExpressionValue<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32252,6 +33823,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolatedExpressionValue<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -32489,10 +34065,12 @@ impl ::treesitter_types::Spanned for InterpolatedExpressionValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -32621,10 +34199,12 @@ pub enum KeyPathStringExpressionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -32740,6 +34320,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for KeyPathStringExpressionChild
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32758,6 +34343,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for KeyPathStringExpressionChild
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -32966,10 +34556,12 @@ impl ::treesitter_types::Spanned for KeyPathStringExpressionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -33013,6 +34605,7 @@ impl ::treesitter_types::Spanned for KeyPathStringExpressionChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LambdaFunctionTypeName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -33036,6 +34629,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeName<'tree
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -33106,6 +34704,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -33125,6 +34724,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeName<'_> {
 pub enum LambdaFunctionTypeReturnType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -33150,6 +34750,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeReturnType
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -33226,6 +34831,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeReturnType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -33246,6 +34852,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeReturnType<'_> {
 pub enum LambdaFunctionTypeChildren<'tree> {
     LambdaFunctionTypeParameters(::std::boxed::Box<LambdaFunctionTypeParameters<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -33266,6 +34873,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeChildren<'
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -33275,6 +34887,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeChildren<'_> {
         match self {
             Self::LambdaFunctionTypeParameters(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
         }
     }
 }
@@ -33315,6 +34928,7 @@ impl ::treesitter_types::Spanned for LambdaLiteralChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LambdaParameterName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -33339,6 +34953,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaParameterName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -33414,6 +35033,7 @@ impl ::treesitter_types::Spanned for LambdaParameterName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -33434,6 +35054,7 @@ impl ::treesitter_types::Spanned for LambdaParameterName<'_> {
 pub enum LambdaParameterType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -33459,6 +35080,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaParameterType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -33535,6 +35161,7 @@ impl ::treesitter_types::Spanned for LambdaParameterType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -33661,10 +35288,12 @@ pub enum MacroDeclarationDefaultValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -33809,6 +35438,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDeclarationDefaultValue
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -33827,6 +35461,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDeclarationDefaultValue
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -34064,10 +35703,12 @@ impl ::treesitter_types::Spanned for MacroDeclarationDefaultValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -34115,6 +35756,7 @@ impl ::treesitter_types::Spanned for MacroDeclarationDefaultValue<'_> {
 pub enum MacroDeclarationChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
     Attribute(::std::boxed::Box<Attribute<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -34148,6 +35790,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDeclarationChildren<'tr
             "attribute" => Ok(Self::Attribute(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Attribute as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -34244,6 +35891,7 @@ impl ::treesitter_types::Spanned for MacroDeclarationChildren<'_> {
         match self {
             Self::ArrayType(inner) => inner.span(),
             Self::Attribute(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -34306,10 +35954,12 @@ pub enum MacroDefinitionBody<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExternalMacroDefinition(::std::boxed::Box<ExternalMacroDefinition<'tree>>),
@@ -34455,6 +36105,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDefinitionBody<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34473,6 +36128,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDefinitionBody<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -34715,10 +36375,12 @@ impl ::treesitter_types::Spanned for MacroDefinitionBody<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExternalMacroDefinition(inner) => inner.span(),
@@ -34807,6 +36469,7 @@ impl ::treesitter_types::Spanned for MacroInvocationChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MetatypeChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -34830,6 +36493,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MetatypeChildren<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -34900,6 +36568,7 @@ impl ::treesitter_types::Spanned for MetatypeChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -35084,10 +36753,12 @@ pub enum MultiplicativeExpressionLhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -35232,6 +36903,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionLhs<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -35250,6 +36926,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionLhs<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -35487,10 +37168,12 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionLhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -35605,10 +37288,12 @@ pub enum MultiplicativeExpressionRhs<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -35753,6 +37438,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionRhs<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -35771,6 +37461,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionRhs<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -36008,10 +37703,12 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionRhs<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -36141,11 +37838,13 @@ pub enum NavigationExpressionTarget<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -36300,6 +37999,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NavigationExpressionTarget<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -36323,6 +38027,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NavigationExpressionTarget<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -36578,11 +38287,13 @@ impl ::treesitter_types::Spanned for NavigationExpressionTarget<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -36705,10 +38416,12 @@ pub enum NilCoalescingExpressionIfNil<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -36853,6 +38566,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionIfNil
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -36871,6 +38589,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionIfNil
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -37108,10 +38831,12 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionIfNil<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -37197,10 +38922,12 @@ pub enum NilCoalescingExpressionValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -37345,6 +39072,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionValue
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37363,6 +39095,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionValue
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -37600,10 +39337,12 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -37650,6 +39389,7 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionValue<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum OpaqueTypeChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -37673,6 +39413,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpaqueTypeChildren<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -37743,6 +39488,7 @@ impl ::treesitter_types::Spanned for OpaqueTypeChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -37800,10 +39546,12 @@ pub enum OpenEndRangeExpressionStart<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -37948,6 +39696,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenEndRangeExpressionStart<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37966,6 +39719,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenEndRangeExpressionStart<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -38203,10 +39961,12 @@ impl ::treesitter_types::Spanned for OpenEndRangeExpressionStart<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -38292,10 +40052,12 @@ pub enum OpenStartRangeExpressionEnd<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -38440,6 +40202,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenStartRangeExpressionEnd<
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -38458,6 +40225,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenStartRangeExpressionEnd<
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -38695,10 +40467,12 @@ impl ::treesitter_types::Spanned for OpenStartRangeExpressionEnd<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -38843,6 +40617,7 @@ impl ::treesitter_types::Spanned for OptionalTypeWrapped<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ParameterName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -38867,6 +40642,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParameterName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -38942,6 +40722,7 @@ impl ::treesitter_types::Spanned for ParameterName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -38962,6 +40743,7 @@ impl ::treesitter_types::Spanned for ParameterName<'_> {
 pub enum ParameterType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -38987,6 +40769,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ParameterType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -39063,6 +40850,7 @@ impl ::treesitter_types::Spanned for ParameterType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -39082,6 +40870,7 @@ impl ::treesitter_types::Spanned for ParameterType<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PatternName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -39105,6 +40894,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -39175,6 +40969,7 @@ impl ::treesitter_types::Spanned for PatternName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -39206,10 +41001,12 @@ pub enum PatternChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -39330,6 +41127,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39348,6 +41150,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -39581,10 +41388,12 @@ impl ::treesitter_types::Spanned for PatternChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -39646,10 +41455,12 @@ pub enum PlaygroundLiteralChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -39765,6 +41576,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlaygroundLiteralChildren<'t
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39783,6 +41599,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlaygroundLiteralChildren<'t
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -39991,10 +41812,12 @@ impl ::treesitter_types::Spanned for PlaygroundLiteralChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -40110,10 +41933,12 @@ pub enum PostfixExpressionTarget<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -40258,6 +42083,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpressionTarget<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -40276,6 +42106,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpressionTarget<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -40513,10 +42348,12 @@ impl ::treesitter_types::Spanned for PostfixExpressionTarget<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -40728,10 +42565,12 @@ pub enum PrefixExpressionTarget<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -40881,6 +42720,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrefixExpressionTarget<'tree
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -40899,6 +42743,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrefixExpressionTarget<'tree
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -41137,10 +42986,12 @@ impl ::treesitter_types::Spanned for PrefixExpressionTarget<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -41226,10 +43077,12 @@ pub enum PropertyDeclarationValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -41374,6 +43227,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyDeclarationValue<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -41392,6 +43250,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyDeclarationValue<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -41629,10 +43492,12 @@ impl ::treesitter_types::Spanned for PropertyDeclarationValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -41763,6 +43628,7 @@ impl ::treesitter_types::Spanned for PropertyDeclarationChildren<'_> {
 pub enum ProtocolBodyChildren<'tree> {
     AssociatedtypeDeclaration(::std::boxed::Box<AssociatedtypeDeclaration<'tree>>),
     DeinitDeclaration(::std::boxed::Box<DeinitDeclaration<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
     InitDeclaration(::std::boxed::Box<InitDeclaration<'tree>>),
     ProtocolFunctionDeclaration(::std::boxed::Box<ProtocolFunctionDeclaration<'tree>>),
     ProtocolPropertyDeclaration(::std::boxed::Box<ProtocolPropertyDeclaration<'tree>>),
@@ -41786,6 +43652,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolBodyChildren<'tree> 
             "deinit_declaration" => Ok(Self::DeinitDeclaration(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DeinitDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "init_declaration" => Ok(Self::InitDeclaration(::std::boxed::Box::new(
@@ -41826,6 +43697,7 @@ impl ::treesitter_types::Spanned for ProtocolBodyChildren<'_> {
         match self {
             Self::AssociatedtypeDeclaration(inner) => inner.span(),
             Self::DeinitDeclaration(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
             Self::InitDeclaration(inner) => inner.span(),
             Self::ProtocolFunctionDeclaration(inner) => inner.span(),
             Self::ProtocolPropertyDeclaration(inner) => inner.span(),
@@ -41837,6 +43709,7 @@ impl ::treesitter_types::Spanned for ProtocolBodyChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ProtocolCompositionTypeChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -41860,6 +43733,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolCompositionTypeChild
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -41930,6 +43808,7 @@ impl ::treesitter_types::Spanned for ProtocolCompositionTypeChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -42065,10 +43944,12 @@ pub enum ProtocolFunctionDeclarationDefaultValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -42213,6 +44094,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationD
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42231,6 +44117,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationD
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -42468,10 +44359,12 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationDefaultValue<'_>
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -42544,6 +44437,7 @@ pub enum ProtocolFunctionDeclarationName<'tree> {
     Caret(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
     Bang(::std::boxed::Box<Bang<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -42601,6 +44495,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationN
             "bang" => Ok(Self::Bang(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Bang as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
@@ -42709,6 +44608,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationName<'_> {
             Self::Caret(span) => *span,
             Self::ArrayType(inner) => inner.span(),
             Self::Bang(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -42732,6 +44632,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationName<'_> {
 pub enum ProtocolFunctionDeclarationReturnType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -42757,6 +44658,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationR
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -42833,6 +44739,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationReturnType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -42856,6 +44763,7 @@ pub enum ProtocolFunctionDeclarationChildren<'tree> {
     Parameter(::std::boxed::Box<Parameter<'tree>>),
     Statements(::std::boxed::Box<Statements<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
+    ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -42891,6 +44799,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationC
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "throws_clause" => Ok(Self::ThrowsClause(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42913,6 +44826,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationChildren<'_> {
             Self::Parameter(inner) => inner.span(),
             Self::Statements(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -43044,10 +44958,12 @@ pub enum RangeExpressionEnd<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -43192,6 +45108,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionEnd<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -43210,6 +45131,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionEnd<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -43447,10 +45373,12 @@ impl ::treesitter_types::Spanned for RangeExpressionEnd<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -43562,10 +45490,12 @@ pub enum RangeExpressionStart<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -43710,6 +45640,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionStart<'tree> 
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -43728,6 +45663,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionStart<'tree> 
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -43965,10 +45905,12 @@ impl ::treesitter_types::Spanned for RangeExpressionStart<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -44092,17 +46034,20 @@ pub enum RepeatWhileStatementCondition<'tree> {
     BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
     BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
     BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CallExpression(::std::boxed::Box<CallExpression<'tree>>),
     Case(::treesitter_types::Span),
     CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -44257,6 +46202,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementConditio
                     <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
@@ -44283,6 +46233,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementConditio
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -44306,6 +46261,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementConditio
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -44633,17 +46593,20 @@ impl ::treesitter_types::Spanned for RepeatWhileStatementCondition<'_> {
             Self::BinLiteral(inner) => inner.span(),
             Self::BitwiseOperation(inner) => inner.span(),
             Self::BooleanLiteral(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CallExpression(inner) => inner.span(),
             Self::Case(span) => *span,
             Self::CheckExpression(inner) => inner.span(),
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -44708,6 +46671,7 @@ impl ::treesitter_types::Spanned for RepeatWhileStatementCondition<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RepeatWhileStatementName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -44731,6 +46695,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementName<'tr
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -44801,6 +46770,7 @@ impl ::treesitter_types::Spanned for RepeatWhileStatementName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -44832,10 +46802,12 @@ pub enum SelectorExpressionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -44951,6 +46923,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SelectorExpressionChildren<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -44969,6 +46946,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SelectorExpressionChildren<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -45177,10 +47159,12 @@ impl ::treesitter_types::Spanned for SelectorExpressionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -45239,10 +47223,12 @@ pub enum SourceFileChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     DoStatement(::std::boxed::Box<DoStatement<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
@@ -45387,6 +47373,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceFileChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45405,6 +47396,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceFileChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -45702,10 +47698,12 @@ impl ::treesitter_types::Spanned for SourceFileChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::DoStatement(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
@@ -45780,11 +47778,13 @@ pub enum StatementsChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     ControlTransferStatement(::std::boxed::Box<ControlTransferStatement<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     DoStatement(::std::boxed::Box<DoStatement<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
@@ -45914,6 +47914,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StatementsChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "control_transfer_statement" => Ok(Self::ControlTransferStatement(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ControlTransferStatement as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45937,6 +47942,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StatementsChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -46191,11 +48201,13 @@ impl ::treesitter_types::Spanned for StatementsChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::ControlTransferStatement(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::DoStatement(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
@@ -46287,10 +48299,12 @@ pub enum SubscriptDeclarationDefaultValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -46435,6 +48449,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationDefaultV
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -46453,6 +48472,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationDefaultV
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -46690,10 +48714,12 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationDefaultValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -46740,6 +48766,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationDefaultValue<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SubscriptDeclarationName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -46763,6 +48790,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationName<'tr
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -46833,6 +48865,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -46852,6 +48885,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationName<'_> {
 pub enum SubscriptDeclarationReturnType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -46877,6 +48911,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationReturnTy
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -46953,6 +48992,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationReturnType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -47047,11 +49087,13 @@ pub enum SwitchEntryChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     DefaultKeyword(::std::boxed::Box<DefaultKeyword<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -47171,6 +49213,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchEntryChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47194,6 +49241,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchEntryChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -47422,11 +49474,13 @@ impl ::treesitter_types::Spanned for SwitchEntryChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::DefaultKeyword(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -47513,10 +49567,12 @@ pub enum SwitchStatementExpr<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -47661,6 +49717,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchStatementExpr<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47679,6 +49740,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchStatementExpr<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -47916,10 +49982,12 @@ impl ::treesitter_types::Spanned for SwitchStatementExpr<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -48005,10 +50073,12 @@ pub enum TernaryExpressionCondition<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -48153,6 +50223,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionCondition<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48171,6 +50246,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionCondition<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -48408,10 +50488,12 @@ impl ::treesitter_types::Spanned for TernaryExpressionCondition<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -48497,10 +50579,12 @@ pub enum TernaryExpressionIfFalse<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -48645,6 +50729,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfFalse<'tr
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48663,6 +50752,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfFalse<'tr
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -48900,10 +50994,12 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfFalse<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -48989,10 +51085,12 @@ pub enum TernaryExpressionIfTrue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -49137,6 +51235,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfTrue<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49155,6 +51258,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfTrue<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -49392,10 +51500,12 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfTrue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -49436,6 +51546,124 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfTrue<'_> {
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
             Self::Tilde(span) => *span,
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ThrowsClauseType<'tree> {
+    ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
+    DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
+    ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
+    FunctionType(::std::boxed::Box<FunctionType<'tree>>),
+    Metatype(::std::boxed::Box<Metatype<'tree>>),
+    OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
+    OptionalType(::std::boxed::Box<OptionalType<'tree>>),
+    ProtocolCompositionType(::std::boxed::Box<ProtocolCompositionType<'tree>>),
+    SuppressedConstraint(::std::boxed::Box<SuppressedConstraint<'tree>>),
+    TupleType(::std::boxed::Box<TupleType<'tree>>),
+    TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
+    TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UserType(::std::boxed::Box<UserType<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ThrowsClauseType<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "existential_type" => Ok(Self::ExistentialType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ExistentialType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "function_type" => Ok(Self::FunctionType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FunctionType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "metatype" => Ok(Self::Metatype(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Metatype as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "opaque_type" => Ok(Self::OpaqueType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpaqueType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "optional_type" => Ok(Self::OptionalType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OptionalType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "protocol_composition_type" => Ok(Self::ProtocolCompositionType(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ProtocolCompositionType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "suppressed_constraint" => Ok(Self::SuppressedConstraint(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SuppressedConstraint as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "tuple_type" => Ok(Self::TupleType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TupleType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_pack_expansion" => Ok(Self::TypePackExpansion(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_parameter_pack" => Ok(Self::TypeParameterPack(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UserType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for ThrowsClauseType<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
+            Self::DictionaryType(inner) => inner.span(),
+            Self::ExistentialType(inner) => inner.span(),
+            Self::FunctionType(inner) => inner.span(),
+            Self::Metatype(inner) => inner.span(),
+            Self::OpaqueType(inner) => inner.span(),
+            Self::OptionalType(inner) => inner.span(),
+            Self::ProtocolCompositionType(inner) => inner.span(),
+            Self::SuppressedConstraint(inner) => inner.span(),
+            Self::TupleType(inner) => inner.span(),
+            Self::TypePackExpansion(inner) => inner.span(),
+            Self::TypeParameterPack(inner) => inner.span(),
+            Self::UserType(inner) => inner.span(),
         }
     }
 }
@@ -49481,10 +51709,12 @@ pub enum TryExpressionExpr<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -49629,6 +51859,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpressionExpr<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49647,6 +51882,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpressionExpr<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -49884,10 +52124,12 @@ impl ::treesitter_types::Spanned for TryExpressionExpr<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -49973,10 +52215,12 @@ pub enum TupleExpressionValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -50121,6 +52365,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleExpressionValue<'tree> 
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -50139,6 +52388,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleExpressionValue<'tree> 
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -50376,10 +52630,12 @@ impl ::treesitter_types::Spanned for TupleExpressionValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -50467,6 +52723,7 @@ impl ::treesitter_types::Spanned for TupleTypeItemElement<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TupleTypeItemName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -50491,6 +52748,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleTypeItemName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -50566,6 +52828,7 @@ impl ::treesitter_types::Spanned for TupleTypeItemName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -50585,6 +52848,7 @@ impl ::treesitter_types::Spanned for TupleTypeItemName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TupleTypeItemType<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -50609,6 +52873,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleTypeItemType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -50684,6 +52953,7 @@ impl ::treesitter_types::Spanned for TupleTypeItemType<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -50737,6 +53007,7 @@ impl ::treesitter_types::Spanned for TupleTypeItemChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeAnnotationName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -50760,6 +53031,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeAnnotationName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -50830,6 +53106,7 @@ impl ::treesitter_types::Spanned for TypeAnnotationName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -50849,6 +53126,7 @@ impl ::treesitter_types::Spanned for TypeAnnotationName<'_> {
 pub enum TypeAnnotationType<'tree> {
     Bang(::treesitter_types::Span),
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -50874,6 +53152,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeAnnotationType<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -50950,6 +53233,7 @@ impl ::treesitter_types::Spanned for TypeAnnotationType<'_> {
         match self {
             Self::Bang(span) => *span,
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -50969,6 +53253,7 @@ impl ::treesitter_types::Spanned for TypeAnnotationType<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeArgumentsName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -50992,6 +53277,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeArgumentsName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51062,6 +53352,7 @@ impl ::treesitter_types::Spanned for TypeArgumentsName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51148,6 +53439,7 @@ impl ::treesitter_types::Spanned for TypeConstraintsChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypePackExpansionChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -51171,6 +53463,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypePackExpansionChildren<'t
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51241,6 +53538,7 @@ impl ::treesitter_types::Spanned for TypePackExpansionChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51259,6 +53557,7 @@ impl ::treesitter_types::Spanned for TypePackExpansionChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeParameterName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -51282,6 +53581,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeParameterName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51352,6 +53656,7 @@ impl ::treesitter_types::Spanned for TypeParameterName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51418,6 +53723,7 @@ impl ::treesitter_types::Spanned for TypeParameterChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypeParameterPackChildren<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -51441,6 +53747,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeParameterPackChildren<'t
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51511,6 +53822,7 @@ impl ::treesitter_types::Spanned for TypeParameterPackChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51563,6 +53875,7 @@ impl ::treesitter_types::Spanned for TypeParametersChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypealiasDeclarationName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -51587,6 +53900,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypealiasDeclarationName<'tr
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51662,6 +53980,7 @@ impl ::treesitter_types::Spanned for TypealiasDeclarationName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51681,6 +54000,7 @@ impl ::treesitter_types::Spanned for TypealiasDeclarationName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TypealiasDeclarationValue<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -51705,6 +54025,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypealiasDeclarationValue<'t
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -51780,6 +54105,7 @@ impl ::treesitter_types::Spanned for TypealiasDeclarationValue<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -51934,10 +54260,12 @@ pub enum ValueArgumentValue<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -52082,6 +54410,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueArgumentValue<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52100,6 +54433,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueArgumentValue<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -52337,10 +54675,12 @@ impl ::treesitter_types::Spanned for ValueArgumentValue<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -52426,10 +54766,12 @@ pub enum ValuePackExpansionChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -52545,6 +54887,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValuePackExpansionChildren<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52563,6 +54910,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValuePackExpansionChildren<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -52771,10 +55123,12 @@ impl ::treesitter_types::Spanned for ValuePackExpansionChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -52831,10 +55185,12 @@ pub enum ValueParameterPackChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -52950,6 +55306,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueParameterPackChildren<'
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52968,6 +55329,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueParameterPackChildren<'
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -53176,10 +55542,12 @@ impl ::treesitter_types::Spanned for ValueParameterPackChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -53236,10 +55604,12 @@ pub enum WhereClauseChildren<'tree> {
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
@@ -53356,6 +55726,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhereClauseChildren<'tree> {
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -53374,6 +55749,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhereClauseChildren<'tree> {
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -53587,10 +55967,12 @@ impl ::treesitter_types::Spanned for WhereClauseChildren<'_> {
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::FullyOpenRange(inner) => inner.span(),
@@ -53678,17 +56060,20 @@ pub enum WhileStatementCondition<'tree> {
     BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
     BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
     BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     CallExpression(::std::boxed::Box<CallExpression<'tree>>),
     Case(::treesitter_types::Span),
     CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
     ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
     ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
     ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
     CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
     Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
     DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
     DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
     EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
@@ -53843,6 +56228,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
                     <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
@@ -53869,6 +56259,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
                     <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
@@ -53892,6 +56287,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
             "directive" => Ok(Self::Directive(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
@@ -54219,17 +56619,20 @@ impl ::treesitter_types::Spanned for WhileStatementCondition<'_> {
             Self::BinLiteral(inner) => inner.span(),
             Self::BitwiseOperation(inner) => inner.span(),
             Self::BooleanLiteral(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CallExpression(inner) => inner.span(),
             Self::Case(span) => *span,
             Self::CheckExpression(inner) => inner.span(),
             Self::ComparisonExpression(inner) => inner.span(),
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::Diagnostic(inner) => inner.span(),
             Self::DictionaryLiteral(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::EqualityExpression(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
@@ -54294,6 +56697,7 @@ impl ::treesitter_types::Spanned for WhileStatementCondition<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum WhileStatementName<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     ExistentialType(::std::boxed::Box<ExistentialType<'tree>>),
     FunctionType(::std::boxed::Box<FunctionType<'tree>>),
@@ -54317,6 +56721,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementName<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -54387,6 +56796,7 @@ impl ::treesitter_types::Spanned for WhileStatementName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::ExistentialType(inner) => inner.span(),
             Self::FunctionType(inner) => inner.span(),
@@ -54492,6 +56902,7 @@ pub enum AnyNode<'tree> {
     Bang(Bang<'tree>),
     BitwiseOperation(BitwiseOperation<'tree>),
     BooleanLiteral(BooleanLiteral<'tree>),
+    BracketQualifiedType(BracketQualifiedType<'tree>),
     CallExpression(CallExpression<'tree>),
     CallSuffix(CallSuffix<'tree>),
     CaptureList(CaptureList<'tree>),
@@ -54508,6 +56919,7 @@ pub enum AnyNode<'tree> {
     ConjunctionExpression(ConjunctionExpression<'tree>),
     ConstructorExpression(ConstructorExpression<'tree>),
     ConstructorSuffix(ConstructorSuffix<'tree>),
+    ConsumeExpression(ConsumeExpression<'tree>),
     ControlTransferStatement(ControlTransferStatement<'tree>),
     CustomOperator(CustomOperator<'tree>),
     DeinitDeclaration(DeinitDeclaration<'tree>),
@@ -54518,6 +56930,7 @@ pub enum AnyNode<'tree> {
     DidsetClause(DidsetClause<'tree>),
     Directive(Directive<'tree>),
     DirectlyAssignableExpression(DirectlyAssignableExpression<'tree>),
+    DiscardStatement(DiscardStatement<'tree>),
     DisjunctionExpression(DisjunctionExpression<'tree>),
     DoStatement(DoStatement<'tree>),
     EnumClassBody(EnumClassBody<'tree>),
@@ -54613,6 +57026,7 @@ pub enum AnyNode<'tree> {
     SwitchStatement(SwitchStatement<'tree>),
     TernaryExpression(TernaryExpression<'tree>),
     Throws(Throws<'tree>),
+    ThrowsClause(ThrowsClause<'tree>),
     TryExpression(TryExpression<'tree>),
     TryOperator(TryOperator<'tree>),
     TupleExpression(TupleExpression<'tree>),
@@ -54731,6 +57145,11 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::BooleanLiteral)
             .unwrap_or(Self::Unknown(node)),
+            "bracket_qualified_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::BracketQualifiedType)
+            .unwrap_or(Self::Unknown(node)),
             "call_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -54811,6 +57230,11 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::ConstructorSuffix)
             .unwrap_or(Self::Unknown(node)),
+            "consume_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::ConsumeExpression)
+            .unwrap_or(Self::Unknown(node)),
             "control_transfer_statement" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <ControlTransferStatement as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -54869,6 +57293,11 @@ impl<'tree> AnyNode<'tree> {
                 .map(Self::DirectlyAssignableExpression)
                 .unwrap_or(Self::Unknown(node))
             }
+            "discard_statement" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::DiscardStatement)
+            .unwrap_or(Self::Unknown(node)),
             "disjunction_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <DisjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -55360,6 +57789,11 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::Throws)
             .unwrap_or(Self::Unknown(node)),
+            "throws_clause" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <ThrowsClause as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::ThrowsClause)
+            .unwrap_or(Self::Unknown(node)),
             "try_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TryExpression as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -55620,6 +58054,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::Bang(inner) => inner.span(),
             Self::BitwiseOperation(inner) => inner.span(),
             Self::BooleanLiteral(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::CallExpression(inner) => inner.span(),
             Self::CallSuffix(inner) => inner.span(),
             Self::CaptureList(inner) => inner.span(),
@@ -55636,6 +58071,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::ConjunctionExpression(inner) => inner.span(),
             Self::ConstructorExpression(inner) => inner.span(),
             Self::ConstructorSuffix(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
             Self::ControlTransferStatement(inner) => inner.span(),
             Self::CustomOperator(inner) => inner.span(),
             Self::DeinitDeclaration(inner) => inner.span(),
@@ -55646,6 +58082,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::DidsetClause(inner) => inner.span(),
             Self::Directive(inner) => inner.span(),
             Self::DirectlyAssignableExpression(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
             Self::DisjunctionExpression(inner) => inner.span(),
             Self::DoStatement(inner) => inner.span(),
             Self::EnumClassBody(inner) => inner.span(),
@@ -55741,6 +58178,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::SwitchStatement(inner) => inner.span(),
             Self::TernaryExpression(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
+            Self::ThrowsClause(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TryOperator(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
