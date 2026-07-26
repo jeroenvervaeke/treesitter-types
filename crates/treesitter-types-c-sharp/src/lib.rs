@@ -42,7 +42,7 @@
 //! assert_eq!(class.name.text(), "Hello");
 //!
 //! // The class body contains one method.
-//! assert_eq!(class.body.children.len(), 1);
+//! assert_eq!(class.body.as_ref().unwrap().children.len(), 1);
 //! ```
 
 pub use tree_sitter_c_sharp;
