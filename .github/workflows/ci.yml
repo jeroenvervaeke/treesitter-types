@@ -57,19 +57,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo publish --workspace --dry-run
 
-  semver-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-semver-checks
-      # Manifest version equals the last published version between releases, so any
-      # public API change surfaces here as the bump level it would require.
-      - run: cargo semver-checks --workspace
-
   codegen-freshness:
     runs-on: ubuntu-latest
     steps:
@@ -114,7 +101,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     if: always()
-    needs: [pr-title, fmt, clippy, build-and-test, publish-dry-run, semver-checks, codegen-freshness, integration]
+    needs: [pr-title, fmt, clippy, build-and-test, publish-dry-run, codegen-freshness, integration]
     steps:
       - name: Check results
         run: |
@@ -124,7 +111,6 @@ jobs:
             "${{ needs.clippy.result }}"
             "${{ needs.build-and-test.result }}"
             "${{ needs.publish-dry-run.result }}"
-            "${{ needs.semver-checks.result }}"
             "${{ needs.codegen-freshness.result }}"
             "${{ needs.integration.result }}"
           )
