@@ -49,15 +49,20 @@ integration-test-typescript:
     #!/usr/bin/env bash
     set -euo pipefail
     REPO_URL="https://github.com/microsoft/TypeScript.git"
+    # main is the Go rewrite (TS 7) and no longer ships src/*.ts.
+    # v6.0.3 is the last release whose compiler is still written in TypeScript.
+    REPO_REF="v6.0.3"
     TMPDIR=$(mktemp -d)
     trap 'rm -rf "$TMPDIR"' EXIT
-    echo "==> Cloning microsoft/TypeScript (shallow, sparse checkout)..."
-    git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/typescript" 2>&1 | tail -1
+    echo "==> Cloning microsoft/TypeScript @ $REPO_REF (shallow, sparse checkout)..."
+    git clone --depth 1 --branch "$REPO_REF" --filter=blob:none --sparse "$REPO_URL" "$TMPDIR/typescript" 2>&1 | tail -1
     cd "$TMPDIR/typescript"
     git sparse-checkout set src 2>/dev/null
     cd - > /dev/null
     FILE_COUNT=$(find "$TMPDIR/typescript/src" -name '*.ts' -not -path '*/node_modules/*' | wc -l)
     echo "==> Found $FILE_COUNT .ts files in src/"
+    # An empty corpus makes parse_all_typescript exit 0, turning an upstream layout change into a silent pass.
+    [ "$FILE_COUNT" -gt 0 ] || { echo "error: no .ts files found -- upstream layout changed?" >&2; exit 1; }
     echo "==> Building parse_all_typescript..."
     cargo build --release -p test-roundtrip --bin parse_all_typescript 2>&1 | tail -1
     echo "==> Parsing all .ts files..."
