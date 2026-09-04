@@ -39,7 +39,16 @@ jobs:
       - name: Install tools
         uses: taiki-e/install-action@v2.85.5
         with:
-          tool: git-cliff,cargo-release
+          tool: git-cliff,cargo-release,cargo-semver-checks
+
+      - name: Check public API against requested release level
+        env:
+          LEVEL: ${{ inputs.level }}
+        run: |
+          case "$LEVEL" in
+            patch|minor|major) cargo semver-checks --workspace --release-type "$LEVEL" ;;
+            *) cargo semver-checks --workspace ;;
+          esac
 
       - name: Configure git identity
         run: |
@@ -54,9 +63,11 @@ jobs:
       - name: Release
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.crates-io-auth.outputs.token }}
+          LEVEL: ${{ inputs.level }}
+          DRY_RUN: ${{ inputs.dry-run }}
         run: |
-          FLAGS="${{ inputs.level }}"
-          if [ "${{ inputs.dry-run }}" != "true" ]; then
+          FLAGS="$LEVEL"
+          if [ "$DRY_RUN" != "true" ]; then
             FLAGS="$FLAGS --execute --no-confirm"
           fi
           cargo release $FLAGS --workspace

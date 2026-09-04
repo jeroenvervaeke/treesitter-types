@@ -320,7 +320,9 @@ integration-test-haskell:
     echo
     ./target/release/parse_all_haskell "$TMPDIR/cabal"
 
-# Run all integration tests
+# Check whether the public API changes require a major/minor/patch bump
+semver-check level="":
+    cargo semver-checks --workspace {{ if level == "" { "" } else { "--release-type " + level } }}
 
 # Dry-run a release to see what would happen
 release-dry-run level="patch":
