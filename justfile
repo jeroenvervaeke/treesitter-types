@@ -324,10 +324,6 @@ integration-test-haskell:
 semver-check level="":
     cargo semver-checks --workspace {{ if level == "" { "" } else { "--release-type " + level } }}
 
-# Dry-run a release to see what would happen
-release-dry-run level="patch":
-    cargo release {{level}} --workspace
-
-# Execute a release (bumps versions, generates changelog, publishes)
-release level="patch":
-    cargo release {{level}} --workspace --execute
+# Preview the release PR: apply per-crate version bumps and changelogs locally, uncommitted
+release-preview:
+    release-plz update
