@@ -332,7 +332,7 @@ pub enum Declaration<'tree> {
     TopSplice(::std::boxed::Box<TopSplice<'tree>>),
     TypeFamily(::std::boxed::Box<TypeFamily<'tree>>),
     TypeInstance(::std::boxed::Box<TypeInstance<'tree>>),
-    TypeSynomym(::std::boxed::Box<TypeSynomym<'tree>>),
+    TypeSynonym(::std::boxed::Box<TypeSynonym<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Declaration<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -426,9 +426,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Declaration<'tree> {
                     <TypeInstance as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "type_synomym" => Ok(Self::TypeSynomym(::std::boxed::Box::new(
+            "type_synonym" => Ok(Self::TypeSynonym(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <TypeSynomym as ::treesitter_types::FromNode>::from_node(node, src)
+                    <TypeSynonym as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             _other => {
@@ -466,7 +466,7 @@ impl ::treesitter_types::Spanned for Declaration<'_> {
             Self::TopSplice(inner) => inner.span(),
             Self::TypeFamily(inner) => inner.span(),
             Self::TypeInstance(inner) => inner.span(),
-            Self::TypeSynomym(inner) => inner.span(),
+            Self::TypeSynonym(inner) => inner.span(),
         }
     }
 }
@@ -9605,25 +9605,25 @@ impl ::treesitter_types::Spanned for TypeRole<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TypeSynomym<'tree> {
+pub struct TypeSynonym<'tree> {
     pub span: ::treesitter_types::Span,
-    pub name: ::core::option::Option<TypeSynomymName<'tree>>,
+    pub name: ::core::option::Option<TypeSynonymName<'tree>>,
     pub patterns: ::core::option::Option<TypeParams<'tree>>,
-    pub r#type: TypeSynomymType<'tree>,
-    pub children: ::core::option::Option<TypeSynomymChildren<'tree>>,
+    pub r#type: TypeSynonymType<'tree>,
+    pub children: ::core::option::Option<TypeSynonymChildren<'tree>>,
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomym<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynonym<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
         node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-        debug_assert_eq!(node.kind(), "type_synomym");
+        debug_assert_eq!(node.kind(), "type_synonym");
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
             name: match node.child_by_field_name("name") {
                 Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <TypeSynomymName as ::treesitter_types::FromNode>::from_node(child, src)
+                    <TypeSynonymName as ::treesitter_types::FromNode>::from_node(child, src)
                 })?),
                 None => None,
             },
@@ -9638,7 +9638,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomym<'tree> {
                     .child_by_field_name("type")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("type", node))?;
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <TypeSynomymType as ::treesitter_types::FromNode>::from_node(child, src)
+                    <TypeSynonymType as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
             children: {
@@ -9663,7 +9663,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomym<'tree> {
                 };
                 match non_field_children.first() {
                     Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
-                        <TypeSynomymChildren as ::treesitter_types::FromNode>::from_node(child, src)
+                        <TypeSynonymChildren as ::treesitter_types::FromNode>::from_node(child, src)
                     })?),
                     None => None,
                 }
@@ -9671,7 +9671,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomym<'tree> {
         })
     }
 }
-impl ::treesitter_types::Spanned for TypeSynomym<'_> {
+impl ::treesitter_types::Spanned for TypeSynonym<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -16209,13 +16209,13 @@ impl ::treesitter_types::Spanned for TypePatternsChildren<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum TypeSynomymName<'tree> {
+pub enum TypeSynonymName<'tree> {
     Name(::std::boxed::Box<Name<'tree>>),
     PrefixId(::std::boxed::Box<PrefixId<'tree>>),
     PrefixList(::std::boxed::Box<PrefixList<'tree>>),
     Unit(::std::boxed::Box<Unit<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymName<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynonymName<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::treesitter_types::tree_sitter::Node<'tree>,
@@ -16246,7 +16246,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymName<'tree> {
         }
     }
 }
-impl ::treesitter_types::Spanned for TypeSynomymName<'_> {
+impl ::treesitter_types::Spanned for TypeSynonymName<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::Name(inner) => inner.span(),
@@ -16257,11 +16257,11 @@ impl ::treesitter_types::Spanned for TypeSynomymName<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum TypeSynomymType<'tree> {
+pub enum TypeSynonymType<'tree> {
     QuantifiedType(::std::boxed::Box<QuantifiedType<'tree>>),
     Signature(::std::boxed::Box<Signature<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymType<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynonymType<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::treesitter_types::tree_sitter::Node<'tree>,
@@ -16287,7 +16287,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymType<'tree> {
         }
     }
 }
-impl ::treesitter_types::Spanned for TypeSynomymType<'_> {
+impl ::treesitter_types::Spanned for TypeSynonymType<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::QuantifiedType(inner) => inner.span(),
@@ -16296,11 +16296,11 @@ impl ::treesitter_types::Spanned for TypeSynomymType<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum TypeSynomymChildren<'tree> {
+pub enum TypeSynonymChildren<'tree> {
     Infix(::std::boxed::Box<Infix<'tree>>),
     Parens(::std::boxed::Box<Parens<'tree>>),
 }
-impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymChildren<'tree> {
+impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynonymChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
     fn from_node(
         node: ::treesitter_types::tree_sitter::Node<'tree>,
@@ -16321,7 +16321,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeSynomymChildren<'tree> {
         }
     }
 }
-impl ::treesitter_types::Spanned for TypeSynomymChildren<'_> {
+impl ::treesitter_types::Spanned for TypeSynonymChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::Infix(inner) => inner.span(),
@@ -16700,7 +16700,7 @@ pub enum AnyNode<'tree> {
     TypeParams(TypeParams<'tree>),
     TypePatterns(TypePatterns<'tree>),
     TypeRole(TypeRole<'tree>),
-    TypeSynomym(TypeSynomym<'tree>),
+    TypeSynonym(TypeSynonym<'tree>),
     TypedQuote(TypedQuote<'tree>),
     UnboxedSum(UnboxedSum<'tree>),
     UnboxedTuple(UnboxedTuple<'tree>),
@@ -17532,10 +17532,10 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::TypeRole)
             .unwrap_or(Self::Unknown(node)),
-            "type_synomym" => ::treesitter_types::runtime::maybe_grow_stack(|| {
-                <TypeSynomym as ::treesitter_types::FromNode>::from_node(node, src)
+            "type_synonym" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <TypeSynonym as ::treesitter_types::FromNode>::from_node(node, src)
             })
-            .map(Self::TypeSynomym)
+            .map(Self::TypeSynonym)
             .unwrap_or(Self::Unknown(node)),
             "typed_quote" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <TypedQuote as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17834,7 +17834,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::TypeParams(inner) => inner.span(),
             Self::TypePatterns(inner) => inner.span(),
             Self::TypeRole(inner) => inner.span(),
-            Self::TypeSynomym(inner) => inner.span(),
+            Self::TypeSynonym(inner) => inner.span(),
             Self::TypedQuote(inner) => inner.span(),
             Self::UnboxedSum(inner) => inner.span(),
             Self::UnboxedTuple(inner) => inner.span(),
