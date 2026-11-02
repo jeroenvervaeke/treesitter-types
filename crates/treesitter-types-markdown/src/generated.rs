@@ -235,6 +235,7 @@ impl ::treesitter_types::Spanned for Document<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FencedCodeBlock<'tree> {
     pub span: ::treesitter_types::Span,
+    pub info_string: ::core::option::Option<InfoString<'tree>>,
     pub children: ::std::vec::Vec<FencedCodeBlockChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FencedCodeBlock<'tree> {
@@ -246,6 +247,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FencedCodeBlock<'tree> {
         debug_assert_eq!(node.kind(), "fenced_code_block");
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
+            info_string: match node.child_by_field_name("info_string") {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InfoString as ::treesitter_types::FromNode>::from_node(child, src)
+                })?),
+                None => None,
+            },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
                 let non_field_children = {
@@ -2205,7 +2212,6 @@ pub enum FencedCodeBlockChildren<'tree> {
     BlockContinuation(::std::boxed::Box<BlockContinuation<'tree>>),
     CodeFenceContent(::std::boxed::Box<CodeFenceContent<'tree>>),
     FencedCodeBlockDelimiter(::std::boxed::Box<FencedCodeBlockDelimiter<'tree>>),
-    InfoString(::std::boxed::Box<InfoString<'tree>>),
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for FencedCodeBlockChildren<'tree> {
     #[allow(clippy::collapsible_else_if)]
@@ -2229,11 +2235,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FencedCodeBlockChildren<'tre
                     <FencedCodeBlockDelimiter as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "info_string" => Ok(Self::InfoString(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <InfoString as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
         }
     }
@@ -2244,7 +2245,6 @@ impl ::treesitter_types::Spanned for FencedCodeBlockChildren<'_> {
             Self::BlockContinuation(inner) => inner.span(),
             Self::CodeFenceContent(inner) => inner.span(),
             Self::FencedCodeBlockDelimiter(inner) => inner.span(),
-            Self::InfoString(inner) => inner.span(),
         }
     }
 }
