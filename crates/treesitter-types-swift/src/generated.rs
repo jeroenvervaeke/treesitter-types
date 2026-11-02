@@ -89,6 +89,7 @@ impl ::treesitter_types::Spanned for ArrayLiteral<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ArrayType<'tree> {
     pub span: ::treesitter_types::Span,
+    pub count: ::core::option::Option<ArrayTypeCount<'tree>>,
     pub element: ::std::vec::Vec<ArrayTypeElement<'tree>>,
     pub name: ArrayTypeName<'tree>,
 }
@@ -101,6 +102,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayType<'tree> {
         debug_assert_eq!(node.kind(), "array_type");
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
+            count: match node.child_by_field_name("count") {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayTypeCount as ::treesitter_types::FromNode>::from_node(child, src)
+                })?),
+                None => None,
+            },
             element: {
                 let mut cursor = node.walk();
                 let mut items = ::std::vec::Vec::new();
@@ -8228,7 +8235,7 @@ impl ::treesitter_types::Spanned for TypeAnnotation<'_> {
 pub struct TypeArguments<'tree> {
     pub span: ::treesitter_types::Span,
     pub name: ::std::vec::Vec<TypeArgumentsName<'tree>>,
-    pub children: ::std::vec::Vec<TypeModifiers<'tree>>,
+    pub children: ::std::vec::Vec<TypeArgumentsChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for TypeArguments<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -8272,7 +8279,9 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypeArguments<'tree> {
                 let mut items = ::std::vec::Vec::new();
                 for child in non_field_children {
                     items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
-                        <TypeModifiers as ::treesitter_types::FromNode>::from_node(child, src)
+                        <TypeArgumentsChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
                     })?);
                 }
                 items
@@ -9001,6 +9010,70 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TypealiasDeclaration<'tree> 
     }
 }
 impl ::treesitter_types::Spanned for TypealiasDeclaration<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct UnsafeExpression<'tree> {
+    pub span: ::treesitter_types::Span,
+    pub expr: ::std::vec::Vec<UnsafeExpressionExpr<'tree>>,
+    pub children: ::core::option::Option<UnsafeExpressionChildren<'tree>>,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for UnsafeExpression<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "unsafe_expression");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            expr: {
+                let mut cursor = node.walk();
+                let mut items = ::std::vec::Vec::new();
+                for child in node.children_by_field_name("expr", &mut cursor) {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <UnsafeExpressionExpr as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
+                    })?);
+                }
+                items
+            },
+            children: {
+                #[allow(clippy::suspicious_else_formatting)]
+                let non_field_children = {
+                    let mut cursor = node.walk();
+                    let mut result = ::std::vec::Vec::new();
+                    if cursor.goto_first_child() {
+                        loop {
+                            if cursor.field_name().is_none()
+                                && cursor.node().is_named()
+                                && !cursor.node().is_extra()
+                            {
+                                result.push(cursor.node());
+                            }
+                            if !cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    result
+                };
+                match non_field_children.first() {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <UnsafeExpressionChildren as ::treesitter_types::FromNode>::from_node(
+                            child, src,
+                        )
+                    })?),
+                    None => None,
+                }
+            },
+        })
+    }
+}
+impl ::treesitter_types::Spanned for UnsafeExpression<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -9942,6 +10015,33 @@ impl ::treesitter_types::Spanned for MultilineComment<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NilLiteral<'tree> {
+    pub span: ::treesitter_types::Span,
+    text: &'tree str,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for NilLiteral<'tree> {
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "nil_literal");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            text: node.utf8_text(src)?,
+        })
+    }
+}
+impl<'tree> ::treesitter_types::LeafNode<'tree> for NilLiteral<'tree> {
+    fn text(&self) -> &'tree str {
+        self.text
+    }
+}
+impl ::treesitter_types::Spanned for NilLiteral<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OctLiteral<'tree> {
     pub span: ::treesitter_types::Span,
     text: &'tree str,
@@ -10274,8 +10374,8 @@ pub enum AdditiveExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -10295,6 +10395,7 @@ pub enum AdditiveExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -10508,12 +10609,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionLhs<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10609,6 +10714,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionLhs<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10689,8 +10799,8 @@ impl ::treesitter_types::Spanned for AdditiveExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -10710,6 +10820,7 @@ impl ::treesitter_types::Spanned for AdditiveExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -10806,8 +10917,8 @@ pub enum AdditiveExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -10827,6 +10938,7 @@ pub enum AdditiveExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -11040,12 +11152,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionRhs<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11141,6 +11257,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AdditiveExpressionRhs<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11221,8 +11342,8 @@ impl ::treesitter_types::Spanned for AdditiveExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -11242,6 +11363,7 @@ impl ::treesitter_types::Spanned for AdditiveExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -11312,8 +11434,8 @@ pub enum ArrayLiteralElement<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -11333,6 +11455,7 @@ pub enum ArrayLiteralElement<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -11546,12 +11669,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayLiteralElement<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11647,6 +11774,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayLiteralElement<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -11727,8 +11859,8 @@ impl ::treesitter_types::Spanned for ArrayLiteralElement<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -11748,10 +11880,45 @@ impl ::treesitter_types::Spanned for ArrayLiteralElement<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
             Self::Tilde(span) => *span,
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ArrayTypeCount<'tree> {
+    IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
+    SimpleIdentifier(::std::boxed::Box<SimpleIdentifier<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ArrayTypeCount<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "integer_literal" => Ok(Self::IntegerLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "simple_identifier" => Ok(Self::SimpleIdentifier(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SimpleIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for ArrayTypeCount<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::IntegerLiteral(inner) => inner.span(),
+            Self::SimpleIdentifier(inner) => inner.span(),
         }
     }
 }
@@ -12061,8 +12228,8 @@ pub enum AsExpressionExpr<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -12082,6 +12249,7 @@ pub enum AsExpressionExpr<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -12295,12 +12463,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionExpr<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -12396,6 +12568,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AsExpressionExpr<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -12476,8 +12653,8 @@ impl ::treesitter_types::Spanned for AsExpressionExpr<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -12497,6 +12674,7 @@ impl ::treesitter_types::Spanned for AsExpressionExpr<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -12848,8 +13026,8 @@ pub enum AssignmentResult<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -12869,6 +13047,7 @@ pub enum AssignmentResult<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -13082,12 +13261,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentResult<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -13183,6 +13366,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentResult<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -13263,8 +13451,8 @@ impl ::treesitter_types::Spanned for AssignmentResult<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -13284,6 +13472,7 @@ impl ::treesitter_types::Spanned for AssignmentResult<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -13738,6 +13927,7 @@ pub enum AttributeChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -13757,6 +13947,7 @@ pub enum AttributeChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
@@ -13948,6 +14139,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14043,6 +14239,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AttributeChildren<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14101,6 +14302,7 @@ impl ::treesitter_types::Spanned for AttributeChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -14120,6 +14322,7 @@ impl ::treesitter_types::Spanned for AttributeChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
@@ -14223,8 +14426,8 @@ pub enum AwaitExpressionExpr<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -14244,6 +14447,7 @@ pub enum AwaitExpressionExpr<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -14457,12 +14661,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionExpr<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14558,6 +14766,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionExpr<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14638,8 +14851,8 @@ impl ::treesitter_types::Spanned for AwaitExpressionExpr<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -14659,6 +14872,7 @@ impl ::treesitter_types::Spanned for AwaitExpressionExpr<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -14704,6 +14918,7 @@ pub enum AwaitExpressionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -14723,6 +14938,7 @@ pub enum AwaitExpressionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -14913,6 +15129,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionChildren<'tre
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15008,6 +15229,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AwaitExpressionChildren<'tre
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15061,6 +15287,7 @@ impl ::treesitter_types::Spanned for AwaitExpressionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -15080,6 +15307,7 @@ impl ::treesitter_types::Spanned for AwaitExpressionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -15148,8 +15376,8 @@ pub enum BitwiseOperationLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -15169,6 +15397,7 @@ pub enum BitwiseOperationLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -15382,12 +15611,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationLhs<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15483,6 +15716,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationLhs<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15563,8 +15801,8 @@ impl ::treesitter_types::Spanned for BitwiseOperationLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -15584,6 +15822,7 @@ impl ::treesitter_types::Spanned for BitwiseOperationLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -15689,8 +15928,8 @@ pub enum BitwiseOperationRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -15710,6 +15949,7 @@ pub enum BitwiseOperationRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -15923,12 +16163,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationRhs<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16024,6 +16268,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for BitwiseOperationRhs<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16104,8 +16353,8 @@ impl ::treesitter_types::Spanned for BitwiseOperationRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -16125,6 +16374,7 @@ impl ::treesitter_types::Spanned for BitwiseOperationRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -16212,6 +16462,7 @@ pub enum CallExpressionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -16231,6 +16482,7 @@ pub enum CallExpressionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -16426,6 +16678,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallExpressionChildren<'tree
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16521,6 +16778,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CallExpressionChildren<'tree
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16575,6 +16837,7 @@ impl ::treesitter_types::Spanned for CallExpressionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -16594,6 +16857,7 @@ impl ::treesitter_types::Spanned for CallExpressionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -16730,8 +16994,8 @@ pub enum CaptureListItemValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -16751,6 +17015,7 @@ pub enum CaptureListItemValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -16964,12 +17229,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaptureListItemValue<'tree> 
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17065,6 +17334,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CaptureListItemValue<'tree> 
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17145,8 +17419,8 @@ impl ::treesitter_types::Spanned for CaptureListItemValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -17166,6 +17440,7 @@ impl ::treesitter_types::Spanned for CaptureListItemValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -17418,8 +17693,8 @@ pub enum CheckExpressionTarget<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -17439,6 +17714,7 @@ pub enum CheckExpressionTarget<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -17652,12 +17928,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionTarget<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17753,6 +18033,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CheckExpressionTarget<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -17833,8 +18118,8 @@ impl ::treesitter_types::Spanned for CheckExpressionTarget<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -17854,6 +18139,7 @@ impl ::treesitter_types::Spanned for CheckExpressionTarget<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -18441,8 +18727,8 @@ pub enum ComparisonExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -18462,6 +18748,7 @@ pub enum ComparisonExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -18675,12 +18962,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionLhs<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -18776,6 +19067,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionLhs<'tre
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -18856,8 +19152,8 @@ impl ::treesitter_types::Spanned for ComparisonExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -18877,6 +19173,7 @@ impl ::treesitter_types::Spanned for ComparisonExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -18979,8 +19276,8 @@ pub enum ComparisonExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -19000,6 +19297,7 @@ pub enum ComparisonExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -19213,12 +19511,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionRhs<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -19314,6 +19616,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ComparisonExpressionRhs<'tre
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -19394,8 +19701,8 @@ impl ::treesitter_types::Spanned for ComparisonExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -19415,6 +19722,7 @@ impl ::treesitter_types::Spanned for ComparisonExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -19663,8 +19971,8 @@ pub enum ConjunctionExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -19684,6 +19992,7 @@ pub enum ConjunctionExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -19897,12 +20206,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionLhs<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -19998,6 +20311,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionLhs<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -20078,8 +20396,8 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -20099,6 +20417,7 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -20192,8 +20511,8 @@ pub enum ConjunctionExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -20213,6 +20532,7 @@ pub enum ConjunctionExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -20426,12 +20746,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionRhs<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -20527,6 +20851,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConjunctionExpressionRhs<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -20607,8 +20936,8 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -20628,6 +20957,7 @@ impl ::treesitter_types::Spanned for ConjunctionExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -20773,8 +21103,8 @@ pub enum ConsumeExpressionExpr<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -20794,6 +21124,7 @@ pub enum ConsumeExpressionExpr<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -21007,12 +21338,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConsumeExpressionExpr<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21108,6 +21443,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ConsumeExpressionExpr<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21188,8 +21528,8 @@ impl ::treesitter_types::Spanned for ConsumeExpressionExpr<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -21209,6 +21549,7 @@ impl ::treesitter_types::Spanned for ConsumeExpressionExpr<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -21279,8 +21620,8 @@ pub enum ControlTransferStatementResult<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -21300,6 +21641,7 @@ pub enum ControlTransferStatementResult<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -21513,12 +21855,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementResu
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21614,6 +21960,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementResu
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -21694,8 +22045,8 @@ impl ::treesitter_types::Spanned for ControlTransferStatementResult<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -21715,6 +22066,7 @@ impl ::treesitter_types::Spanned for ControlTransferStatementResult<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -21760,6 +22112,7 @@ pub enum ControlTransferStatementChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -21780,6 +22133,7 @@ pub enum ControlTransferStatementChildren<'tree> {
     ThrowKeyword(::std::boxed::Box<ThrowKeyword<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -21970,6 +22324,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementChil
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22070,6 +22429,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ControlTransferStatementChil
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22123,6 +22487,7 @@ impl ::treesitter_types::Spanned for ControlTransferStatementChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -22143,6 +22508,7 @@ impl ::treesitter_types::Spanned for ControlTransferStatementChildren<'_> {
             Self::ThrowKeyword(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -22156,6 +22522,7 @@ pub enum DeprecatedOperatorDeclarationBodyChildren<'tree> {
     IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
     LineStringLiteral(::std::boxed::Box<LineStringLiteral<'tree>>),
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     RawStringLiteral(::std::boxed::Box<RawStringLiteral<'tree>>),
     RealLiteral(::std::boxed::Box<RealLiteral<'tree>>),
@@ -22201,6 +22568,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree>
                     <MultiLineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22239,6 +22611,7 @@ impl ::treesitter_types::Spanned for DeprecatedOperatorDeclarationBodyChildren<'
             Self::IntegerLiteral(inner) => inner.span(),
             Self::LineStringLiteral(inner) => inner.span(),
             Self::MultiLineStringLiteral(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::RawStringLiteral(inner) => inner.span(),
             Self::RealLiteral(inner) => inner.span(),
@@ -22310,8 +22683,8 @@ pub enum DictionaryLiteralKey<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -22331,6 +22704,7 @@ pub enum DictionaryLiteralKey<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -22544,12 +22918,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralKey<'tree> 
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22645,6 +23023,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralKey<'tree> 
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -22725,8 +23108,8 @@ impl ::treesitter_types::Spanned for DictionaryLiteralKey<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -22746,6 +23129,7 @@ impl ::treesitter_types::Spanned for DictionaryLiteralKey<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -22816,8 +23200,8 @@ pub enum DictionaryLiteralValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -22837,6 +23221,7 @@ pub enum DictionaryLiteralValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -23050,12 +23435,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralValue<'tree
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -23151,6 +23540,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DictionaryLiteralValue<'tree
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -23231,8 +23625,8 @@ impl ::treesitter_types::Spanned for DictionaryLiteralValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -23252,6 +23646,7 @@ impl ::treesitter_types::Spanned for DictionaryLiteralValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -23747,6 +24142,7 @@ pub enum DirectlyAssignableExpressionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -23766,6 +24162,7 @@ pub enum DirectlyAssignableExpressionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -23956,6 +24353,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DirectlyAssignableExpression
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24051,6 +24453,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DirectlyAssignableExpression
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24104,6 +24511,7 @@ impl ::treesitter_types::Spanned for DirectlyAssignableExpressionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -24123,6 +24531,7 @@ impl ::treesitter_types::Spanned for DirectlyAssignableExpressionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -24191,8 +24600,8 @@ pub enum DisjunctionExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -24212,6 +24621,7 @@ pub enum DisjunctionExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -24425,12 +24835,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionLhs<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24526,6 +24940,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionLhs<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -24606,8 +25025,8 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -24627,6 +25046,7 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -24720,8 +25140,8 @@ pub enum DisjunctionExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -24741,6 +25161,7 @@ pub enum DisjunctionExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -24954,12 +25375,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionRhs<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -25055,6 +25480,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for DisjunctionExpressionRhs<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -25135,8 +25565,8 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -25156,6 +25586,7 @@ impl ::treesitter_types::Spanned for DisjunctionExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -25396,8 +25827,8 @@ pub enum EnumEntryRawValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -25417,6 +25848,7 @@ pub enum EnumEntryRawValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -25630,12 +26062,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumEntryRawValue<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -25731,6 +26167,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumEntryRawValue<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -25811,8 +26252,8 @@ impl ::treesitter_types::Spanned for EnumEntryRawValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -25832,6 +26273,7 @@ impl ::treesitter_types::Spanned for EnumEntryRawValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -25995,6 +26437,7 @@ pub enum EnumTypeParametersChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -26015,6 +26458,7 @@ pub enum EnumTypeParametersChildren<'tree> {
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     WildcardPattern(::std::boxed::Box<WildcardPattern<'tree>>),
@@ -26206,6 +26650,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumTypeParametersChildren<'
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -26306,6 +26755,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EnumTypeParametersChildren<'
                     <TypeModifiers as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -26364,6 +26818,7 @@ impl ::treesitter_types::Spanned for EnumTypeParametersChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -26384,6 +26839,7 @@ impl ::treesitter_types::Spanned for EnumTypeParametersChildren<'_> {
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
             Self::TypeModifiers(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::WildcardPattern(inner) => inner.span(),
@@ -26831,8 +27287,8 @@ pub enum EqualityExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -26852,6 +27308,7 @@ pub enum EqualityExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -27065,12 +27522,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionLhs<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -27166,6 +27627,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionLhs<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -27246,8 +27712,8 @@ impl ::treesitter_types::Spanned for EqualityExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -27267,6 +27733,7 @@ impl ::treesitter_types::Spanned for EqualityExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -27369,8 +27836,8 @@ pub enum EqualityExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -27390,6 +27857,7 @@ pub enum EqualityExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -27603,12 +28071,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionRhs<'tree>
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -27704,6 +28176,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for EqualityExpressionRhs<'tree>
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -27784,8 +28261,8 @@ impl ::treesitter_types::Spanned for EqualityExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -27805,6 +28282,7 @@ impl ::treesitter_types::Spanned for EqualityExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -27993,8 +28471,8 @@ pub enum ForStatementCollection<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -28014,6 +28492,7 @@ pub enum ForStatementCollection<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -28227,12 +28706,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatementCollection<'tree
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28328,6 +28811,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ForStatementCollection<'tree
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28408,8 +28896,8 @@ impl ::treesitter_types::Spanned for ForStatementCollection<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -28429,6 +28917,7 @@ impl ::treesitter_types::Spanned for ForStatementCollection<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -28547,8 +29036,8 @@ pub enum FunctionDeclarationDefaultValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -28568,6 +29057,7 @@ pub enum FunctionDeclarationDefaultValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -28781,12 +29271,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationDefaultVa
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28882,6 +29376,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationDefaultVa
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -28962,8 +29461,8 @@ impl ::treesitter_types::Spanned for FunctionDeclarationDefaultValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -28983,6 +29482,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationDefaultValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -29345,6 +29845,7 @@ pub enum FunctionDeclarationChildren<'tree> {
     Modifiers(::std::boxed::Box<Modifiers<'tree>>),
     OwnershipModifier(::std::boxed::Box<OwnershipModifier<'tree>>),
     Parameter(::std::boxed::Box<Parameter<'tree>>),
+    ParameterModifiers(::std::boxed::Box<ParameterModifiers<'tree>>),
     PropertyBehaviorModifier(::std::boxed::Box<PropertyBehaviorModifier<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
     ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
@@ -29381,6 +29882,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for FunctionDeclarationChildren<
             "parameter" => Ok(Self::Parameter(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Parameter as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "parameter_modifiers" => Ok(Self::ParameterModifiers(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ParameterModifiers as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "property_behavior_modifier" => Ok(Self::PropertyBehaviorModifier(
@@ -29420,6 +29926,7 @@ impl ::treesitter_types::Spanned for FunctionDeclarationChildren<'_> {
             Self::Modifiers(inner) => inner.span(),
             Self::OwnershipModifier(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
+            Self::ParameterModifiers(inner) => inner.span(),
             Self::PropertyBehaviorModifier(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
             Self::ThrowsClause(inner) => inner.span(),
@@ -29943,8 +30450,8 @@ pub enum GuardStatementCondition<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
@@ -29974,6 +30481,7 @@ pub enum GuardStatementCondition<'tree> {
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
     TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
     TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValueBindingPattern(::std::boxed::Box<ValueBindingPattern>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
@@ -30235,12 +30743,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementCondition<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -30386,6 +30898,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for GuardStatementCondition<'tre
                     <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -30502,8 +31019,8 @@ impl ::treesitter_types::Spanned for GuardStatementCondition<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpaqueType(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
@@ -30533,6 +31050,7 @@ impl ::treesitter_types::Spanned for GuardStatementCondition<'_> {
             Self::TypeModifiers(inner) => inner.span(),
             Self::TypePackExpansion(inner) => inner.span(),
             Self::TypeParameterPack(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueBindingPattern(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
@@ -30775,8 +31293,8 @@ pub enum IfStatementCondition<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
@@ -30806,6 +31324,7 @@ pub enum IfStatementCondition<'tree> {
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
     TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
     TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValueBindingPattern(::std::boxed::Box<ValueBindingPattern>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
@@ -31067,12 +31586,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -31218,6 +31741,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for IfStatementCondition<'tree> 
                     <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -31334,8 +31862,8 @@ impl ::treesitter_types::Spanned for IfStatementCondition<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpaqueType(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
@@ -31365,6 +31893,7 @@ impl ::treesitter_types::Spanned for IfStatementCondition<'_> {
             Self::TypeModifiers(inner) => inner.span(),
             Self::TypePackExpansion(inner) => inner.span(),
             Self::TypeParameterPack(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueBindingPattern(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
@@ -31632,8 +32161,8 @@ pub enum InfixExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -31653,6 +32182,7 @@ pub enum InfixExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -31866,12 +32396,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionLhs<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -31967,6 +32501,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionLhs<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32047,8 +32586,8 @@ impl ::treesitter_types::Spanned for InfixExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -32068,6 +32607,7 @@ impl ::treesitter_types::Spanned for InfixExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -32138,8 +32678,8 @@ pub enum InfixExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -32159,6 +32699,7 @@ pub enum InfixExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -32372,12 +32913,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionRhs<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32473,6 +33018,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InfixExpressionRhs<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -32553,8 +33103,8 @@ impl ::treesitter_types::Spanned for InfixExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -32574,6 +33124,7 @@ impl ::treesitter_types::Spanned for InfixExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -33066,8 +33617,8 @@ pub enum InitDeclarationDefaultValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -33087,6 +33638,7 @@ pub enum InitDeclarationDefaultValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -33300,12 +33852,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationDefaultValue<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -33401,6 +33957,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InitDeclarationDefaultValue<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -33481,8 +34042,8 @@ impl ::treesitter_types::Spanned for InitDeclarationDefaultValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -33502,6 +34063,7 @@ impl ::treesitter_types::Spanned for InitDeclarationDefaultValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -33671,8 +34233,8 @@ pub enum InterpolatedExpressionValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -33692,6 +34254,7 @@ pub enum InterpolatedExpressionValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -33905,12 +34468,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolatedExpressionValue<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34006,6 +34573,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for InterpolatedExpressionValue<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34086,8 +34658,8 @@ impl ::treesitter_types::Spanned for InterpolatedExpressionValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -34107,6 +34679,7 @@ impl ::treesitter_types::Spanned for InterpolatedExpressionValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -34221,6 +34794,7 @@ pub enum KeyPathStringExpressionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -34240,6 +34814,7 @@ pub enum KeyPathStringExpressionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -34430,6 +35005,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for KeyPathStringExpressionChild
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34525,6 +35105,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for KeyPathStringExpressionChild
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34578,6 +35163,7 @@ impl ::treesitter_types::Spanned for KeyPathStringExpressionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -34597,6 +35183,7 @@ impl ::treesitter_types::Spanned for KeyPathStringExpressionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -34851,6 +35438,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeReturnType<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LambdaFunctionTypeChildren<'tree> {
     LambdaFunctionTypeParameters(::std::boxed::Box<LambdaFunctionTypeParameters<'tree>>),
+    ParameterModifiers(::std::boxed::Box<ParameterModifiers<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
     ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
 }
@@ -34868,6 +35456,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for LambdaFunctionTypeChildren<'
                     )
                 })?),
             )),
+            "parameter_modifiers" => Ok(Self::ParameterModifiers(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ParameterModifiers as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "throws" => Ok(Self::Throws(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Throws as ::treesitter_types::FromNode>::from_node(node, src)
@@ -34886,6 +35479,7 @@ impl ::treesitter_types::Spanned for LambdaFunctionTypeChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::LambdaFunctionTypeParameters(inner) => inner.span(),
+            Self::ParameterModifiers(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
             Self::ThrowsClause(inner) => inner.span(),
         }
@@ -35309,8 +35903,8 @@ pub enum MacroDeclarationDefaultValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -35330,6 +35924,7 @@ pub enum MacroDeclarationDefaultValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -35543,12 +36138,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDeclarationDefaultValue
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -35644,6 +36243,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDeclarationDefaultValue
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -35724,8 +36328,8 @@ impl ::treesitter_types::Spanned for MacroDeclarationDefaultValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -35745,6 +36349,7 @@ impl ::treesitter_types::Spanned for MacroDeclarationDefaultValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -35976,8 +36581,8 @@ pub enum MacroDefinitionBody<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -35997,6 +36602,7 @@ pub enum MacroDefinitionBody<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -36215,12 +36821,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDefinitionBody<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -36316,6 +36926,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MacroDefinitionBody<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -36397,8 +37012,8 @@ impl ::treesitter_types::Spanned for MacroDefinitionBody<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -36418,6 +37033,7 @@ impl ::treesitter_types::Spanned for MacroDefinitionBody<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -36774,8 +37390,8 @@ pub enum MultiplicativeExpressionLhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -36795,6 +37411,7 @@ pub enum MultiplicativeExpressionLhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -37008,12 +37625,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionLhs<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37109,6 +37730,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionLhs<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37189,8 +37815,8 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionLhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -37210,6 +37836,7 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionLhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -37309,8 +37936,8 @@ pub enum MultiplicativeExpressionRhs<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -37330,6 +37957,7 @@ pub enum MultiplicativeExpressionRhs<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -37543,12 +38171,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionRhs<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37644,6 +38276,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MultiplicativeExpressionRhs<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -37724,8 +38361,8 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionRhs<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -37745,6 +38382,7 @@ impl ::treesitter_types::Spanned for MultiplicativeExpressionRhs<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -37861,8 +38499,8 @@ pub enum NavigationExpressionTarget<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
@@ -37883,6 +38521,7 @@ pub enum NavigationExpressionTarget<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
@@ -38114,12 +38753,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NavigationExpressionTarget<'
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -38220,6 +38863,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NavigationExpressionTarget<'
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -38310,8 +38958,8 @@ impl ::treesitter_types::Spanned for NavigationExpressionTarget<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpaqueType(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
@@ -38332,6 +38980,7 @@ impl ::treesitter_types::Spanned for NavigationExpressionTarget<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
@@ -38437,8 +39086,8 @@ pub enum NilCoalescingExpressionIfNil<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -38458,6 +39107,7 @@ pub enum NilCoalescingExpressionIfNil<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -38671,12 +39321,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionIfNil
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -38772,6 +39426,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionIfNil
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -38852,8 +39511,8 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionIfNil<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -38873,6 +39532,7 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionIfNil<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -38943,8 +39603,8 @@ pub enum NilCoalescingExpressionValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -38964,6 +39624,7 @@ pub enum NilCoalescingExpressionValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -39177,12 +39838,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionValue
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39278,6 +39943,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NilCoalescingExpressionValue
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39358,8 +40028,8 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -39379,6 +40049,7 @@ impl ::treesitter_types::Spanned for NilCoalescingExpressionValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -39567,8 +40238,8 @@ pub enum OpenEndRangeExpressionStart<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -39588,6 +40259,7 @@ pub enum OpenEndRangeExpressionStart<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -39801,12 +40473,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenEndRangeExpressionStart<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39902,6 +40578,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenEndRangeExpressionStart<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -39982,8 +40663,8 @@ impl ::treesitter_types::Spanned for OpenEndRangeExpressionStart<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -40003,6 +40684,7 @@ impl ::treesitter_types::Spanned for OpenEndRangeExpressionStart<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -40073,8 +40755,8 @@ pub enum OpenStartRangeExpressionEnd<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -40094,6 +40776,7 @@ pub enum OpenStartRangeExpressionEnd<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -40307,12 +40990,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenStartRangeExpressionEnd<
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -40408,6 +41095,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OpenStartRangeExpressionEnd<
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -40488,8 +41180,8 @@ impl ::treesitter_types::Spanned for OpenStartRangeExpressionEnd<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -40509,6 +41201,7 @@ impl ::treesitter_types::Spanned for OpenStartRangeExpressionEnd<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -40569,6 +41262,7 @@ impl ::treesitter_types::Spanned for OperatorDeclarationChildren<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum OptionalTypeWrapped<'tree> {
     ArrayType(::std::boxed::Box<ArrayType<'tree>>),
+    BracketQualifiedType(::std::boxed::Box<BracketQualifiedType<'tree>>),
     DictionaryType(::std::boxed::Box<DictionaryType<'tree>>),
     TupleType(::std::boxed::Box<TupleType<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
@@ -40583,6 +41277,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for OptionalTypeWrapped<'tree> {
             "array_type" => Ok(Self::ArrayType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrayType as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bracket_qualified_type" => Ok(Self::BracketQualifiedType(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BracketQualifiedType as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "dictionary_type" => Ok(Self::DictionaryType(::std::boxed::Box::new(
@@ -40608,6 +41307,7 @@ impl ::treesitter_types::Spanned for OptionalTypeWrapped<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayType(inner) => inner.span(),
+            Self::BracketQualifiedType(inner) => inner.span(),
             Self::DictionaryType(inner) => inner.span(),
             Self::TupleType(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
@@ -41023,6 +41723,7 @@ pub enum PatternChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -41044,6 +41745,7 @@ pub enum PatternChildren<'tree> {
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValueBindingPattern(::std::boxed::Box<ValueBindingPattern>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
@@ -41237,6 +41939,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -41342,6 +42049,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PatternChildren<'tree> {
                     <TypeModifiers as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -41410,6 +42122,7 @@ impl ::treesitter_types::Spanned for PatternChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -41431,6 +42144,7 @@ impl ::treesitter_types::Spanned for PatternChildren<'_> {
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
             Self::TypeModifiers(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueBindingPattern(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
@@ -41477,6 +42191,7 @@ pub enum PlaygroundLiteralChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -41496,6 +42211,7 @@ pub enum PlaygroundLiteralChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -41686,6 +42402,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlaygroundLiteralChildren<'t
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -41781,6 +42502,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PlaygroundLiteralChildren<'t
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -41834,6 +42560,7 @@ impl ::treesitter_types::Spanned for PlaygroundLiteralChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -41853,6 +42580,7 @@ impl ::treesitter_types::Spanned for PlaygroundLiteralChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -41954,8 +42682,8 @@ pub enum PostfixExpressionTarget<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -41975,6 +42703,7 @@ pub enum PostfixExpressionTarget<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -42188,12 +42917,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpressionTarget<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42289,6 +43022,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PostfixExpressionTarget<'tre
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42369,8 +43107,8 @@ impl ::treesitter_types::Spanned for PostfixExpressionTarget<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -42390,6 +43128,7 @@ impl ::treesitter_types::Spanned for PostfixExpressionTarget<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -42586,8 +43325,8 @@ pub enum PrefixExpressionTarget<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -42607,6 +43346,7 @@ pub enum PrefixExpressionTarget<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -42825,12 +43565,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrefixExpressionTarget<'tree
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -42926,6 +43670,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrefixExpressionTarget<'tree
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -43007,8 +43756,8 @@ impl ::treesitter_types::Spanned for PrefixExpressionTarget<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -43028,6 +43777,7 @@ impl ::treesitter_types::Spanned for PrefixExpressionTarget<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -43098,8 +43848,8 @@ pub enum PropertyDeclarationValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -43119,6 +43869,7 @@ pub enum PropertyDeclarationValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -43332,12 +44083,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyDeclarationValue<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -43433,6 +44188,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyDeclarationValue<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -43513,8 +44273,8 @@ impl ::treesitter_types::Spanned for PropertyDeclarationValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -43534,6 +44294,7 @@ impl ::treesitter_types::Spanned for PropertyDeclarationValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -43965,8 +44726,8 @@ pub enum ProtocolFunctionDeclarationDefaultValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -43986,6 +44747,7 @@ pub enum ProtocolFunctionDeclarationDefaultValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -44199,12 +44961,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationD
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -44300,6 +45066,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationD
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -44380,8 +45151,8 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationDefaultValue<'_>
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -44401,6 +45172,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationDefaultValue<'_>
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -44761,6 +45533,7 @@ pub enum ProtocolFunctionDeclarationChildren<'tree> {
     Attribute(::std::boxed::Box<Attribute<'tree>>),
     Modifiers(::std::boxed::Box<Modifiers<'tree>>),
     Parameter(::std::boxed::Box<Parameter<'tree>>),
+    ParameterModifiers(::std::boxed::Box<ParameterModifiers<'tree>>),
     Statements(::std::boxed::Box<Statements<'tree>>),
     Throws(::std::boxed::Box<Throws<'tree>>),
     ThrowsClause(::std::boxed::Box<ThrowsClause<'tree>>),
@@ -44787,6 +45560,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ProtocolFunctionDeclarationC
             "parameter" => Ok(Self::Parameter(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Parameter as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "parameter_modifiers" => Ok(Self::ParameterModifiers(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ParameterModifiers as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "statements" => Ok(Self::Statements(::std::boxed::Box::new(
@@ -44824,6 +45602,7 @@ impl ::treesitter_types::Spanned for ProtocolFunctionDeclarationChildren<'_> {
             Self::Attribute(inner) => inner.span(),
             Self::Modifiers(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
+            Self::ParameterModifiers(inner) => inner.span(),
             Self::Statements(inner) => inner.span(),
             Self::Throws(inner) => inner.span(),
             Self::ThrowsClause(inner) => inner.span(),
@@ -44979,8 +45758,8 @@ pub enum RangeExpressionEnd<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -45000,6 +45779,7 @@ pub enum RangeExpressionEnd<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -45213,12 +45993,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionEnd<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45314,6 +46098,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionEnd<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45394,8 +46183,8 @@ impl ::treesitter_types::Spanned for RangeExpressionEnd<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -45415,6 +46204,7 @@ impl ::treesitter_types::Spanned for RangeExpressionEnd<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -45511,8 +46301,8 @@ pub enum RangeExpressionStart<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -45532,6 +46322,7 @@ pub enum RangeExpressionStart<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -45745,12 +46536,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionStart<'tree> 
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45846,6 +46641,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RangeExpressionStart<'tree> 
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -45926,8 +46726,8 @@ impl ::treesitter_types::Spanned for RangeExpressionStart<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -45947,6 +46747,7 @@ impl ::treesitter_types::Spanned for RangeExpressionStart<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -46067,8 +46868,8 @@ pub enum RepeatWhileStatementCondition<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
@@ -46098,6 +46899,7 @@ pub enum RepeatWhileStatementCondition<'tree> {
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
     TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
     TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValueBindingPattern(::std::boxed::Box<ValueBindingPattern>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
@@ -46359,12 +47161,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementConditio
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -46510,6 +47316,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for RepeatWhileStatementConditio
                     <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -46626,8 +47437,8 @@ impl ::treesitter_types::Spanned for RepeatWhileStatementCondition<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpaqueType(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
@@ -46657,6 +47468,7 @@ impl ::treesitter_types::Spanned for RepeatWhileStatementCondition<'_> {
             Self::TypeModifiers(inner) => inner.span(),
             Self::TypePackExpansion(inner) => inner.span(),
             Self::TypeParameterPack(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueBindingPattern(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
@@ -46824,6 +47636,7 @@ pub enum SelectorExpressionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -46843,6 +47656,7 @@ pub enum SelectorExpressionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -47033,6 +47847,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SelectorExpressionChildren<'
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47128,6 +47947,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SelectorExpressionChildren<'
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47181,6 +48005,7 @@ impl ::treesitter_types::Spanned for SelectorExpressionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -47200,6 +48025,7 @@ impl ::treesitter_types::Spanned for SelectorExpressionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -47252,6 +48078,7 @@ pub enum SourceFileChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -47280,6 +48107,7 @@ pub enum SourceFileChildren<'tree> {
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
     TypealiasDeclaration(::std::boxed::Box<TypealiasDeclaration<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     WhileStatement(::std::boxed::Box<WhileStatement<'tree>>),
@@ -47518,6 +48346,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceFileChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47660,6 +48493,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SourceFileChildren<'tree> {
                     <TypealiasDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -47727,6 +48565,7 @@ impl ::treesitter_types::Spanned for SourceFileChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -47755,6 +48594,7 @@ impl ::treesitter_types::Spanned for SourceFileChildren<'_> {
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
             Self::TypealiasDeclaration(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::WhileStatement(inner) => inner.span(),
@@ -47805,6 +48645,7 @@ pub enum StatementsChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -47828,6 +48669,7 @@ pub enum StatementsChildren<'tree> {
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
     TypealiasDeclaration(::std::boxed::Box<TypealiasDeclaration<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     WhileStatement(::std::boxed::Box<WhileStatement<'tree>>),
@@ -48049,6 +48891,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StatementsChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48164,6 +49011,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for StatementsChildren<'tree> {
                     <TypealiasDeclaration as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48228,6 +49080,7 @@ impl ::treesitter_types::Spanned for StatementsChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -48251,6 +49104,7 @@ impl ::treesitter_types::Spanned for StatementsChildren<'_> {
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
             Self::TypealiasDeclaration(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::WhileStatement(inner) => inner.span(),
@@ -48320,8 +49174,8 @@ pub enum SubscriptDeclarationDefaultValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -48341,6 +49195,7 @@ pub enum SubscriptDeclarationDefaultValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -48554,12 +49409,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationDefaultV
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48655,6 +49514,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationDefaultV
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -48735,8 +49599,8 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationDefaultValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -48756,6 +49620,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationDefaultValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -49015,6 +49880,7 @@ pub enum SubscriptDeclarationChildren<'tree> {
     ComputedProperty(::std::boxed::Box<ComputedProperty<'tree>>),
     Modifiers(::std::boxed::Box<Modifiers<'tree>>),
     Parameter(::std::boxed::Box<Parameter<'tree>>),
+    ParameterModifiers(::std::boxed::Box<ParameterModifiers<'tree>>),
     TypeConstraints(::std::boxed::Box<TypeConstraints<'tree>>),
     TypeParameters(::std::boxed::Box<TypeParameters<'tree>>),
 }
@@ -49045,6 +49911,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SubscriptDeclarationChildren
                     <Parameter as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "parameter_modifiers" => Ok(Self::ParameterModifiers(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ParameterModifiers as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "type_constraints" => Ok(Self::TypeConstraints(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <TypeConstraints as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49066,6 +49937,7 @@ impl ::treesitter_types::Spanned for SubscriptDeclarationChildren<'_> {
             Self::ComputedProperty(inner) => inner.span(),
             Self::Modifiers(inner) => inner.span(),
             Self::Parameter(inner) => inner.span(),
+            Self::ParameterModifiers(inner) => inner.span(),
             Self::TypeConstraints(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
         }
@@ -49111,6 +49983,7 @@ pub enum SwitchEntryChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -49132,6 +50005,7 @@ pub enum SwitchEntryChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     WhereKeyword(::std::boxed::Box<WhereKeyword<'tree>>),
@@ -49333,6 +50207,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchEntryChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49438,6 +50317,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchEntryChildren<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49498,6 +50382,7 @@ impl ::treesitter_types::Spanned for SwitchEntryChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -49519,6 +50404,7 @@ impl ::treesitter_types::Spanned for SwitchEntryChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::WhereKeyword(inner) => inner.span(),
@@ -49588,8 +50474,8 @@ pub enum SwitchStatementExpr<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -49609,6 +50495,7 @@ pub enum SwitchStatementExpr<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -49822,12 +50709,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchStatementExpr<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -49923,6 +50814,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for SwitchStatementExpr<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -50003,8 +50899,8 @@ impl ::treesitter_types::Spanned for SwitchStatementExpr<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -50024,6 +50920,7 @@ impl ::treesitter_types::Spanned for SwitchStatementExpr<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -50094,8 +50991,8 @@ pub enum TernaryExpressionCondition<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -50115,6 +51012,7 @@ pub enum TernaryExpressionCondition<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -50328,12 +51226,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionCondition<'
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -50429,6 +51331,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionCondition<'
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -50509,8 +51416,8 @@ impl ::treesitter_types::Spanned for TernaryExpressionCondition<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -50530,6 +51437,7 @@ impl ::treesitter_types::Spanned for TernaryExpressionCondition<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -50600,8 +51508,8 @@ pub enum TernaryExpressionIfFalse<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -50621,6 +51529,7 @@ pub enum TernaryExpressionIfFalse<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -50834,12 +51743,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfFalse<'tr
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -50935,6 +51848,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfFalse<'tr
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -51015,8 +51933,8 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfFalse<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -51036,6 +51954,7 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfFalse<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -51106,8 +52025,8 @@ pub enum TernaryExpressionIfTrue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -51127,6 +52046,7 @@ pub enum TernaryExpressionIfTrue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -51340,12 +52260,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfTrue<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -51441,6 +52365,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TernaryExpressionIfTrue<'tre
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -51521,8 +52450,8 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfTrue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -51542,6 +52471,7 @@ impl ::treesitter_types::Spanned for TernaryExpressionIfTrue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -51730,8 +52660,8 @@ pub enum TryExpressionExpr<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -51751,6 +52681,7 @@ pub enum TryExpressionExpr<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -51964,12 +52895,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpressionExpr<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52065,6 +53000,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TryExpressionExpr<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52145,8 +53085,8 @@ impl ::treesitter_types::Spanned for TryExpressionExpr<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -52166,6 +53106,7 @@ impl ::treesitter_types::Spanned for TryExpressionExpr<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -52236,8 +53177,8 @@ pub enum TupleExpressionValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -52257,6 +53198,7 @@ pub enum TupleExpressionValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -52470,12 +53412,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleExpressionValue<'tree> 
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52571,6 +53517,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for TupleExpressionValue<'tree> 
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -52651,8 +53602,8 @@ impl ::treesitter_types::Spanned for TupleExpressionValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -52672,6 +53623,7 @@ impl ::treesitter_types::Spanned for TupleExpressionValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -53365,6 +54317,40 @@ impl ::treesitter_types::Spanned for TypeArgumentsName<'_> {
             Self::TypePackExpansion(inner) => inner.span(),
             Self::TypeParameterPack(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TypeArgumentsChildren<'tree> {
+    IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
+    TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for TypeArgumentsChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "integer_literal" => Ok(Self::IntegerLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "type_modifiers" => Ok(Self::TypeModifiers(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TypeModifiers as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for TypeArgumentsChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::IntegerLiteral(inner) => inner.span(),
+            Self::TypeModifiers(inner) => inner.span(),
         }
     }
 }
@@ -54185,6 +55171,956 @@ impl ::treesitter_types::Spanned for TypealiasDeclarationChildren<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub enum UnsafeExpressionExpr<'tree> {
+    NotEq(::treesitter_types::Span),
+    BangEqEq(::treesitter_types::Span),
+    Percent(::treesitter_types::Span),
+    PercentEq(::treesitter_types::Span),
+    Amp(::treesitter_types::Span),
+    Star(::treesitter_types::Span),
+    StarEq(::treesitter_types::Span),
+    Plus(::treesitter_types::Span),
+    PlusPlus(::treesitter_types::Span),
+    PlusEq(::treesitter_types::Span),
+    Minus(::treesitter_types::Span),
+    MinusMinus(::treesitter_types::Span),
+    MinusEq(::treesitter_types::Span),
+    Slash(::treesitter_types::Span),
+    SlashEq(::treesitter_types::Span),
+    Lt(::treesitter_types::Span),
+    Shl(::treesitter_types::Span),
+    LtEq(::treesitter_types::Span),
+    Eq(::treesitter_types::Span),
+    EqEq(::treesitter_types::Span),
+    EqEqEq(::treesitter_types::Span),
+    Gt(::treesitter_types::Span),
+    GtEq(::treesitter_types::Span),
+    Shr(::treesitter_types::Span),
+    Question(::treesitter_types::Span),
+    Caret(::treesitter_types::Span),
+    AdditiveExpression(::std::boxed::Box<AdditiveExpression<'tree>>),
+    ArrayLiteral(::std::boxed::Box<ArrayLiteral<'tree>>),
+    AsExpression(::std::boxed::Box<AsExpression<'tree>>),
+    Assignment(::std::boxed::Box<Assignment<'tree>>),
+    AwaitExpression(::std::boxed::Box<AwaitExpression<'tree>>),
+    Bang(::std::boxed::Box<Bang<'tree>>),
+    BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
+    BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
+    BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    CallExpression(::std::boxed::Box<CallExpression<'tree>>),
+    CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
+    ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
+    ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
+    ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
+    CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
+    Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
+    DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
+    DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
+    EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
+    FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
+    HexLiteral(::std::boxed::Box<HexLiteral<'tree>>),
+    IfStatement(::std::boxed::Box<IfStatement<'tree>>),
+    InfixExpression(::std::boxed::Box<InfixExpression<'tree>>),
+    IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
+    KeyPathExpression(::std::boxed::Box<KeyPathExpression<'tree>>),
+    KeyPathStringExpression(::std::boxed::Box<KeyPathStringExpression<'tree>>),
+    LambdaLiteral(::std::boxed::Box<LambdaLiteral<'tree>>),
+    LineStringLiteral(::std::boxed::Box<LineStringLiteral<'tree>>),
+    MacroInvocation(::std::boxed::Box<MacroInvocation<'tree>>),
+    MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
+    MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
+    NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
+    NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
+    OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
+    OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
+    OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
+    PlaygroundLiteral(::std::boxed::Box<PlaygroundLiteral<'tree>>),
+    PostfixExpression(::std::boxed::Box<PostfixExpression<'tree>>),
+    PrefixExpression(::std::boxed::Box<PrefixExpression<'tree>>),
+    RangeExpression(::std::boxed::Box<RangeExpression<'tree>>),
+    RawStringLiteral(::std::boxed::Box<RawStringLiteral<'tree>>),
+    RealLiteral(::std::boxed::Box<RealLiteral<'tree>>),
+    RegexLiteral(::std::boxed::Box<RegexLiteral<'tree>>),
+    SelectorExpression(::std::boxed::Box<SelectorExpression<'tree>>),
+    SelfExpression(::std::boxed::Box<SelfExpression<'tree>>),
+    SimpleIdentifier(::std::boxed::Box<SimpleIdentifier<'tree>>),
+    SpecialLiteral(::std::boxed::Box<SpecialLiteral<'tree>>),
+    SuperExpression(::std::boxed::Box<SuperExpression<'tree>>),
+    SwitchStatement(::std::boxed::Box<SwitchStatement<'tree>>),
+    TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
+    TryExpression(::std::boxed::Box<TryExpression<'tree>>),
+    TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
+    ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
+    ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
+    Pipe(::treesitter_types::Span),
+    Tilde(::treesitter_types::Span),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for UnsafeExpressionExpr<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "!=" => Ok(Self::NotEq(::treesitter_types::Span::from(node))),
+            "!==" => Ok(Self::BangEqEq(::treesitter_types::Span::from(node))),
+            "%" => Ok(Self::Percent(::treesitter_types::Span::from(node))),
+            "%=" => Ok(Self::PercentEq(::treesitter_types::Span::from(node))),
+            "&" => Ok(Self::Amp(::treesitter_types::Span::from(node))),
+            "*" => Ok(Self::Star(::treesitter_types::Span::from(node))),
+            "*=" => Ok(Self::StarEq(::treesitter_types::Span::from(node))),
+            "+" => Ok(Self::Plus(::treesitter_types::Span::from(node))),
+            "++" => Ok(Self::PlusPlus(::treesitter_types::Span::from(node))),
+            "+=" => Ok(Self::PlusEq(::treesitter_types::Span::from(node))),
+            "-" => Ok(Self::Minus(::treesitter_types::Span::from(node))),
+            "--" => Ok(Self::MinusMinus(::treesitter_types::Span::from(node))),
+            "-=" => Ok(Self::MinusEq(::treesitter_types::Span::from(node))),
+            "/" => Ok(Self::Slash(::treesitter_types::Span::from(node))),
+            "/=" => Ok(Self::SlashEq(::treesitter_types::Span::from(node))),
+            "<" => Ok(Self::Lt(::treesitter_types::Span::from(node))),
+            "<<" => Ok(Self::Shl(::treesitter_types::Span::from(node))),
+            "<=" => Ok(Self::LtEq(::treesitter_types::Span::from(node))),
+            "=" => Ok(Self::Eq(::treesitter_types::Span::from(node))),
+            "==" => Ok(Self::EqEq(::treesitter_types::Span::from(node))),
+            "===" => Ok(Self::EqEqEq(::treesitter_types::Span::from(node))),
+            ">" => Ok(Self::Gt(::treesitter_types::Span::from(node))),
+            ">=" => Ok(Self::GtEq(::treesitter_types::Span::from(node))),
+            ">>" => Ok(Self::Shr(::treesitter_types::Span::from(node))),
+            "?" => Ok(Self::Question(::treesitter_types::Span::from(node))),
+            "^" => Ok(Self::Caret(::treesitter_types::Span::from(node))),
+            "additive_expression" => Ok(Self::AdditiveExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AdditiveExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "array_literal" => Ok(Self::ArrayLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "as_expression" => Ok(Self::AsExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AsExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "assignment" => Ok(Self::Assignment(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Assignment as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "await_expression" => Ok(Self::AwaitExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AwaitExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bang" => Ok(Self::Bang(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Bang as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bin_literal" => Ok(Self::BinLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BinLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bitwise_operation" => Ok(Self::BitwiseOperation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BitwiseOperation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "boolean_literal" => Ok(Self::BooleanLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "check_expression" => Ok(Self::CheckExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CheckExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "comparison_expression" => Ok(Self::ComparisonExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ComparisonExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "conjunction_expression" => Ok(Self::ConjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "constructor_expression" => Ok(Self::ConstructorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "diagnostic" => Ok(Self::Diagnostic(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Diagnostic as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_literal" => Ok(Self::DictionaryLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DisjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "equality_expression" => Ok(Self::EqualityExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <EqualityExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "fully_open_range" => Ok(Self::FullyOpenRange(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FullyOpenRange as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "hex_literal" => Ok(Self::HexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <HexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "if_statement" => Ok(Self::IfStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "infix_expression" => Ok(Self::InfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "integer_literal" => Ok(Self::IntegerLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_expression" => Ok(Self::KeyPathExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_string_expression" => Ok(Self::KeyPathStringExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathStringExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "lambda_literal" => Ok(Self::LambdaLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LambdaLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "line_string_literal" => Ok(Self::LineStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "macro_invocation" => Ok(Self::MacroInvocation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MacroInvocation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "multi_line_string_literal" => Ok(Self::MultiLineStringLiteral(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiLineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "multiplicative_expression" => Ok(Self::MultiplicativeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiplicativeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "navigation_expression" => Ok(Self::NavigationExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "open_end_range_expression" => Ok(Self::OpenEndRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenEndRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "open_start_range_expression" => Ok(Self::OpenStartRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenStartRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "playground_literal" => Ok(Self::PlaygroundLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PlaygroundLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "prefix_expression" => Ok(Self::PrefixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PrefixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "range_expression" => Ok(Self::RangeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "raw_string_literal" => Ok(Self::RawStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RawStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "real_literal" => Ok(Self::RealLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RealLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "regex_literal" => Ok(Self::RegexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RegexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "selector_expression" => Ok(Self::SelectorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelectorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "self_expression" => Ok(Self::SelfExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelfExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "simple_identifier" => Ok(Self::SimpleIdentifier(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SimpleIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "special_literal" => Ok(Self::SpecialLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SpecialLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "super_expression" => Ok(Self::SuperExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SuperExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "switch_statement" => Ok(Self::SwitchStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SwitchStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "try_expression" => Ok(Self::TryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "tuple_expression" => Ok(Self::TupleExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_parameter_pack" => Ok(Self::ValueParameterPack(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValueParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "|" => Ok(Self::Pipe(::treesitter_types::Span::from(node))),
+            "~" => Ok(Self::Tilde(::treesitter_types::Span::from(node))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for UnsafeExpressionExpr<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::NotEq(span) => *span,
+            Self::BangEqEq(span) => *span,
+            Self::Percent(span) => *span,
+            Self::PercentEq(span) => *span,
+            Self::Amp(span) => *span,
+            Self::Star(span) => *span,
+            Self::StarEq(span) => *span,
+            Self::Plus(span) => *span,
+            Self::PlusPlus(span) => *span,
+            Self::PlusEq(span) => *span,
+            Self::Minus(span) => *span,
+            Self::MinusMinus(span) => *span,
+            Self::MinusEq(span) => *span,
+            Self::Slash(span) => *span,
+            Self::SlashEq(span) => *span,
+            Self::Lt(span) => *span,
+            Self::Shl(span) => *span,
+            Self::LtEq(span) => *span,
+            Self::Eq(span) => *span,
+            Self::EqEq(span) => *span,
+            Self::EqEqEq(span) => *span,
+            Self::Gt(span) => *span,
+            Self::GtEq(span) => *span,
+            Self::Shr(span) => *span,
+            Self::Question(span) => *span,
+            Self::Caret(span) => *span,
+            Self::AdditiveExpression(inner) => inner.span(),
+            Self::ArrayLiteral(inner) => inner.span(),
+            Self::AsExpression(inner) => inner.span(),
+            Self::Assignment(inner) => inner.span(),
+            Self::AwaitExpression(inner) => inner.span(),
+            Self::Bang(inner) => inner.span(),
+            Self::BinLiteral(inner) => inner.span(),
+            Self::BitwiseOperation(inner) => inner.span(),
+            Self::BooleanLiteral(inner) => inner.span(),
+            Self::CallExpression(inner) => inner.span(),
+            Self::CheckExpression(inner) => inner.span(),
+            Self::ComparisonExpression(inner) => inner.span(),
+            Self::ConjunctionExpression(inner) => inner.span(),
+            Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
+            Self::CustomOperator(inner) => inner.span(),
+            Self::Diagnostic(inner) => inner.span(),
+            Self::DictionaryLiteral(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
+            Self::DisjunctionExpression(inner) => inner.span(),
+            Self::EqualityExpression(inner) => inner.span(),
+            Self::FullyOpenRange(inner) => inner.span(),
+            Self::HexLiteral(inner) => inner.span(),
+            Self::IfStatement(inner) => inner.span(),
+            Self::InfixExpression(inner) => inner.span(),
+            Self::IntegerLiteral(inner) => inner.span(),
+            Self::KeyPathExpression(inner) => inner.span(),
+            Self::KeyPathStringExpression(inner) => inner.span(),
+            Self::LambdaLiteral(inner) => inner.span(),
+            Self::LineStringLiteral(inner) => inner.span(),
+            Self::MacroInvocation(inner) => inner.span(),
+            Self::MultiLineStringLiteral(inner) => inner.span(),
+            Self::MultiplicativeExpression(inner) => inner.span(),
+            Self::NavigationExpression(inner) => inner.span(),
+            Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
+            Self::OctLiteral(inner) => inner.span(),
+            Self::OpenEndRangeExpression(inner) => inner.span(),
+            Self::OpenStartRangeExpression(inner) => inner.span(),
+            Self::PlaygroundLiteral(inner) => inner.span(),
+            Self::PostfixExpression(inner) => inner.span(),
+            Self::PrefixExpression(inner) => inner.span(),
+            Self::RangeExpression(inner) => inner.span(),
+            Self::RawStringLiteral(inner) => inner.span(),
+            Self::RealLiteral(inner) => inner.span(),
+            Self::RegexLiteral(inner) => inner.span(),
+            Self::SelectorExpression(inner) => inner.span(),
+            Self::SelfExpression(inner) => inner.span(),
+            Self::SimpleIdentifier(inner) => inner.span(),
+            Self::SpecialLiteral(inner) => inner.span(),
+            Self::SuperExpression(inner) => inner.span(),
+            Self::SwitchStatement(inner) => inner.span(),
+            Self::TernaryExpression(inner) => inner.span(),
+            Self::TryExpression(inner) => inner.span(),
+            Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
+            Self::ValuePackExpansion(inner) => inner.span(),
+            Self::ValueParameterPack(inner) => inner.span(),
+            Self::Pipe(span) => *span,
+            Self::Tilde(span) => *span,
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum UnsafeExpressionChildren<'tree> {
+    AdditiveExpression(::std::boxed::Box<AdditiveExpression<'tree>>),
+    ArrayLiteral(::std::boxed::Box<ArrayLiteral<'tree>>),
+    AsExpression(::std::boxed::Box<AsExpression<'tree>>),
+    Assignment(::std::boxed::Box<Assignment<'tree>>),
+    AwaitExpression(::std::boxed::Box<AwaitExpression<'tree>>),
+    Bang(::std::boxed::Box<Bang<'tree>>),
+    BinLiteral(::std::boxed::Box<BinLiteral<'tree>>),
+    BitwiseOperation(::std::boxed::Box<BitwiseOperation<'tree>>),
+    BooleanLiteral(::std::boxed::Box<BooleanLiteral<'tree>>),
+    CallExpression(::std::boxed::Box<CallExpression<'tree>>),
+    CheckExpression(::std::boxed::Box<CheckExpression<'tree>>),
+    ComparisonExpression(::std::boxed::Box<ComparisonExpression<'tree>>),
+    ConjunctionExpression(::std::boxed::Box<ConjunctionExpression<'tree>>),
+    ConstructorExpression(::std::boxed::Box<ConstructorExpression<'tree>>),
+    ConsumeExpression(::std::boxed::Box<ConsumeExpression<'tree>>),
+    CustomOperator(::std::boxed::Box<CustomOperator<'tree>>),
+    Diagnostic(::std::boxed::Box<Diagnostic<'tree>>),
+    DictionaryLiteral(::std::boxed::Box<DictionaryLiteral<'tree>>),
+    Directive(::std::boxed::Box<Directive<'tree>>),
+    DiscardStatement(::std::boxed::Box<DiscardStatement<'tree>>),
+    DisjunctionExpression(::std::boxed::Box<DisjunctionExpression<'tree>>),
+    EqualityExpression(::std::boxed::Box<EqualityExpression<'tree>>),
+    FullyOpenRange(::std::boxed::Box<FullyOpenRange<'tree>>),
+    HexLiteral(::std::boxed::Box<HexLiteral<'tree>>),
+    IfStatement(::std::boxed::Box<IfStatement<'tree>>),
+    InfixExpression(::std::boxed::Box<InfixExpression<'tree>>),
+    IntegerLiteral(::std::boxed::Box<IntegerLiteral<'tree>>),
+    KeyPathExpression(::std::boxed::Box<KeyPathExpression<'tree>>),
+    KeyPathStringExpression(::std::boxed::Box<KeyPathStringExpression<'tree>>),
+    LambdaLiteral(::std::boxed::Box<LambdaLiteral<'tree>>),
+    LineStringLiteral(::std::boxed::Box<LineStringLiteral<'tree>>),
+    MacroInvocation(::std::boxed::Box<MacroInvocation<'tree>>),
+    MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
+    MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
+    NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
+    NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
+    OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
+    OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
+    OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
+    PlaygroundLiteral(::std::boxed::Box<PlaygroundLiteral<'tree>>),
+    PostfixExpression(::std::boxed::Box<PostfixExpression<'tree>>),
+    PrefixExpression(::std::boxed::Box<PrefixExpression<'tree>>),
+    RangeExpression(::std::boxed::Box<RangeExpression<'tree>>),
+    RawStringLiteral(::std::boxed::Box<RawStringLiteral<'tree>>),
+    RealLiteral(::std::boxed::Box<RealLiteral<'tree>>),
+    RegexLiteral(::std::boxed::Box<RegexLiteral<'tree>>),
+    SelectorExpression(::std::boxed::Box<SelectorExpression<'tree>>),
+    SelfExpression(::std::boxed::Box<SelfExpression<'tree>>),
+    SimpleIdentifier(::std::boxed::Box<SimpleIdentifier<'tree>>),
+    SpecialLiteral(::std::boxed::Box<SpecialLiteral<'tree>>),
+    SuperExpression(::std::boxed::Box<SuperExpression<'tree>>),
+    SwitchStatement(::std::boxed::Box<SwitchStatement<'tree>>),
+    TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
+    TryExpression(::std::boxed::Box<TryExpression<'tree>>),
+    TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
+    ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
+    ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for UnsafeExpressionChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "additive_expression" => Ok(Self::AdditiveExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AdditiveExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "array_literal" => Ok(Self::ArrayLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArrayLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "as_expression" => Ok(Self::AsExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AsExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "assignment" => Ok(Self::Assignment(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Assignment as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "await_expression" => Ok(Self::AwaitExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AwaitExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bang" => Ok(Self::Bang(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Bang as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bin_literal" => Ok(Self::BinLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BinLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "bitwise_operation" => Ok(Self::BitwiseOperation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BitwiseOperation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "boolean_literal" => Ok(Self::BooleanLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BooleanLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "call_expression" => Ok(Self::CallExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CallExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "check_expression" => Ok(Self::CheckExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CheckExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "comparison_expression" => Ok(Self::ComparisonExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ComparisonExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "conjunction_expression" => Ok(Self::ConjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "constructor_expression" => Ok(Self::ConstructorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConstructorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "consume_expression" => Ok(Self::ConsumeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConsumeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "custom_operator" => Ok(Self::CustomOperator(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CustomOperator as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "diagnostic" => Ok(Self::Diagnostic(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Diagnostic as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "dictionary_literal" => Ok(Self::DictionaryLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DictionaryLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "directive" => Ok(Self::Directive(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Directive as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "discard_statement" => Ok(Self::DiscardStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DiscardStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "disjunction_expression" => Ok(Self::DisjunctionExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <DisjunctionExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "equality_expression" => Ok(Self::EqualityExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <EqualityExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "fully_open_range" => Ok(Self::FullyOpenRange(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <FullyOpenRange as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "hex_literal" => Ok(Self::HexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <HexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "if_statement" => Ok(Self::IfStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IfStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "infix_expression" => Ok(Self::InfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <InfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "integer_literal" => Ok(Self::IntegerLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IntegerLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_expression" => Ok(Self::KeyPathExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "key_path_string_expression" => Ok(Self::KeyPathStringExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <KeyPathStringExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "lambda_literal" => Ok(Self::LambdaLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LambdaLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "line_string_literal" => Ok(Self::LineStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <LineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "macro_invocation" => Ok(Self::MacroInvocation(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MacroInvocation as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "multi_line_string_literal" => Ok(Self::MultiLineStringLiteral(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiLineStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "multiplicative_expression" => Ok(Self::MultiplicativeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MultiplicativeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "navigation_expression" => Ok(Self::NavigationExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "open_end_range_expression" => Ok(Self::OpenEndRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenEndRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "open_start_range_expression" => Ok(Self::OpenStartRangeExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <OpenStartRangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?),
+            )),
+            "playground_literal" => Ok(Self::PlaygroundLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PlaygroundLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "postfix_expression" => Ok(Self::PostfixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PostfixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "prefix_expression" => Ok(Self::PrefixExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PrefixExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "range_expression" => Ok(Self::RangeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RangeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "raw_string_literal" => Ok(Self::RawStringLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RawStringLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "real_literal" => Ok(Self::RealLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RealLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "regex_literal" => Ok(Self::RegexLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RegexLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "selector_expression" => Ok(Self::SelectorExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelectorExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "self_expression" => Ok(Self::SelfExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SelfExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "simple_identifier" => Ok(Self::SimpleIdentifier(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SimpleIdentifier as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "special_literal" => Ok(Self::SpecialLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SpecialLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "super_expression" => Ok(Self::SuperExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SuperExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "switch_statement" => Ok(Self::SwitchStatement(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <SwitchStatement as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "ternary_expression" => Ok(Self::TernaryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TernaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "try_expression" => Ok(Self::TryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "tuple_expression" => Ok(Self::TupleExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "value_parameter_pack" => Ok(Self::ValueParameterPack(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ValueParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            other => Err(::treesitter_types::ParseError::unexpected_kind(other, node)),
+        }
+    }
+}
+impl ::treesitter_types::Spanned for UnsafeExpressionChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::AdditiveExpression(inner) => inner.span(),
+            Self::ArrayLiteral(inner) => inner.span(),
+            Self::AsExpression(inner) => inner.span(),
+            Self::Assignment(inner) => inner.span(),
+            Self::AwaitExpression(inner) => inner.span(),
+            Self::Bang(inner) => inner.span(),
+            Self::BinLiteral(inner) => inner.span(),
+            Self::BitwiseOperation(inner) => inner.span(),
+            Self::BooleanLiteral(inner) => inner.span(),
+            Self::CallExpression(inner) => inner.span(),
+            Self::CheckExpression(inner) => inner.span(),
+            Self::ComparisonExpression(inner) => inner.span(),
+            Self::ConjunctionExpression(inner) => inner.span(),
+            Self::ConstructorExpression(inner) => inner.span(),
+            Self::ConsumeExpression(inner) => inner.span(),
+            Self::CustomOperator(inner) => inner.span(),
+            Self::Diagnostic(inner) => inner.span(),
+            Self::DictionaryLiteral(inner) => inner.span(),
+            Self::Directive(inner) => inner.span(),
+            Self::DiscardStatement(inner) => inner.span(),
+            Self::DisjunctionExpression(inner) => inner.span(),
+            Self::EqualityExpression(inner) => inner.span(),
+            Self::FullyOpenRange(inner) => inner.span(),
+            Self::HexLiteral(inner) => inner.span(),
+            Self::IfStatement(inner) => inner.span(),
+            Self::InfixExpression(inner) => inner.span(),
+            Self::IntegerLiteral(inner) => inner.span(),
+            Self::KeyPathExpression(inner) => inner.span(),
+            Self::KeyPathStringExpression(inner) => inner.span(),
+            Self::LambdaLiteral(inner) => inner.span(),
+            Self::LineStringLiteral(inner) => inner.span(),
+            Self::MacroInvocation(inner) => inner.span(),
+            Self::MultiLineStringLiteral(inner) => inner.span(),
+            Self::MultiplicativeExpression(inner) => inner.span(),
+            Self::NavigationExpression(inner) => inner.span(),
+            Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
+            Self::OctLiteral(inner) => inner.span(),
+            Self::OpenEndRangeExpression(inner) => inner.span(),
+            Self::OpenStartRangeExpression(inner) => inner.span(),
+            Self::PlaygroundLiteral(inner) => inner.span(),
+            Self::PostfixExpression(inner) => inner.span(),
+            Self::PrefixExpression(inner) => inner.span(),
+            Self::RangeExpression(inner) => inner.span(),
+            Self::RawStringLiteral(inner) => inner.span(),
+            Self::RealLiteral(inner) => inner.span(),
+            Self::RegexLiteral(inner) => inner.span(),
+            Self::SelectorExpression(inner) => inner.span(),
+            Self::SelfExpression(inner) => inner.span(),
+            Self::SimpleIdentifier(inner) => inner.span(),
+            Self::SpecialLiteral(inner) => inner.span(),
+            Self::SuperExpression(inner) => inner.span(),
+            Self::SwitchStatement(inner) => inner.span(),
+            Self::TernaryExpression(inner) => inner.span(),
+            Self::TryExpression(inner) => inner.span(),
+            Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
+            Self::ValuePackExpansion(inner) => inner.span(),
+            Self::ValueParameterPack(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UserTypeChildren<'tree> {
     TypeArguments(::std::boxed::Box<TypeArguments<'tree>>),
     TypeIdentifier(::std::boxed::Box<TypeIdentifier<'tree>>),
@@ -54281,8 +56217,8 @@ pub enum ValueArgumentValue<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -54302,6 +56238,7 @@ pub enum ValueArgumentValue<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     Pipe(::treesitter_types::Span),
@@ -54515,12 +56452,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueArgumentValue<'tree> {
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -54616,6 +56557,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueArgumentValue<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -54696,8 +56642,8 @@ impl ::treesitter_types::Spanned for ValueArgumentValue<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -54717,6 +56663,7 @@ impl ::treesitter_types::Spanned for ValueArgumentValue<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::Pipe(span) => *span,
@@ -54788,6 +56735,7 @@ pub enum ValuePackExpansionChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -54807,6 +56755,7 @@ pub enum ValuePackExpansionChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -54997,6 +56946,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValuePackExpansionChildren<'
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55092,6 +57046,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValuePackExpansionChildren<'
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55145,6 +57104,7 @@ impl ::treesitter_types::Spanned for ValuePackExpansionChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -55164,6 +57124,7 @@ impl ::treesitter_types::Spanned for ValuePackExpansionChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -55207,6 +57168,7 @@ pub enum ValueParameterPackChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -55226,6 +57188,7 @@ pub enum ValueParameterPackChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
 }
@@ -55416,6 +57379,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueParameterPackChildren<'
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55511,6 +57479,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ValueParameterPackChildren<'
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55564,6 +57537,7 @@ impl ::treesitter_types::Spanned for ValueParameterPackChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -55583,6 +57557,7 @@ impl ::treesitter_types::Spanned for ValueParameterPackChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
         }
@@ -55626,6 +57601,7 @@ pub enum WhereClauseChildren<'tree> {
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
     OpenStartRangeExpression(::std::boxed::Box<OpenStartRangeExpression<'tree>>),
@@ -55645,6 +57621,7 @@ pub enum WhereClauseChildren<'tree> {
     TernaryExpression(::std::boxed::Box<TernaryExpression<'tree>>),
     TryExpression(::std::boxed::Box<TryExpression<'tree>>),
     TupleExpression(::std::boxed::Box<TupleExpression<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
     ValueParameterPack(::std::boxed::Box<ValueParameterPack<'tree>>),
     WhereKeyword(::std::boxed::Box<WhereKeyword<'tree>>),
@@ -55836,6 +57813,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhereClauseChildren<'tree> {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55931,6 +57913,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhereClauseChildren<'tree> {
                     <TupleExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "value_pack_expansion" => Ok(Self::ValuePackExpansion(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ValuePackExpansion as ::treesitter_types::FromNode>::from_node(node, src)
@@ -55989,6 +57976,7 @@ impl ::treesitter_types::Spanned for WhereClauseChildren<'_> {
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
             Self::OpenStartRangeExpression(inner) => inner.span(),
@@ -56008,6 +57996,7 @@ impl ::treesitter_types::Spanned for WhereClauseChildren<'_> {
             Self::TernaryExpression(inner) => inner.span(),
             Self::TryExpression(inner) => inner.span(),
             Self::TupleExpression(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
             Self::ValueParameterPack(inner) => inner.span(),
             Self::WhereKeyword(inner) => inner.span(),
@@ -56093,8 +58082,8 @@ pub enum WhileStatementCondition<'tree> {
     MultiLineStringLiteral(::std::boxed::Box<MultiLineStringLiteral<'tree>>),
     MultiplicativeExpression(::std::boxed::Box<MultiplicativeExpression<'tree>>),
     NavigationExpression(::std::boxed::Box<NavigationExpression<'tree>>),
-    Nil(::treesitter_types::Span),
     NilCoalescingExpression(::std::boxed::Box<NilCoalescingExpression<'tree>>),
+    NilLiteral(::std::boxed::Box<NilLiteral<'tree>>),
     OctLiteral(::std::boxed::Box<OctLiteral<'tree>>),
     OpaqueType(::std::boxed::Box<OpaqueType<'tree>>),
     OpenEndRangeExpression(::std::boxed::Box<OpenEndRangeExpression<'tree>>),
@@ -56124,6 +58113,7 @@ pub enum WhileStatementCondition<'tree> {
     TypeModifiers(::std::boxed::Box<TypeModifiers<'tree>>),
     TypePackExpansion(::std::boxed::Box<TypePackExpansion<'tree>>),
     TypeParameterPack(::std::boxed::Box<TypeParameterPack<'tree>>),
+    UnsafeExpression(::std::boxed::Box<UnsafeExpression<'tree>>),
     UserType(::std::boxed::Box<UserType<'tree>>),
     ValueBindingPattern(::std::boxed::Box<ValueBindingPattern>),
     ValuePackExpansion(::std::boxed::Box<ValuePackExpansion<'tree>>),
@@ -56385,12 +58375,16 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
                     <NavigationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
-            "nil" => Ok(Self::Nil(::treesitter_types::Span::from(node))),
             "nil_coalescing_expression" => Ok(Self::NilCoalescingExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <NilCoalescingExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
+            "nil_literal" => Ok(Self::NilLiteral(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "oct_literal" => Ok(Self::OctLiteral(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -56536,6 +58530,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for WhileStatementCondition<'tre
                     <TypeParameterPack as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
+            "unsafe_expression" => Ok(Self::UnsafeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "user_type" => Ok(Self::UserType(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <UserType as ::treesitter_types::FromNode>::from_node(node, src)
@@ -56652,8 +58651,8 @@ impl ::treesitter_types::Spanned for WhileStatementCondition<'_> {
             Self::MultiLineStringLiteral(inner) => inner.span(),
             Self::MultiplicativeExpression(inner) => inner.span(),
             Self::NavigationExpression(inner) => inner.span(),
-            Self::Nil(span) => *span,
             Self::NilCoalescingExpression(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::OpaqueType(inner) => inner.span(),
             Self::OpenEndRangeExpression(inner) => inner.span(),
@@ -56683,6 +58682,7 @@ impl ::treesitter_types::Spanned for WhileStatementCondition<'_> {
             Self::TypeModifiers(inner) => inner.span(),
             Self::TypePackExpansion(inner) => inner.span(),
             Self::TypeParameterPack(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueBindingPattern(inner) => inner.span(),
             Self::ValuePackExpansion(inner) => inner.span(),
@@ -57044,6 +59044,7 @@ pub enum AnyNode<'tree> {
     TypeParameterPack(TypeParameterPack<'tree>),
     TypeParameters(TypeParameters<'tree>),
     TypealiasDeclaration(TypealiasDeclaration<'tree>),
+    UnsafeExpression(UnsafeExpression<'tree>),
     UserType(UserType<'tree>),
     ValueArgument(ValueArgument<'tree>),
     ValueArgumentLabel(ValueArgumentLabel<'tree>),
@@ -57065,6 +59066,7 @@ pub enum AnyNode<'tree> {
     HexLiteral(HexLiteral<'tree>),
     IntegerLiteral(IntegerLiteral<'tree>),
     MultilineComment(MultilineComment<'tree>),
+    NilLiteral(NilLiteral<'tree>),
     OctLiteral(OctLiteral<'tree>),
     RawStrContinuingIndicator(RawStrContinuingIndicator<'tree>),
     RawStrEndPart(RawStrEndPart<'tree>),
@@ -57879,6 +59881,11 @@ impl<'tree> AnyNode<'tree> {
             })
             .map(Self::TypealiasDeclaration)
             .unwrap_or(Self::Unknown(node)),
+            "unsafe_expression" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <UnsafeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::UnsafeExpression)
+            .unwrap_or(Self::Unknown(node)),
             "user_type" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <UserType as ::treesitter_types::FromNode>::from_node(node, src)
             })
@@ -57983,6 +59990,11 @@ impl<'tree> AnyNode<'tree> {
                 <MultilineComment as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::MultilineComment)
+            .unwrap_or(Self::Unknown(node)),
+            "nil_literal" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <NilLiteral as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::NilLiteral)
             .unwrap_or(Self::Unknown(node)),
             "oct_literal" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <OctLiteral as ::treesitter_types::FromNode>::from_node(node, src)
@@ -58196,6 +60208,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::TypeParameterPack(inner) => inner.span(),
             Self::TypeParameters(inner) => inner.span(),
             Self::TypealiasDeclaration(inner) => inner.span(),
+            Self::UnsafeExpression(inner) => inner.span(),
             Self::UserType(inner) => inner.span(),
             Self::ValueArgument(inner) => inner.span(),
             Self::ValueArgumentLabel(inner) => inner.span(),
@@ -58217,6 +60230,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::HexLiteral(inner) => inner.span(),
             Self::IntegerLiteral(inner) => inner.span(),
             Self::MultilineComment(inner) => inner.span(),
+            Self::NilLiteral(inner) => inner.span(),
             Self::OctLiteral(inner) => inner.span(),
             Self::RawStrContinuingIndicator(inner) => inner.span(),
             Self::RawStrEndPart(inner) => inner.span(),

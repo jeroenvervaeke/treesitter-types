@@ -13,5 +13,5 @@ readme = "../../README.md"
 
 [dependencies]
 treesitter-types = { version = "1.0.0", path = "../treesitter-types" }
-tree-sitter-php = "0.24"
+tree-sitter-php = "0.25"
 
