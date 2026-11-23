@@ -222,7 +222,6 @@ pub enum PrimaryExpression<'tree> {
     AnonymousFunction(::std::boxed::Box<AnonymousFunction<'tree>>),
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
     ArrowFunction(::std::boxed::Box<ArrowFunction<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
@@ -265,11 +264,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PrimaryExpression<'tree> {
             "arrow_function" => Ok(Self::ArrowFunction(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ArrowFunction as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?,
             ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
@@ -400,7 +394,6 @@ impl ::treesitter_types::Spanned for PrimaryExpression<'_> {
             Self::AnonymousFunction(inner) => inner.span(),
             Self::ArrayCreationExpression(inner) => inner.span(),
             Self::ArrowFunction(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
@@ -1088,6 +1081,33 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Argument<'tree> {
     }
 }
 impl ::treesitter_types::Spanned for Argument<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        self.span
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ArgumentPlaceholder<'tree> {
+    pub span: ::treesitter_types::Span,
+    text: &'tree str,
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentPlaceholder<'tree> {
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        debug_assert_eq!(node.kind(), "argument_placeholder");
+        Ok(Self {
+            span: ::treesitter_types::Span::from(node),
+            text: node.utf8_text(src)?,
+        })
+    }
+}
+impl<'tree> ::treesitter_types::LeafNode<'tree> for ArgumentPlaceholder<'tree> {
+    fn text(&self) -> &'tree str {
+        self.text
+    }
+}
+impl ::treesitter_types::Spanned for ArgumentPlaceholder<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         self.span
     }
@@ -1987,7 +2007,7 @@ impl ::treesitter_types::Spanned for CaseStatement<'_> {
 pub struct CastExpression<'tree> {
     pub span: ::treesitter_types::Span,
     pub r#type: CastType<'tree>,
-    pub value: CastExpressionValue<'tree>,
+    pub value: Expression<'tree>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for CastExpression<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -2011,7 +2031,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CastExpression<'tree> {
                     .child_by_field_name("value")
                     .ok_or_else(|| ::treesitter_types::ParseError::missing_field("value", node))?;
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpressionValue as ::treesitter_types::FromNode>::from_node(child, src)
+                    <Expression as ::treesitter_types::FromNode>::from_node(child, src)
                 })?
             },
         })
@@ -2281,7 +2301,8 @@ impl ::treesitter_types::Spanned for ClassInterfaceClause<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CloneExpression<'tree> {
     pub span: ::treesitter_types::Span,
-    pub children: PrimaryExpression<'tree>,
+    pub arguments: ::core::option::Option<Arguments<'tree>>,
+    pub children: ::core::option::Option<Expression<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for CloneExpression<'tree> {
     #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
@@ -2292,6 +2313,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CloneExpression<'tree> {
         debug_assert_eq!(node.kind(), "clone_expression");
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
+            arguments: match node.child_by_field_name("arguments") {
+                Some(child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <Arguments as ::treesitter_types::FromNode>::from_node(child, src)
+                })?),
+                None => None,
+            },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
                 let non_field_children = {
@@ -2312,79 +2339,12 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for CloneExpression<'tree> {
                     }
                     result
                 };
-                let child = if let Some(&c) = non_field_children.first() {
-                    c
-                } else {
-                    let mut fallback_cursor = node.walk();
-                    let mut fallback_child = None;
-                    if fallback_cursor.goto_first_child() {
-                        loop {
-                            if fallback_cursor.field_name().is_none()
-                                && !fallback_cursor.node().is_extra()
-                            {
-                                let candidate = fallback_cursor.node();
-                                #[allow(clippy::needless_question_mark)]
-                                if (|| -> ::core::result::Result<
-                                    _,
-                                    ::treesitter_types::ParseError,
-                                > {
-                                    let child = candidate;
-                                    Ok(
-                                        ::treesitter_types::runtime::maybe_grow_stack(|| <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
-                                            child,
-                                            src,
-                                        ))?,
-                                    )
-                                })()
-                                    .is_ok()
-                                {
-                                    fallback_child = Some(candidate);
-                                    break;
-                                }
-                            }
-                            if !fallback_cursor.goto_next_sibling() {
-                                break;
-                            }
-                        }
-                    }
-                    if fallback_child.is_none() {
-                        let mut cursor2 = node.walk();
-                        if cursor2.goto_first_child() {
-                            loop {
-                                if cursor2.node().is_named() && !cursor2.node().is_extra() {
-                                    let candidate = cursor2.node();
-                                    #[allow(clippy::needless_question_mark)]
-                                    if (|| -> ::core::result::Result<
-                                        _,
-                                        ::treesitter_types::ParseError,
-                                    > {
-                                        let child = candidate;
-                                        Ok(
-                                            ::treesitter_types::runtime::maybe_grow_stack(|| <PrimaryExpression as ::treesitter_types::FromNode>::from_node(
-                                                child,
-                                                src,
-                                            ))?,
-                                        )
-                                    })()
-                                        .is_ok()
-                                    {
-                                        fallback_child = Some(candidate);
-                                        break;
-                                    }
-                                }
-                                if !cursor2.goto_next_sibling() {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    fallback_child.ok_or_else(|| {
-                        ::treesitter_types::ParseError::missing_field("children", node)
-                    })?
-                };
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(child, src)
-                })?
+                match non_field_children.first() {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <Expression as ::treesitter_types::FromNode>::from_node(child, src)
+                    })?),
+                    None => None,
+                }
             },
         })
     }
@@ -5444,9 +5404,10 @@ impl ::treesitter_types::Spanned for MethodDeclaration<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Name<'tree> {
     pub span: ::treesitter_types::Span,
-    text: &'tree str,
+    pub children: ::core::option::Option<NameChildren<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for Name<'tree> {
+    #[allow(clippy::match_single_binding, clippy::suspicious_else_formatting)]
     fn from_node(
         node: ::treesitter_types::tree_sitter::Node<'tree>,
         src: &'tree [u8],
@@ -5454,13 +5415,34 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for Name<'tree> {
         debug_assert_eq!(node.kind(), "name");
         Ok(Self {
             span: ::treesitter_types::Span::from(node),
-            text: node.utf8_text(src)?,
+            children: {
+                #[allow(clippy::suspicious_else_formatting)]
+                let non_field_children = {
+                    let mut cursor = node.walk();
+                    let mut result = ::std::vec::Vec::new();
+                    if cursor.goto_first_child() {
+                        loop {
+                            if cursor.field_name().is_none()
+                                && cursor.node().is_named()
+                                && !cursor.node().is_extra()
+                            {
+                                result.push(cursor.node());
+                            }
+                            if !cursor.goto_next_sibling() {
+                                break;
+                            }
+                        }
+                    }
+                    result
+                };
+                match non_field_children.first() {
+                    Some(&child) => Some(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <NameChildren as ::treesitter_types::FromNode>::from_node(child, src)
+                    })?),
+                    None => None,
+                }
+            },
         })
-    }
-}
-impl<'tree> ::treesitter_types::LeafNode<'tree> for Name<'tree> {
-    fn text(&self) -> &'tree str {
-        self.text
     }
 }
 impl ::treesitter_types::Spanned for Name<'_> {
@@ -7097,7 +7079,7 @@ pub struct PropertyPromotionParameter<'tree> {
     pub name: PropertyPromotionParameterName<'tree>,
     pub readonly: ::core::option::Option<ReadonlyModifier<'tree>>,
     pub r#type: ::core::option::Option<Type<'tree>>,
-    pub visibility: VisibilityModifier<'tree>,
+    pub visibility: ::std::vec::Vec<VisibilityModifier<'tree>>,
     pub children: ::core::option::Option<PropertyHookList<'tree>>,
 }
 impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyPromotionParameter<'tree> {
@@ -7144,12 +7126,14 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for PropertyPromotionParameter<'
                 None => None,
             },
             visibility: {
-                let child = node.child_by_field_name("visibility").ok_or_else(|| {
-                    ::treesitter_types::ParseError::missing_field("visibility", node)
-                })?;
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <VisibilityModifier as ::treesitter_types::FromNode>::from_node(child, src)
-                })?
+                let mut cursor = node.walk();
+                let mut items = ::std::vec::Vec::new();
+                for child in node.children_by_field_name("visibility", &mut cursor) {
+                    items.push(::treesitter_types::runtime::maybe_grow_stack(|| {
+                        <VisibilityModifier as ::treesitter_types::FromNode>::from_node(child, src)
+                    })?);
+                }
+                items
             },
             children: {
                 #[allow(clippy::suspicious_else_formatting)]
@@ -10079,6 +10063,7 @@ impl ::treesitter_types::Spanned for AnonymousFunctionUseClauseChildren<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ArgumentChildren<'tree> {
+    ArgumentPlaceholder(::std::boxed::Box<ArgumentPlaceholder<'tree>>),
     Expression(::std::boxed::Box<Expression<'tree>>),
     Name(::std::boxed::Box<Name<'tree>>),
     VariadicUnpacking(::std::boxed::Box<VariadicUnpacking<'tree>>),
@@ -10090,6 +10075,11 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
+            "argument_placeholder" => Ok(Self::ArgumentPlaceholder(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ArgumentPlaceholder as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
             "name" => Ok(Self::Name(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <Name as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10117,6 +10107,7 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ArgumentChildren<'tree> {
 impl ::treesitter_types::Spanned for ArgumentChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
+            Self::ArgumentPlaceholder(inner) => inner.span(),
             Self::Expression(inner) => inner.span(),
             Self::Name(inner) => inner.span(),
             Self::VariadicUnpacking(inner) => inner.span(),
@@ -10244,7 +10235,6 @@ impl ::treesitter_types::Spanned for ArrowFunctionReturnType<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AssignmentExpressionLeft<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     ListLiteral(::std::boxed::Box<ListLiteral<'tree>>),
@@ -10264,11 +10254,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentExpressionLeft<'tr
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10337,7 +10322,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AssignmentExpressionLeft<'tr
 impl ::treesitter_types::Spanned for AssignmentExpressionLeft<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::ListLiteral(inner) => inner.span(),
@@ -10395,7 +10379,6 @@ impl ::treesitter_types::Spanned for AttributeChildren<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AugmentedAssignmentExpressionLeft<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     MemberAccessExpression(::std::boxed::Box<MemberAccessExpression<'tree>>),
@@ -10414,11 +10397,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AugmentedAssignmentExpressio
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10482,7 +10460,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for AugmentedAssignmentExpressio
 impl ::treesitter_types::Spanned for AugmentedAssignmentExpressionLeft<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::MemberAccessExpression(inner) => inner.span(),
@@ -10816,7 +10793,6 @@ impl ::treesitter_types::Spanned for BinaryExpressionRight<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ByRefChildren<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     MemberAccessExpression(::std::boxed::Box<MemberAccessExpression<'tree>>),
@@ -10835,11 +10811,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ByRefChildren<'tree> {
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -10903,7 +10874,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ByRefChildren<'tree> {
 impl ::treesitter_types::Spanned for ByRefChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::MemberAccessExpression(inner) => inner.span(),
@@ -10918,78 +10888,8 @@ impl ::treesitter_types::Spanned for ByRefChildren<'_> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum CastExpressionValue<'tree> {
-    CloneExpression(::std::boxed::Box<CloneExpression<'tree>>),
-    ErrorSuppressionExpression(::std::boxed::Box<ErrorSuppressionExpression<'tree>>),
-    IncludeExpression(::std::boxed::Box<IncludeExpression<'tree>>),
-    IncludeOnceExpression(::std::boxed::Box<IncludeOnceExpression<'tree>>),
-    PrimaryExpression(::std::boxed::Box<PrimaryExpression<'tree>>),
-    UnaryOpExpression(::std::boxed::Box<UnaryOpExpression<'tree>>),
-}
-impl<'tree> ::treesitter_types::FromNode<'tree> for CastExpressionValue<'tree> {
-    #[allow(clippy::collapsible_else_if)]
-    fn from_node(
-        node: ::treesitter_types::tree_sitter::Node<'tree>,
-        src: &'tree [u8],
-    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
-        match node.kind() {
-            "clone_expression" => Ok(Self::CloneExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CloneExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
-            "error_suppression_expression" => Ok(Self::ErrorSuppressionExpression(
-                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <ErrorSuppressionExpression as ::treesitter_types::FromNode>::from_node(
-                        node, src,
-                    )
-                })?),
-            )),
-            "include_expression" => Ok(Self::IncludeExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <IncludeExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
-            "include_once_expression" => Ok(Self::IncludeOnceExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <IncludeOnceExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
-            "unary_op_expression" => Ok(Self::UnaryOpExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <UnaryOpExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
-            _other => {
-                if let Ok(v) = ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                }) {
-                    Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
-                } else {
-                    Err(::treesitter_types::ParseError::unexpected_kind(
-                        _other, node,
-                    ))
-                }
-            }
-        }
-    }
-}
-impl ::treesitter_types::Spanned for CastExpressionValue<'_> {
-    fn span(&self) -> ::treesitter_types::Span {
-        match self {
-            Self::CloneExpression(inner) => inner.span(),
-            Self::ErrorSuppressionExpression(inner) => inner.span(),
-            Self::IncludeExpression(inner) => inner.span(),
-            Self::IncludeOnceExpression(inner) => inner.span(),
-            Self::PrimaryExpression(inner) => inner.span(),
-            Self::UnaryOpExpression(inner) => inner.span(),
-        }
-    }
-}
-#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ClassConstantAccessExpressionChildren<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -11024,11 +10924,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ClassConstantAccessExpressio
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -11150,7 +11045,6 @@ impl ::treesitter_types::Spanned for ClassConstantAccessExpressionChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -12722,7 +12616,6 @@ impl ::treesitter_types::Spanned for MemberAccessExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MemberAccessExpressionObject<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -12756,11 +12649,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MemberAccessExpressionObject
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -12877,7 +12765,6 @@ impl ::treesitter_types::Spanned for MemberAccessExpressionObject<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -12957,7 +12844,6 @@ impl ::treesitter_types::Spanned for MemberCallExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MemberCallExpressionObject<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -12991,11 +12877,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for MemberCallExpressionObject<'
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -13112,7 +12993,6 @@ impl ::treesitter_types::Spanned for MemberCallExpressionObject<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -13241,6 +13121,149 @@ impl ::treesitter_types::Spanned for MethodDeclarationChildren<'_> {
             Self::StaticModifier(inner) => inner.span(),
             Self::VarModifier(inner) => inner.span(),
             Self::VisibilityModifier(inner) => inner.span(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum NameChildren<'tree> {
+    AssignmentExpression(::std::boxed::Box<AssignmentExpression<'tree>>),
+    AugmentedAssignmentExpression(::std::boxed::Box<AugmentedAssignmentExpression<'tree>>),
+    BinaryExpression(::std::boxed::Box<BinaryExpression<'tree>>),
+    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
+    CloneExpression(::std::boxed::Box<CloneExpression<'tree>>),
+    ConditionalExpression(::std::boxed::Box<ConditionalExpression<'tree>>),
+    ErrorSuppressionExpression(::std::boxed::Box<ErrorSuppressionExpression<'tree>>),
+    IncludeExpression(::std::boxed::Box<IncludeExpression<'tree>>),
+    IncludeOnceExpression(::std::boxed::Box<IncludeOnceExpression<'tree>>),
+    MatchExpression(::std::boxed::Box<MatchExpression<'tree>>),
+    PrimaryExpression(::std::boxed::Box<PrimaryExpression<'tree>>),
+    ReferenceAssignmentExpression(::std::boxed::Box<ReferenceAssignmentExpression<'tree>>),
+    RequireExpression(::std::boxed::Box<RequireExpression<'tree>>),
+    RequireOnceExpression(::std::boxed::Box<RequireOnceExpression<'tree>>),
+    UnaryOpExpression(::std::boxed::Box<UnaryOpExpression<'tree>>),
+    YieldExpression(::std::boxed::Box<YieldExpression<'tree>>),
+}
+impl<'tree> ::treesitter_types::FromNode<'tree> for NameChildren<'tree> {
+    #[allow(clippy::collapsible_else_if)]
+    fn from_node(
+        node: ::treesitter_types::tree_sitter::Node<'tree>,
+        src: &'tree [u8],
+    ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
+        match node.kind() {
+            "assignment_expression" => Ok(Self::AssignmentExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AssignmentExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "augmented_assignment_expression" => Ok(Self::AugmentedAssignmentExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <AugmentedAssignmentExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })?),
+            )),
+            "binary_expression" => Ok(Self::BinaryExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <BinaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "clone_expression" => Ok(Self::CloneExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <CloneExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "conditional_expression" => Ok(Self::ConditionalExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ConditionalExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "error_suppression_expression" => Ok(Self::ErrorSuppressionExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ErrorSuppressionExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })?),
+            )),
+            "include_expression" => Ok(Self::IncludeExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IncludeExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "include_once_expression" => Ok(Self::IncludeOnceExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <IncludeOnceExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "match_expression" => Ok(Self::MatchExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <MatchExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "reference_assignment_expression" => Ok(Self::ReferenceAssignmentExpression(
+                ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <ReferenceAssignmentExpression as ::treesitter_types::FromNode>::from_node(
+                        node, src,
+                    )
+                })?),
+            )),
+            "require_expression" => Ok(Self::RequireExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RequireExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "require_once_expression" => Ok(Self::RequireOnceExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <RequireOnceExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "unary_op_expression" => Ok(Self::UnaryOpExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <UnaryOpExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            "yield_expression" => Ok(Self::YieldExpression(::std::boxed::Box::new(
+                ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <YieldExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                })?,
+            ))),
+            _other => {
+                if let Ok(v) = ::treesitter_types::runtime::maybe_grow_stack(|| {
+                    <PrimaryExpression as ::treesitter_types::FromNode>::from_node(node, src)
+                }) {
+                    Ok(Self::PrimaryExpression(::std::boxed::Box::new(v)))
+                } else {
+                    Err(::treesitter_types::ParseError::unexpected_kind(
+                        _other, node,
+                    ))
+                }
+            }
+        }
+    }
+}
+impl ::treesitter_types::Spanned for NameChildren<'_> {
+    fn span(&self) -> ::treesitter_types::Span {
+        match self {
+            Self::AssignmentExpression(inner) => inner.span(),
+            Self::AugmentedAssignmentExpression(inner) => inner.span(),
+            Self::BinaryExpression(inner) => inner.span(),
+            Self::CastExpression(inner) => inner.span(),
+            Self::CloneExpression(inner) => inner.span(),
+            Self::ConditionalExpression(inner) => inner.span(),
+            Self::ErrorSuppressionExpression(inner) => inner.span(),
+            Self::IncludeExpression(inner) => inner.span(),
+            Self::IncludeOnceExpression(inner) => inner.span(),
+            Self::MatchExpression(inner) => inner.span(),
+            Self::PrimaryExpression(inner) => inner.span(),
+            Self::ReferenceAssignmentExpression(inner) => inner.span(),
+            Self::RequireExpression(inner) => inner.span(),
+            Self::RequireOnceExpression(inner) => inner.span(),
+            Self::UnaryOpExpression(inner) => inner.span(),
+            Self::YieldExpression(inner) => inner.span(),
         }
     }
 }
@@ -13461,7 +13484,6 @@ impl ::treesitter_types::Spanned for NullsafeMemberAccessExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum NullsafeMemberAccessExpressionObject<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -13495,11 +13517,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NullsafeMemberAccessExpressi
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -13616,7 +13633,6 @@ impl ::treesitter_types::Spanned for NullsafeMemberAccessExpressionObject<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -13696,7 +13712,6 @@ impl ::treesitter_types::Spanned for NullsafeMemberCallExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum NullsafeMemberCallExpressionObject<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -13730,11 +13745,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for NullsafeMemberCallExpression
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -13851,7 +13861,6 @@ impl ::treesitter_types::Spanned for NullsafeMemberCallExpressionObject<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -14290,7 +14299,6 @@ impl ::treesitter_types::Spanned for QualifiedNamePrefix<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ReferenceAssignmentExpressionLeft<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     ListLiteral(::std::boxed::Box<ListLiteral<'tree>>),
@@ -14310,11 +14318,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ReferenceAssignmentExpressio
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -14383,7 +14386,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ReferenceAssignmentExpressio
 impl ::treesitter_types::Spanned for ReferenceAssignmentExpressionLeft<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::ListLiteral(inner) => inner.span(),
@@ -14487,7 +14489,6 @@ impl ::treesitter_types::Spanned for ScopedCallExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ScopedCallExpressionScope<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -14522,11 +14523,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ScopedCallExpressionScope<'t
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -14648,7 +14644,6 @@ impl ::treesitter_types::Spanned for ScopedCallExpressionScope<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -14710,7 +14705,6 @@ impl ::treesitter_types::Spanned for ScopedPropertyAccessExpressionName<'_> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ScopedPropertyAccessExpressionScope<'tree> {
     ArrayCreationExpression(::std::boxed::Box<ArrayCreationExpression<'tree>>),
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     ClassConstantAccessExpression(::std::boxed::Box<ClassConstantAccessExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     EncapsedString(::std::boxed::Box<EncapsedString<'tree>>),
@@ -14745,11 +14739,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for ScopedPropertyAccessExpressi
                     <ArrayCreationExpression as ::treesitter_types::FromNode>::from_node(node, src)
                 })?),
             )),
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "class_constant_access_expression" => Ok(Self::ClassConstantAccessExpression(
                 ::std::boxed::Box::new(::treesitter_types::runtime::maybe_grow_stack(|| {
                     <ClassConstantAccessExpression as ::treesitter_types::FromNode>::from_node(
@@ -14871,7 +14860,6 @@ impl ::treesitter_types::Spanned for ScopedPropertyAccessExpressionScope<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
             Self::ArrayCreationExpression(inner) => inner.span(),
-            Self::CastExpression(inner) => inner.span(),
             Self::ClassConstantAccessExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::EncapsedString(inner) => inner.span(),
@@ -15421,7 +15409,6 @@ impl ::treesitter_types::Spanned for UnionTypeChildren<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UnsetStatementChildren<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     MemberAccessExpression(::std::boxed::Box<MemberAccessExpression<'tree>>),
@@ -15440,11 +15427,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnsetStatementChildren<'tree
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15508,7 +15490,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UnsetStatementChildren<'tree
 impl ::treesitter_types::Spanned for UnsetStatementChildren<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::MemberAccessExpression(inner) => inner.span(),
@@ -15524,7 +15505,6 @@ impl ::treesitter_types::Spanned for UnsetStatementChildren<'_> {
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum UpdateExpressionArgument<'tree> {
-    CastExpression(::std::boxed::Box<CastExpression<'tree>>),
     DynamicVariableName(::std::boxed::Box<DynamicVariableName<'tree>>),
     FunctionCallExpression(::std::boxed::Box<FunctionCallExpression<'tree>>),
     MemberAccessExpression(::std::boxed::Box<MemberAccessExpression<'tree>>),
@@ -15543,11 +15523,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UpdateExpressionArgument<'tr
         src: &'tree [u8],
     ) -> ::core::result::Result<Self, ::treesitter_types::ParseError> {
         match node.kind() {
-            "cast_expression" => Ok(Self::CastExpression(::std::boxed::Box::new(
-                ::treesitter_types::runtime::maybe_grow_stack(|| {
-                    <CastExpression as ::treesitter_types::FromNode>::from_node(node, src)
-                })?,
-            ))),
             "dynamic_variable_name" => Ok(Self::DynamicVariableName(::std::boxed::Box::new(
                 ::treesitter_types::runtime::maybe_grow_stack(|| {
                     <DynamicVariableName as ::treesitter_types::FromNode>::from_node(node, src)
@@ -15611,7 +15586,6 @@ impl<'tree> ::treesitter_types::FromNode<'tree> for UpdateExpressionArgument<'tr
 impl ::treesitter_types::Spanned for UpdateExpressionArgument<'_> {
     fn span(&self) -> ::treesitter_types::Span {
         match self {
-            Self::CastExpression(inner) => inner.span(),
             Self::DynamicVariableName(inner) => inner.span(),
             Self::FunctionCallExpression(inner) => inner.span(),
             Self::MemberAccessExpression(inner) => inner.span(),
@@ -15902,6 +15876,7 @@ pub enum AnyNode<'tree> {
     AnonymousFunction(AnonymousFunction<'tree>),
     AnonymousFunctionUseClause(AnonymousFunctionUseClause<'tree>),
     Argument(Argument<'tree>),
+    ArgumentPlaceholder(ArgumentPlaceholder<'tree>),
     Arguments(Arguments<'tree>),
     ArrayCreationExpression(ArrayCreationExpression<'tree>),
     ArrayElementInitializer(ArrayElementInitializer<'tree>),
@@ -16111,6 +16086,11 @@ impl<'tree> AnyNode<'tree> {
                 <Argument as ::treesitter_types::FromNode>::from_node(node, src)
             })
             .map(Self::Argument)
+            .unwrap_or(Self::Unknown(node)),
+            "argument_placeholder" => ::treesitter_types::runtime::maybe_grow_stack(|| {
+                <ArgumentPlaceholder as ::treesitter_types::FromNode>::from_node(node, src)
+            })
+            .map(Self::ArgumentPlaceholder)
             .unwrap_or(Self::Unknown(node)),
             "arguments" => ::treesitter_types::runtime::maybe_grow_stack(|| {
                 <Arguments as ::treesitter_types::FromNode>::from_node(node, src)
@@ -16908,6 +16888,7 @@ impl ::treesitter_types::Spanned for AnyNode<'_> {
             Self::AnonymousFunction(inner) => inner.span(),
             Self::AnonymousFunctionUseClause(inner) => inner.span(),
             Self::Argument(inner) => inner.span(),
+            Self::ArgumentPlaceholder(inner) => inner.span(),
             Self::Arguments(inner) => inner.span(),
             Self::ArrayCreationExpression(inner) => inner.span(),
             Self::ArrayElementInitializer(inner) => inner.span(),
